@@ -1,37 +1,35 @@
 from fastapi import APIRouter, HTTPException
-from backend.database import SessionLocal
-from backend.models import User, Role
-from backend.schemas import UserRegister, UserLogin
-from backend.auth import (
+from database import SessionLocal
+from models import Role, User
+from schemas.user import UserRegisterRequest, UserLoginRequest
+from schemas.user_role import UserRole
+from auth import (
     hash_password,
     verify_password,
     create_token
 )
 
+from utils import utils as u
+
 router = APIRouter()
 
-
 @router.post("/register")
-def register(user: UserRegister):
-
-
+def register(user: UserRegisterRequest):
     db = SessionLocal()
 
     try:
-        # sprawdzenie czy email istnieje
-        existing = (
+        email_exists = (
             db.query(User)
             .filter(User.email == user.email)
             .first()
         )
 
-        if existing:
+        if email_exists:
             raise HTTPException(
                 status_code=400,
                 detail="Email already exists"
             )
 
-        # pobranie roli "user"
         default_role = (
             db.query(Role)
             .filter(Role.name == "user")
@@ -49,12 +47,30 @@ def register(user: UserRegister):
             email=user.email,
             password=hash_password(user.password),
             birthday=user.birthday,
-            role_id=default_role.id
         )
 
         db.add(new_user)
         db.commit()
         db.refresh(new_user)
+
+        new_user = (
+            db
+            .query(User)
+            .filter(User.email == new_user.email)
+            .first()
+        )
+
+        now = u.get_utc_date()
+        users_roles_entry = UserRole(
+            role_id = default_role.id,
+            user_id = new_user.id,
+            created_at = now,
+            modified_at = now
+        )
+
+        db.add(users_roles_entry)
+        db.commit()
+        db.refresh(users_roles_entry)
 
         return {"message": "User created"}
 
@@ -63,7 +79,7 @@ def register(user: UserRegister):
 
 
 @router.post("/login")
-def login(user: UserLogin):
+def login(user: UserLoginRequest):
 
     db = SessionLocal()
 

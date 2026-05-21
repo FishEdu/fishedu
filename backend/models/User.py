@@ -1,15 +1,8 @@
-from sqlalchemy import Column, Integer, String, Date, DateTime, ForeignKey
-from sqlalchemy.orm import relationship
-from backend.database import Base
 from datetime import datetime, timezone
 
+from sqlalchemy import Column, Date, DateTime, Integer, String
 
-class Role(Base):
-    __tablename__ = "roles"
-
-    id = Column(Integer, primary_key=True)
-    name = Column(String, unique=True)
-
+from database import Base
 
 class User(Base):
     __tablename__ = "users"
@@ -20,10 +13,6 @@ class User(Base):
     email = Column(String, unique=True, nullable=False)
     password = Column(String, nullable=False)
     birthday = Column(Date)
-
-    role_id = Column(Integer, ForeignKey("roles.id"))
-
-    role = relationship("Role")
 
     created_at = Column(
         DateTime,
