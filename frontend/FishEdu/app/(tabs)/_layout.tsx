@@ -1,0 +1,42 @@
+import { Tabs } from "expo-router"
+import Ionicons from '@expo/vector-icons/Ionicons'
+
+export default function TabsLayout() {
+  return (
+    <Tabs
+      screenOptions={{}}
+    >
+      <Tabs.Screen
+        name="index"
+        options={{
+          title: "Home",
+          tabBarIcon: ({ size, color }) => 
+            <Ionicons name="home" size={size} color={color}></Ionicons>
+        }}
+      >
+      </Tabs.Screen>
+
+      <Tabs.Screen
+        name="register"
+        options={{
+          title: "Register",
+          tabBarIcon: ({ size, color }) => (
+            <Ionicons name="person-outline" size={size} color={color}></Ionicons>
+          )
+        }}
+      >
+      </Tabs.Screen>
+
+        <Tabs.Screen
+        name="login"
+        options={{
+          title: "Login",
+          tabBarIcon: ({ size, color }) => (
+            <Ionicons name="bag-remove" size={size} color={color}></Ionicons>
+          )
+        }}
+      >
+      </Tabs.Screen>
+    </Tabs>
+  )  
+}
