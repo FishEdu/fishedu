@@ -1,7 +1,8 @@
 import { View, Text, StyleSheet, ScrollView } from "react-native";
-import RegisterForm from "@/Components/RegisterForm";
+import RegisterForm from "@/Components/RegisterForm/RegisterForm";
 import Container from "@/Components/Container";
 import convertRemToPixels from "../utils/convertRemToPixels";
+import { Link } from "expo-router";
 
 function Register() {
   return (
@@ -12,7 +13,12 @@ function Register() {
         </Container>
       </View>
       <Container>
-        <RegisterForm />
+        <>
+          <RegisterForm />
+          <Text>
+            Already have an account? <Link style={styles.loginLink} href="/login">Login</Link>
+          </Text>
+        </>
       </Container>
     </ScrollView>
   )
@@ -32,7 +38,12 @@ const styles = StyleSheet.create({
     color: "white",
     fontWeight: 600,
     fontSize: 40,
-  }
+  },
+
+  loginLink: {
+    color: "hsl(226, 75%, 59%)",
+    fontWeight: 600
+  },
 })
 
 export default Register;
