@@ -4,7 +4,9 @@ import Ionicons from '@expo/vector-icons/Ionicons'
 export default function TabsLayout() {
   return (
     <Tabs
-      screenOptions={{}}
+      screenOptions={{
+        sceneStyle: { backgroundColor: "hsl(180, 5%, 96%)" }
+      }}
     >
       <Tabs.Screen
         name="index"

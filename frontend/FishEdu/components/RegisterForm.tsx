@@ -1,6 +1,7 @@
 import convertRemToPixels from "@/app/utils/convertRemToPixels";
 import { useState } from "react";
-import { TextInput, Text, StyleSheet, View } from "react-native";
+import { Text, StyleSheet, View } from "react-native";
+import InputGroup from "./FormInputs/InputGroup";
 import CustomDatePicker from "./MyDatePicker";
 // import DatePicker from 'expo-datepicker';
 // import { z } from "zod";
@@ -41,23 +42,28 @@ function RegisterForm() {
         <View>
           <View>
             {
-              inputNames.map(name => (           
-                <View key={name} style={styles.input}>
-                  <Text style={styles.inputHeader}>{name}</Text>
-                  <TextInput placeholder={name}/>
-                </View>
+              inputNames.map(name => (
+                <InputGroup
+                  key={name}
+                  name={name}
+                  styles={{
+                    containerStyles: styles.inputContainerStyles,
+                    titleStyles: styles.titleStyles,
+                    inputStyles: styles.inputStyles,
+                    inputWrapper: styles.inputWrapper,
+                  }}
+                  inputProps={{
+                    placeholder: name
+                  }}
+                />
             ))}
-            <View style={styles.input}>
-              <Text style={styles.inputHeader}>Birthday</Text>
+
+            <View style={styles.inputContainerStyles}>
+              <Text style={styles.titleStyles}>Birthday</Text>
               <CustomDatePicker
                 value={birthday}
                 onChange={setBirthday}
               />
-              {/* <DatePicker
-                // inputStyle={styles.dateInput}
-                date={date}
-                onChange={setDate}
-              /> */}
             </View>
           </View>
           <Text>Already have an account?
@@ -68,24 +74,34 @@ function RegisterForm() {
 }
 
 const styles = StyleSheet.create({
-    input: {
-      backgroundColor: "white",
+    inputContainerStyles: {
       paddingBlock: convertRemToPixels(1),
-      paddingInline: convertRemToPixels(1.5),
-      borderRadius: convertRemToPixels(1),
-      color: "hsl(0, 0%, 35%)",
       fontSize: convertRemToPixels(1.25)
     },
+    
+    titleStyles: {
+      fontSize: convertRemToPixels(2),
+      fontWeight: 600,
+      paddingBottom: convertRemToPixels(.5)
+    },
+    
+    //Figure out how to style font styles
+    inputStyles: {
+      color: "red",
+    },
 
+    inputWrapper: {
+      backgroundColor: "white",
+      paddingBlock: convertRemToPixels(.5),
+      paddingInline: convertRemToPixels(.75),
+      borderRadius: convertRemToPixels(.75)
+    },
+    
     dateInput: {
       color: "hsl(0, 0%, 35%)",
       backgroundColor: "white",
       fontSize: convertRemToPixels(1.25)
-    },
-
-    inputHeader: {
-      fontSize: convertRemToPixels(2)
-    }
+    }    
 })
 
 export default RegisterForm;

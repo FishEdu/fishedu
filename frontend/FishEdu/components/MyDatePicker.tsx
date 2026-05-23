@@ -34,13 +34,7 @@ export default function CustomDatePicker({
     <View>
       <TouchableOpacity onPress={() => setOpen(true)} style={styles.inputContainer}>
         <Text style={styles.input}>
-          {`${date.getDate()}`}
-        </Text>
-         <Text style={styles.input}>
-          {`${date.getMonth()}`}
-        </Text>
-         <Text style={styles.input}>
-          {`${date.getFullYear()}`}
+          {`${date.getDate()}/${date.getMonth()}/${date.getFullYear()}`}
         </Text>
       </TouchableOpacity>
 
@@ -48,9 +42,8 @@ export default function CustomDatePicker({
         <View style={styles.modalContainer}>
           <View style={styles.modalBox}>
             <Text style={styles.title}>Input date</Text>
-
-            <View style={styles.row}>
-              <View style={styles.dayMonthColumn}>
+            <View style={styles.inputs}>
+              <View style={styles.inputGroup}>
                 <Text>Day</Text>
                 <TextInput
                   style={styles.textInput}
@@ -62,7 +55,7 @@ export default function CustomDatePicker({
                 />
               </View>
               
-              <View style={styles.column}>
+              <View style={styles.inputGroup}>
                 <Text>Month</Text>
                   <TextInput
                   style={styles.textInput}
@@ -74,7 +67,7 @@ export default function CustomDatePicker({
                 />
               </View>
               
-              <View style={styles.column}>
+              <View style={styles.inputGroup}>
                 <Text>Year</Text>
                  <TextInput
                   style={styles.textInput}
@@ -153,5 +146,16 @@ const styles = StyleSheet.create({
   closeBtn: {
     marginTop: 20,
     alignSelf: "center"
+  },
+  inputGroup: {
+    display: "flex",
+    flexDirection: "column",
+    gap: convertRemToPixels(.5)
+  },
+  inputs: {
+    display: "flex",
+    flexDirection: "column",
+    gap: convertRemToPixels(1),
+    marginBottom: convertRemToPixels(1)
   }
 });

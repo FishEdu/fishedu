@@ -1,29 +1,37 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, ScrollView } from "react-native";
+import RegisterForm from "@/Components/RegisterForm";
+import Container from "@/Components/Container";
 import convertRemToPixels from "../utils/convertRemToPixels";
-import RegisterForm from "@/components/RegisterForm";
 
 function Register() {
-     return (
-        <View>
-            <Text style={styles.header}>Welcome to FishEdu</Text>
-            <RegisterForm />
-        </View>
-    )
+  return (
+    <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 40 }}>
+      <View style={styles.header}>
+        <Container>
+          <Text style={styles.headerText}>Welcome to FishEdu</Text>
+        </Container>
+      </View>
+      <Container>
+        <RegisterForm />
+      </Container>
+    </ScrollView>
+  )
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
   },
+  
   header: {
     backgroundColor: "hsl(226, 75%, 59%)",
+    paddingBlock: convertRemToPixels(1.5)
+  },
+
+  headerText: {
     color: "white",
     fontWeight: 600,
-    textAlign: "center",
     fontSize: 40,
-    paddingBlock: convertRemToPixels(1)
   }
 })
 
