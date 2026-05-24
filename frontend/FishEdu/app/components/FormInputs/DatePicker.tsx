@@ -131,8 +131,8 @@ export default function DatePicker({
               >
               </InputGroup>
             </View>
-            <TouchableOpacity onPress={handleOnPress} style={styles.closeBtn}>
-              <Text>Close</Text>
+            <TouchableOpacity onPress={handleOnPress} style={styles.closeButton}>
+              <Text style={styles.closeButton}>Close</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -175,9 +175,13 @@ const styles = StyleSheet.create({
     textAlign: "center",
     flexGrow: 1
   },
-  closeBtn: {
+  closeButton: {
     marginTop: 20,
     alignSelf: "center"
+  },
+  closeButtonText: {
+    color: "hsl(226, 75%, 59%)",
+    fontWeight: 600
   },
   inputs: {
     display: "flex",

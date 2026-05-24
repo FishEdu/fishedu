@@ -29,5 +29,4 @@ function InputGroup({ inputProps, name, styles }: localProps) {
   )
 }
 
-
 export default InputGroup

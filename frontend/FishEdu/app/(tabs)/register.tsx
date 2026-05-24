@@ -1,7 +1,6 @@
 import { View, Text, StyleSheet, ScrollView } from "react-native";
 import RegisterForm from "@/Components/RegisterForm/RegisterForm";
 import Container from "@/Components/Container";
-import convertRemToPixels from "../utils/convertRemToPixels";
 import { Link } from "expo-router";
 
 function Register() {
@@ -31,7 +30,7 @@ const styles = StyleSheet.create({
   
   header: {
     backgroundColor: "hsl(226, 75%, 59%)",
-    paddingBlock: convertRemToPixels(1.5)
+    paddingBlock: 24
   },
 
   headerText: {
