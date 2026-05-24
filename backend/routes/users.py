@@ -2,8 +2,8 @@ from fastapi import APIRouter, HTTPException
 from database import SessionLocal
 from models.Role import Role
 from models.User import User
-from schemas.user import UserRegisterRequest, UserLoginRequest
-from schemas.user_role import UserRole
+from models.UserRole import UserRole
+from schemas.User import UserRegisterRequest, UserLoginRequest
 from auth import (
     hash_password,
     verify_password,
@@ -43,11 +43,14 @@ def register(user: UserRegisterRequest):
                 detail="Default role not found in database"
             )
 
+        now = u.get_utc_date()
         new_user = User(
             login=user.login,
             email=user.email,
             password=hash_password(user.password),
             birthday=user.birthday,
+            created_at=now,
+            modified_at=now
         )
 
         db.add(new_user)
