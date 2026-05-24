@@ -13,7 +13,7 @@ from utils import utils as u
 
 router = APIRouter()
 
-@router.post("/register")
+@router.post("/api/v1/register")
 def register(user: UserRegisterRequest):
     db = SessionLocal()
 
@@ -78,7 +78,7 @@ def register(user: UserRegisterRequest):
         db.close()
 
 
-@router.post("/login")
+@router.post("/api/v1/login")
 def login(user: UserLoginRequest):
 
     db = SessionLocal()
