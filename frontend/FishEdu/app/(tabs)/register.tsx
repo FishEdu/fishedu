@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet, ScrollView } from "react-native";
-import RegisterForm from "@/Components/RegisterForm/RegisterForm";
-import Container from "@/Components/Container";
+import RegisterForm from "@/app/components/RegisterForm/RegisterForm";
+import Container from "@/app/components/Container";
 import { Link } from "expo-router";
 
 function Register() {

@@ -1,4 +1,4 @@
-import { Text, View, TouchableOpacity } from "react-native";
+import { Text, View, Pressable } from "react-native";
 import InputGroup from "../FormInputs/InputGroup";
 import { useDatePicker } from "../FormInputs/DatePicker";
 import { registerFormStyles } from "./styles";
@@ -55,9 +55,9 @@ export default function RegisterForm() {
         )}
       </View>
 
-      <TouchableOpacity onPress={handleSubmit} style={styles.submitBtn}>
+      <Pressable onPress={handleSubmit} style={styles.submitBtn}>
         <Text style={styles.submitText}>Register</Text>
-      </TouchableOpacity>
+      </Pressable>
     </View>
   )
 }

@@ -1,4 +1,3 @@
-import convertRemToPixels from "@/app/utils/convertRemToPixels";
 import { JSX } from "react";
 import { StyleSheet, View } from "react-native";
 
@@ -12,7 +11,7 @@ function Container({ children }: localProps) {
 
 const styles = StyleSheet.create({
   container: {
-    paddingInline: convertRemToPixels(1),
+    paddingInline: 16,
     display: "flex"
   }
 });

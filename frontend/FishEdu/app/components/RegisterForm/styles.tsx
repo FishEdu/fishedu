@@ -1,35 +1,34 @@
-import convertRemToPixels from "@/app/utils/convertRemToPixels"
-import { StyleSheet } from "react-native"
+import { StyleSheet } from "react-native";
 
 export const registerFormStyles = StyleSheet.create({
   inputContainerStyles: {
-    paddingBlock: convertRemToPixels(1),
-    fontSize: convertRemToPixels(1.25)
+    paddingBlock: 16,
+    fontSize: 20
   },
   titleStyles: {
-    fontSize: convertRemToPixels(2),
+    fontSize: 32,
     fontWeight: "600",
-    paddingBottom: convertRemToPixels(.5)
+    paddingBottom: 8
   },
   inputStyles: {
     color: "hsl(0, 0%, 35%)",
   },
   inputWrapper: {
     backgroundColor: "white",
-    paddingBlock: convertRemToPixels(.5),
-    paddingInline: convertRemToPixels(.75),
-    borderRadius: convertRemToPixels(.75)
+    paddingBlock: 8,
+    paddingInline: 12,
+    borderRadius: 12
   },
   submitBtn: {
-    marginBlock: convertRemToPixels(1),
+    marginBlock: 16,
     backgroundColor: "hsl(226, 75%, 59%)",
-    padding: convertRemToPixels(1),
-    borderRadius: convertRemToPixels(.75),
+    padding: 16,
+    borderRadius: 12,
     alignItems: "center"
   },
   submitText: {
     color: "white",
-    fontSize: convertRemToPixels(1.5),
+    fontSize: 24,
     fontWeight: "600"
   }
 })

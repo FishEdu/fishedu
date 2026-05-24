@@ -1,6 +1,5 @@
-import convertRemToPixels from "@/app/utils/convertRemToPixels";
 import { useState } from "react";
-import { View, Text, TouchableOpacity, Modal, StyleSheet } from "react-native";
+import { View, Text, Modal, StyleSheet, Pressable } from "react-native";
 import InputGroup from "./InputGroup";
 
 interface CustomDatePickerProps {
@@ -60,11 +59,11 @@ export default function DatePicker({
 
   return (
     <View>
-      <TouchableOpacity onPress={() => setOpen(true)} style={styles.inputContainer}>
+      <Pressable onPress={() => setOpen(true)} style={styles.inputContainer}>
         <Text style={styles.input}>
           {`${date.getDate()}/${date.getMonth()}/${date.getFullYear()}`}
         </Text>
-      </TouchableOpacity>
+      </Pressable>
 
       <Modal visible={open} transparent animationType="slide">
         <View style={styles.modalContainer}>
@@ -131,9 +130,9 @@ export default function DatePicker({
               >
               </InputGroup>
             </View>
-            <TouchableOpacity onPress={handleOnPress} style={styles.closeButton}>
+            <Pressable onPress={handleOnPress} style={styles.closeButton}>
               <Text style={styles.closeButton}>Close</Text>
-            </TouchableOpacity>
+            </Pressable>
           </View>
         </View>
       </Modal>
@@ -145,11 +144,11 @@ const styles = StyleSheet.create({
   inputContainer: {
     display: "flex",
     flexDirection: "row",
-    gap: convertRemToPixels(1)
+    gap: 16
   },
   input: {
-    padding: convertRemToPixels(.75),
-    borderRadius: convertRemToPixels(.5),
+    padding: 12,
+    borderRadius: 8,
     backgroundColor: "white"
   },
   modalContainer: {
@@ -159,9 +158,9 @@ const styles = StyleSheet.create({
   },
   modalBox: {
     backgroundColor: "white",
-    margin: convertRemToPixels(1.5),
-    padding: convertRemToPixels(1.5),
-    borderRadius: convertRemToPixels(.5)
+    margin: 24,
+    padding: 24,
+    borderRadius: 8
   },
   title: {
     fontSize: 18,
@@ -186,7 +185,7 @@ const styles = StyleSheet.create({
   inputs: {
     display: "flex",
     flexDirection: "column",
-    gap: convertRemToPixels(1),
-    marginBottom: convertRemToPixels(1)
+    gap: 16,
+    marginBottom: 16
   }
 });
