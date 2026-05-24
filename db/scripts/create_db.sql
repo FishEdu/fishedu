@@ -1,5 +1,5 @@
 CREATE TABLE "users" (
-  "id" integer PRIMARY KEY,
+  id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   "login" varchar,
   "email" varchar,
   "password" varchar,
@@ -9,7 +9,7 @@ CREATE TABLE "users" (
 );
 
 CREATE TABLE "user_records" (
-  "id" integer PRIMARY KEY,
+  id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   "fish_id" integer,
   "total_length" float,
   "fork_length" float,
@@ -21,14 +21,14 @@ CREATE TABLE "user_records" (
 );
 
 CREATE TABLE "roles" (
-  "id" integer PRIMARY KEY,
+  id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   "name" varchar,
   "created_at" timestamp,
   "modified_at" timestamp
 );
 
 CREATE TABLE "users_roles" (
-  "id" integer PRIMARY KEY,
+  id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   "user_id" integer,
   "role_id" integer,
   "created_at" timestamp,
@@ -36,7 +36,7 @@ CREATE TABLE "users_roles" (
 );
 
 CREATE TABLE "fish" (
-  "id" integer PRIMARY KEY,
+  id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   "habitat_id" integer,
   "is_endangered" bool,
   "created_at" timestamp,
@@ -44,7 +44,7 @@ CREATE TABLE "fish" (
 );
 
 CREATE TABLE "fish_pl_translations" (
-  "id" integer PRIMARY KEY,
+  id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   "fish_id" integer,
   "name" varchar,
   "description" text,
@@ -53,7 +53,7 @@ CREATE TABLE "fish_pl_translations" (
 );
 
 CREATE TABLE "fish_en_translations" (
-  "id" integer PRIMARY KEY,
+  id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   "fish_id" integer,
   "name" varchar,
   "description" text,
@@ -62,14 +62,14 @@ CREATE TABLE "fish_en_translations" (
 );
 
 CREATE TABLE "fishing_methods" (
-  "id" integer PRIMARY KEY,
+  id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   "is_passive" bool,
   "created_at" timestamp,
   "modified_at" timestamp
 );
 
 CREATE TABLE "fishing_methods_pl_translations" (
-  "id" integer PRIMARY KEY,
+  id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   "fishing_method_id" integer,
   "name" varchar,
   "description" text,
@@ -78,7 +78,7 @@ CREATE TABLE "fishing_methods_pl_translations" (
 );
 
 CREATE TABLE "fishing_methods_en_translations" (
-  "id" integer PRIMARY KEY,
+  id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   "fishing_method_id" integer,
   "name" varchar,
   "description" text,
@@ -87,7 +87,7 @@ CREATE TABLE "fishing_methods_en_translations" (
 );
 
 CREATE TABLE "fishing_methods_fish" (
-  "id" integer PRIMARY KEY,
+  id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   "fish_id" integer,
   "method_id" integer,
   "created_at" timestamp,
@@ -95,13 +95,13 @@ CREATE TABLE "fishing_methods_fish" (
 );
 
 CREATE TABLE "recipes" (
-  "id" integer PRIMARY KEY,
+  id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   "created_at" timestamp,
   "modified_at" timestamp
 );
 
 CREATE TABLE "recipes_pl_translations" (
-  "id" integer PRIMARY KEY,
+  id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   "recipe_id" int,
   "name" varchar,
   "created_at" timestamp,
@@ -109,7 +109,7 @@ CREATE TABLE "recipes_pl_translations" (
 );
 
 CREATE TABLE "recipes_en_translations" (
-  "id" integer PRIMARY KEY,
+  id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   "recipe_id" int,
   "name" varchar,
   "created_at" timestamp,
@@ -117,7 +117,7 @@ CREATE TABLE "recipes_en_translations" (
 );
 
 CREATE TABLE "recipes_fish" (
-  "id" integer PRIMARY KEY,
+  id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   "fish_id" integer,
   "recipe_id" integer,
   "created_at" timestamp,
@@ -125,13 +125,13 @@ CREATE TABLE "recipes_fish" (
 );
 
 CREATE TABLE "ingredients" (
-  "id" integer PRIMARY KEY,
+  id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   "created_at" timestamp,
   "modified_at" timestamp
 );
 
 CREATE TABLE "ingredients_en_translations" (
-  "id" integer PRIMARY KEY,
+  id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   "ingredient_id" int,
   "name" varchar,
   "created_at" timestamp,
@@ -139,7 +139,7 @@ CREATE TABLE "ingredients_en_translations" (
 );
 
 CREATE TABLE "ingredients_pl_translations" (
-  "id" integer PRIMARY KEY,
+  id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   "ingredient_id" int,
   "name" varchar,
   "created_at" timestamp,
@@ -147,7 +147,7 @@ CREATE TABLE "ingredients_pl_translations" (
 );
 
 CREATE TABLE "recipes_ingredients" (
-  "id" integer PRIMARY KEY,
+  id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   "recipe_id" integer,
   "ingredient_id" integer,
   "ammount" float,
@@ -157,13 +157,13 @@ CREATE TABLE "recipes_ingredients" (
 );
 
 CREATE TABLE "fishing_areas" (
-  "id" integer PRIMARY KEY,
+  id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   "created_at" timestamp,
   "modified_at" timestamp
 );
 
 CREATE TABLE "fishing_areas_pl_translations" (
-  "id" integer PRIMARY KEY,
+  id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   "fishing_area_id" integer,
   "name" varchar,
   "description" varchar,
@@ -172,7 +172,7 @@ CREATE TABLE "fishing_areas_pl_translations" (
 );
 
 CREATE TABLE "fishing_areas_en_translations" (
-  "id" integer PRIMARY KEY,
+  id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   "fishing_area_id" integer,
   "name" varchar,
   "description" varchar,
@@ -181,7 +181,7 @@ CREATE TABLE "fishing_areas_en_translations" (
 );
 
 CREATE TABLE "with_url_education_materials" (
-  "id" integer PRIMARY KEY,
+  id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   "title" varchar,
   "url" varchar,
   "type" varchar,
@@ -193,14 +193,14 @@ CREATE TABLE "with_url_education_materials" (
 );
 
 CREATE TABLE "equipment" (
-  "id" integer PRIMARY KEY,
+  id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   "name" varchar,
   "created_at" timestamp,
   "modified_at" timestamp
 );
 
 CREATE TABLE "education_materials" (
-  "id" integer PRIMARY KEY,
+  id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   "title" varchar,
   "description" text,
   "is_for_novice" bool,
@@ -208,6 +208,49 @@ CREATE TABLE "education_materials" (
   "created_at" timestamp,
   "modified_at" timestamp
 );
+
+ALTER TABLE "user_records" ADD FOREIGN KEY ("fish_id") REFERENCES "fish" ("id") DEFERRABLE INITIALLY IMMEDIATE;
+
+ALTER TABLE "user_records" ADD FOREIGN KEY ("area_id") REFERENCES "fishing_areas" ("id") DEFERRABLE INITIALLY IMMEDIATE;
+
+ALTER TABLE "users_roles" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id") DEFERRABLE INITIALLY IMMEDIATE;
+
+ALTER TABLE "users_roles" ADD FOREIGN KEY ("role_id") REFERENCES "roles" ("id") DEFERRABLE INITIALLY IMMEDIATE;
+
+ALTER TABLE "fish" ADD FOREIGN KEY ("habitat_id") REFERENCES "fishing_areas" ("id") DEFERRABLE INITIALLY IMMEDIATE;
+
+ALTER TABLE "fish_pl_translations" ADD FOREIGN KEY ("fish_id") REFERENCES "fish" ("id") DEFERRABLE INITIALLY IMMEDIATE;
+
+ALTER TABLE "fish_en_translations" ADD FOREIGN KEY ("fish_id") REFERENCES "fish" ("id") DEFERRABLE INITIALLY IMMEDIATE;
+
+ALTER TABLE "fishing_methods_pl_translations" ADD FOREIGN KEY ("fishing_method_id") REFERENCES "fishing_methods" ("id") DEFERRABLE INITIALLY IMMEDIATE;
+
+ALTER TABLE "fishing_methods_en_translations" ADD FOREIGN KEY ("fishing_method_id") REFERENCES "fishing_methods" ("id") DEFERRABLE INITIALLY IMMEDIATE;
+
+ALTER TABLE "fishing_methods_fish" ADD FOREIGN KEY ("fish_id") REFERENCES "fish" ("id") DEFERRABLE INITIALLY IMMEDIATE;
+
+ALTER TABLE "fishing_methods_fish" ADD FOREIGN KEY ("method_id") REFERENCES "fishing_methods" ("id") DEFERRABLE INITIALLY IMMEDIATE;
+
+ALTER TABLE "recipes_pl_translations" ADD FOREIGN KEY ("recipe_id") REFERENCES "recipes" ("id") DEFERRABLE INITIALLY IMMEDIATE;
+
+ALTER TABLE "recipes_en_translations" ADD FOREIGN KEY ("recipe_id") REFERENCES "recipes" ("id") DEFERRABLE INITIALLY IMMEDIATE;
+
+ALTER TABLE "recipes_fish" ADD FOREIGN KEY ("fish_id") REFERENCES "fish" ("id") DEFERRABLE INITIALLY IMMEDIATE;
+
+ALTER TABLE "recipes_fish" ADD FOREIGN KEY ("recipe_id") REFERENCES "recipes" ("id") DEFERRABLE INITIALLY IMMEDIATE;
+
+ALTER TABLE "ingredients_en_translations" ADD FOREIGN KEY ("ingredient_id") REFERENCES "ingredients" ("id") DEFERRABLE INITIALLY IMMEDIATE;
+
+ALTER TABLE "ingredients_pl_translations" ADD FOREIGN KEY ("ingredient_id") REFERENCES "ingredients" ("id") DEFERRABLE INITIALLY IMMEDIATE;
+
+ALTER TABLE "recipes_ingredients" ADD FOREIGN KEY ("recipe_id") REFERENCES "recipes" ("id") DEFERRABLE INITIALLY IMMEDIATE;
+
+ALTER TABLE "recipes_ingredients" ADD FOREIGN KEY ("ingredient_id") REFERENCES "ingredients" ("id") DEFERRABLE INITIALLY IMMEDIATE;
+
+ALTER TABLE "fishing_areas_pl_translations" ADD FOREIGN KEY ("fishing_area_id") REFERENCES "fishing_areas" ("id") DEFERRABLE INITIALLY IMMEDIATE;
+
+ALTER TABLE "fishing_areas_en_translations" ADD FOREIGN KEY ("fishing_area_id") REFERENCES "fishing_areas" ("id") DEFERRABLE INITIALLY IMMEDIATE;
+
 
 ALTER TABLE "user_records" ADD FOREIGN KEY ("fish_id") REFERENCES "fish" ("id") DEFERRABLE INITIALLY IMMEDIATE;
 
