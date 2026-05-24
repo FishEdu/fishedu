@@ -29,7 +29,7 @@ def register(user: UserRegisterRequest):
             raise HTTPException(
                 status_code=400,
                 detail="Email already exists"
-            )
+        )
 
         default_role = (
             db.query(Role)
@@ -52,6 +52,7 @@ def register(user: UserRegisterRequest):
             created_at=now,
             modified_at=now
         )
+
 
         db.add(new_user)
         db.commit()

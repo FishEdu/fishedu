@@ -5,7 +5,6 @@ Revises:
 Create Date: 2026-05-21 19:03:31.184207
 
 """
-from datetime import datetime, timezone
 from typing import Sequence, Union
 
 from alembic import op
@@ -22,7 +21,6 @@ depends_on: Union[str, Sequence[str], None] = None
 
 roles = table(
     'roles',
-    # column('id', sa.Integer, primary_key=True, autoincrement=True),
     column('name', sa.String),
     column('created_at', sa.DateTime),
     column('modified_at', sa.DateTime),
@@ -33,21 +31,21 @@ def upgrade() -> None:
 
     op.execute(
         roles.insert().values([
-                {
-                    'name': 'user',
-                    'created_at': utc_date,
-                    'modified_at': utc_date
-                },
-                {
-                    'name': 'moderator',
-                    'created_at': utc_date,
-                    'modified_at': utc_date
-                },
-                {
-                    'name': 'admin',
-                    'created_at': utc_date,
-                    'modified_at': utc_date
-                }
+            {
+                'name': 'user',
+                'created_at': utc_date,
+                'modified_at': utc_date
+            },
+            {
+                'name': 'moderator',
+                'created_at': utc_date,
+                'modified_at': utc_date
+            },
+            {
+                'name': 'admin',
+                'created_at': utc_date,
+                'modified_at': utc_date
+            }
         ])
     )
 
