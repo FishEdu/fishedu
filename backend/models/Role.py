@@ -1,10 +1,10 @@
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, String
 
 from database import Base
+from models.BaseModelMixin import BaseModelMixin
 
 
-class Role(Base):
+class Role(Base, BaseModelMixin):
     __tablename__ = "roles"
 
-    id = Column(Integer, primary_key=True)
     name = Column(String, unique=True)

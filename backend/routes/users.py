@@ -1,6 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from database import SessionLocal
-from models import Role, User
+from models.Role import Role
+from models.User import User
 from schemas.user import UserRegisterRequest, UserLoginRequest
 from schemas.user_role import UserRole
 from auth import (
