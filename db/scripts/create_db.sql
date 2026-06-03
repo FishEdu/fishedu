@@ -37,7 +37,8 @@ CREATE TABLE "users_roles" (
 
 CREATE TABLE "fish" (
   id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-  "habitat_id" integer,
+  "min_protection_length" float,
+  "max_protection_length" float,
   "is_endangered" bool,
   "created_at" timestamp,
   "modified_at" timestamp
@@ -46,8 +47,13 @@ CREATE TABLE "fish" (
 CREATE TABLE "fish_pl_translations" (
   id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   "fish_id" integer,
+  "habitat_id" integer,
   "name" varchar,
   "description" text,
+  "appearance" text,
+  "feeding_places" text,
+  "preferences" text,
+  "handling" text,
   "created_at" timestamp,
   "modified_at" timestamp
 );
@@ -55,8 +61,43 @@ CREATE TABLE "fish_pl_translations" (
 CREATE TABLE "fish_en_translations" (
   id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   "fish_id" integer,
+  "habitat_id" integer,
   "name" varchar,
   "description" text,
+  "appearance" text,
+  "feeding_places" text,
+  "preferences" text,
+  "handling" text,
+  "created_at" timestamp,
+  "modified_at" timestamp
+);
+
+CREATE TABLE "diets" (
+  id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  "created_at" timestamp,
+  "modified_at" timestamp
+);
+
+CREATE TABLE "diets_pl_translations" (
+  id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  "diet_id" integer,
+  "name" varchar,
+  "created_at" timestamp,
+  "modified_at" timestamp
+);
+
+CREATE TABLE "diets_en_translations" (
+  id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  "diet_id" integer,
+  "name" varchar,
+  "created_at" timestamp,
+  "modified_at" timestamp
+);
+
+CREATE TABLE "diets_fish" (
+  id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  "fish_id" integer,
+  "diet_id" integer,
   "created_at" timestamp,
   "modified_at" timestamp
 );
@@ -217,11 +258,21 @@ ALTER TABLE "users_roles" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id") 
 
 ALTER TABLE "users_roles" ADD FOREIGN KEY ("role_id") REFERENCES "roles" ("id") DEFERRABLE INITIALLY IMMEDIATE;
 
-ALTER TABLE "fish" ADD FOREIGN KEY ("habitat_id") REFERENCES "fishing_areas" ("id") DEFERRABLE INITIALLY IMMEDIATE;
-
 ALTER TABLE "fish_pl_translations" ADD FOREIGN KEY ("fish_id") REFERENCES "fish" ("id") DEFERRABLE INITIALLY IMMEDIATE;
 
+ALTER TABLE "fish_pl_translations" ADD FOREIGN KEY ("habitat_id") REFERENCES "fishing_areas" ("id") DEFERRABLE INITIALLY IMMEDIATE;
+
 ALTER TABLE "fish_en_translations" ADD FOREIGN KEY ("fish_id") REFERENCES "fish" ("id") DEFERRABLE INITIALLY IMMEDIATE;
+
+ALTER TABLE "fish_en_translations" ADD FOREIGN KEY ("habitat_id") REFERENCES "fishing_areas" ("id") DEFERRABLE INITIALLY IMMEDIATE;
+
+ALTER TABLE "diets_pl_translations" ADD FOREIGN KEY ("diet_id") REFERENCES "diets" ("id") DEFERRABLE INITIALLY IMMEDIATE;
+
+ALTER TABLE "diets_en_translations" ADD FOREIGN KEY ("diet_id") REFERENCES "diets" ("id") DEFERRABLE INITIALLY IMMEDIATE;
+
+ALTER TABLE "diets_fish" ADD FOREIGN KEY ("fish_id") REFERENCES "fish" ("id") DEFERRABLE INITIALLY IMMEDIATE;
+
+ALTER TABLE "diets_fish" ADD FOREIGN KEY ("diet_id") REFERENCES "diets" ("id") DEFERRABLE INITIALLY IMMEDIATE;
 
 ALTER TABLE "fishing_methods_pl_translations" ADD FOREIGN KEY ("fishing_method_id") REFERENCES "fishing_methods" ("id") DEFERRABLE INITIALLY IMMEDIATE;
 
@@ -260,11 +311,21 @@ ALTER TABLE "users_roles" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id") 
 
 ALTER TABLE "users_roles" ADD FOREIGN KEY ("role_id") REFERENCES "roles" ("id") DEFERRABLE INITIALLY IMMEDIATE;
 
-ALTER TABLE "fish" ADD FOREIGN KEY ("habitat_id") REFERENCES "fishing_areas" ("id") DEFERRABLE INITIALLY IMMEDIATE;
-
 ALTER TABLE "fish_pl_translations" ADD FOREIGN KEY ("fish_id") REFERENCES "fish" ("id") DEFERRABLE INITIALLY IMMEDIATE;
 
+ALTER TABLE "fish_pl_translations" ADD FOREIGN KEY ("habitat_id") REFERENCES "fishing_areas" ("id") DEFERRABLE INITIALLY IMMEDIATE;
+
 ALTER TABLE "fish_en_translations" ADD FOREIGN KEY ("fish_id") REFERENCES "fish" ("id") DEFERRABLE INITIALLY IMMEDIATE;
+
+ALTER TABLE "fish_en_translations" ADD FOREIGN KEY ("habitat_id") REFERENCES "fishing_areas" ("id") DEFERRABLE INITIALLY IMMEDIATE;
+
+ALTER TABLE "diets_pl_translations" ADD FOREIGN KEY ("diet_id") REFERENCES "diets" ("id") DEFERRABLE INITIALLY IMMEDIATE;
+
+ALTER TABLE "diets_en_translations" ADD FOREIGN KEY ("diet_id") REFERENCES "diets" ("id") DEFERRABLE INITIALLY IMMEDIATE;
+
+ALTER TABLE "diets_fish" ADD FOREIGN KEY ("fish_id") REFERENCES "fish" ("id") DEFERRABLE INITIALLY IMMEDIATE;
+
+ALTER TABLE "diets_fish" ADD FOREIGN KEY ("diet_id") REFERENCES "diets" ("id") DEFERRABLE INITIALLY IMMEDIATE;
 
 ALTER TABLE "fishing_methods_pl_translations" ADD FOREIGN KEY ("fishing_method_id") REFERENCES "fishing_methods" ("id") DEFERRABLE INITIALLY IMMEDIATE;
 

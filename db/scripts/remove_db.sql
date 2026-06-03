@@ -15,6 +15,10 @@ DROP TABLE IF EXISTS recipes CASCADE;
 
 DROP TABLE IF EXISTS fish_en_translations CASCADE;
 DROP TABLE IF EXISTS fish_pl_translations CASCADE;
+DROP TABLE IF EXISTS diets_fish CASCADE;
+DROP TABLE IF EXISTS diets_en_translations CASCADE;
+DROP TABLE IF EXISTS diets_pl_translations CASCADE;
+DROP TABLE IF EXISTS diets CASCADE;
 DROP TABLE IF EXISTS fish CASCADE;
 
 DROP TABLE IF EXISTS fishing_areas_en_translations CASCADE;
