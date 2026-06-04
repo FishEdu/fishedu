@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { z } from "zod";
-import { useDatePicker } from "../FormInputs/DatePicker";
+import { useDatePicker } from "@/app/components/FormInputs/DatePicker";
 
 const passwordLength = 10;
 const specialBigNumberRegEx = /^(?=.*[0-9])(?=.*[A-Z])(?=.*[!@#$%^&*()\-_=+]).+$/;
