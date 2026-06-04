@@ -1,14 +1,16 @@
 from fastapi import APIRouter, HTTPException
 from database import SessionLocal
-from models import Fish
-from models import FishPlTranslations
-from models import FishEnTranslations
+from models import Fish, FishPlTranslations, FishEnTranslations
 
 router = APIRouter(
     prefix="/api/v1/fish",
     tags=["fish"]
 )
 
+
+# =========================
+# GET SINGLE FISH
+# =========================
 @router.get("/{name}")
 def get_fish(name: str, language: str):
 
@@ -27,7 +29,7 @@ def get_fish(name: str, language: str):
                 detail="Unsupported language"
             )
 
-        fish = (
+        result = (
             db.query(Fish, translation_table)
             .join(
                 translation_table,
@@ -39,17 +41,35 @@ def get_fish(name: str, language: str):
             .first()
         )
 
-        if not fish:
+        if not result:
             raise HTTPException(
                 status_code=404,
                 detail="Fish not found"
             )
 
-        return fish
+        fish, translation = result
+
+        return {
+            "id": fish.id,
+            "min_protection_length": fish.min_protection_length,
+            "max_protection_length": fish.max_protection_length,
+            "is_endangered": fish.is_endangered,
+
+            "name": translation.name,
+            "description": translation.description,
+            "appearance": translation.appearance,
+            "feeding_places": translation.feeding_places,
+            "preferences": translation.preferences,
+            "handling": translation.handling,
+        }
 
     finally:
         db.close()
 
+
+# =========================
+# GET ALL FISH
+# =========================
 @router.get("")
 def get_all_fish(language: str):
 
@@ -68,7 +88,7 @@ def get_all_fish(language: str):
                 detail="Unsupported language"
             )
 
-        fishes = (
+        results = (
             db.query(Fish, translation_table)
             .join(
                 translation_table,
@@ -77,7 +97,22 @@ def get_all_fish(language: str):
             .all()
         )
 
-        return fishes
+        return [
+            {
+                "id": fish.id,
+                "min_protection_length": fish.min_protection_length,
+                "max_protection_length": fish.max_protection_length,
+                "is_endangered": fish.is_endangered,
+
+                "name": translation.name,
+                "description": translation.description,
+                "appearance": translation.appearance,
+                "feeding_places": translation.feeding_places,
+                "preferences": translation.preferences,
+                "handling": translation.handling,
+            }
+            for fish, translation in results
+        ]
 
     finally:
         db.close()
