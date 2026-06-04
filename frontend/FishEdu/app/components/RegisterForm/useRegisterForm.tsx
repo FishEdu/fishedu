@@ -33,7 +33,7 @@ interface FormData {
   birthday: string
 }
 
-export const useValidateRegisterData = () => {
+export const useRegisterForm = () => {
   const [ errors, setErrors ] = useState<Record<string, string>>({})
   const [ formData, setFormData ] = useState<FormData>({
     login: "",

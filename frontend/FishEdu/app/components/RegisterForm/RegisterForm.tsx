@@ -1,11 +1,11 @@
 import { Text, View, Pressable } from "react-native";
 import InputGroup from "@/app/components/FormInputs/InputGroup";
 import { registerFormStyles } from "./styles";
-import { useValidateRegisterData } from "./useValidateRegisterData";
 import { useDatePicker } from "@components/FormInputs/DatePicker";
+import { useRegisterForm } from "./useRegisterForm";
 
 export default function RegisterForm() { 
-  const { formData, errors, setFormData, handleSubmit } = useValidateRegisterData()
+  const { formData, errors, setFormData, handleSubmit } = useRegisterForm()
   const { DatePickerElement } = useDatePicker()
 
   const updateField = (field: keyof FormData, value: string) => {
