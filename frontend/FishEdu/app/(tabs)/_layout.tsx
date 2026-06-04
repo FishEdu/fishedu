@@ -18,7 +18,7 @@ export default function TabsLayout() {
       >
       </Tabs.Screen>
 
-      <Tabs.Screen
+      {/* <Tabs.Screen
         name="register"
         options={{
           title: "Register",
@@ -38,7 +38,7 @@ export default function TabsLayout() {
           )
         }}
       >
-      </Tabs.Screen>
+      </Tabs.Screen> */}
     </Tabs>
   )  
 }
