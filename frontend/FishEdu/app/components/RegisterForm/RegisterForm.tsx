@@ -1,8 +1,8 @@
 import { Text, View, Pressable } from "react-native";
-import InputGroup from "../FormInputs/InputGroup";
-import { useDatePicker } from "../FormInputs/DatePicker";
+import InputGroup from "@/app/components/FormInputs/InputGroup";
 import { registerFormStyles } from "./styles";
 import { useValidateRegisterData } from "./useValidateRegisterData";
+import { useDatePicker } from "@components/FormInputs/DatePicker";
 
 export default function RegisterForm() { 
   const { formData, errors, setFormData, handleSubmit } = useValidateRegisterData()
