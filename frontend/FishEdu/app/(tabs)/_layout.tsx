@@ -22,7 +22,7 @@ export default function TabsLayout() {
         options={{
           title: "Settings",
           tabBarIcon: ({ size, color }) => 
-            <Ionicons name="cog" size={size} color={color}></Ionicons>
+            <Ionicons name="settings" size={size} color={color}></Ionicons>
         }}
       />
 
