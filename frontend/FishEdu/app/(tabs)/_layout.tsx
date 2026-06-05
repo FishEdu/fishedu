@@ -15,8 +15,16 @@ export default function TabsLayout() {
           tabBarIcon: ({ size, color }) => 
             <Ionicons name="home" size={size} color={color}></Ionicons>
         }}
-      >
-      </Tabs.Screen>
+      />
+      
+      <Tabs.Screen
+        name="settings"
+        options={{
+          title: "Settings",
+          tabBarIcon: ({ size, color }) => 
+            <Ionicons name="cog" size={size} color={color}></Ionicons>
+        }}
+      />
 
       {/* <Tabs.Screen
         name="register"
