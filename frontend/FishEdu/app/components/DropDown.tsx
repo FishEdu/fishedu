@@ -1,4 +1,5 @@
-import { Host, DropdownMenu, DropdownMenuItem, Button, Text, Icon } from '@expo/ui/jetpack-compose';
+import { Host, DropdownMenu, DropdownMenuItem, Button, Text } from '@expo/ui/jetpack-compose';
+import Ionicons from '@expo/vector-icons/Ionicons';
 import { useState } from 'react';
 
 export default function BasicDropdownMenuExample() {
@@ -7,7 +8,7 @@ export default function BasicDropdownMenuExample() {
     <Host matchContents>
       <DropdownMenu expanded={isExpanded} onDismissRequest={() => setIsExpanded(false)}>
         <DropdownMenu.Trigger>
-          <Button variant="bordered" onClick={() => setIsExpanded(true)}>
+          <Button onClick={() => setIsExpanded(true)}>
             Show Menu
           </Button>
         </DropdownMenu.Trigger>
@@ -21,7 +22,9 @@ export default function BasicDropdownMenuExample() {
               <Text>Home</Text>
             </DropdownMenuItem.Text>
             <DropdownMenuItem.LeadingIcon>
-              <Icon source={homeIcon} size={24} />
+              <Ionicons
+                name='home' 
+              />
             </DropdownMenuItem.LeadingIcon>
           </DropdownMenuItem>
         </DropdownMenu.Items>
