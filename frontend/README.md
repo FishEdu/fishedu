@@ -1,33 +1,93 @@
+Java Installation (JDK 17)
 
-# Requirements
+This project requires Java 17. Newer versions (21+) may cause Gradle build issues.
 
-- Installed Node.js LTS
-- Installed Expo GO on your phone
+Download JDK 17 (Temurin LTS):
+https://adoptium.net/
 
-# Installation
+After installation, set environment variables:
 
-## 1. Install npm packages
+JAVA_HOME
+C:\Program Files\Eclipse Adoptium\jdk-17.x.x
+PATH
+%JAVA_HOME%\bin
 
-Run:
+Verify installation:
 
-```
-npm i
-```
-## 2. Delete or move the starting code
-```
-npm run reset-project
-```
+java -version
 
-# Running app on a mobile device
+Expected output:
 
-## 1. Start the app
+openjdk version "17"
+Android Studio & SDK Setup
 
-```
-npm start
-```
+Install Android Studio:
+https://developer.android.com/studio
 
-## 2. Scan the QR code with Expo GO app
-- Be sure to be connected to the same network as your app
+During installation ensure the following components are selected:
 
-# Now you're ready to edit the app
-The app will change whenever you save your changes
+Android SDK
+Android SDK Platform
+Android SDK Platform-Tools
+Android Emulator
+Android SDK Environment Variables
+
+Default SDK location:
+
+C:\Users\<username>\AppData\Local\Android\Sdk
+
+Set environment variables:
+
+ANDROID_HOME
+C:\Users\<username>\AppData\Local\Android\Sdk
+PATH additions
+%ANDROID_HOME%\platform-tools
+%ANDROID_HOME%\emulator
+
+Verify installation:
+
+adb version
+Android Emulator Setup
+
+In Android Studio:
+
+Open Device Manager
+Click Create Device
+Select a device (e.g. Pixel 8)
+Download a system image (x86_64 recommended)
+Start the emulator
+
+Verify running emulator:
+
+adb devices
+
+Expected output:
+
+emulator-5554 device
+Install Dependencies
+npm install
+Run the Project (Android)
+npx expo run:android
+Common Issues
+adb is not recognized
+
+Make sure platform-tools is added to PATH.
+
+JAVA_HOME is not set
+
+Ensure Java 17 is installed and JAVA_HOME points to it.
+
+Emulator does not start
+
+Start it manually from Android Studio → Device Manager.
+
+Gradle build errors (IBM_SEMERU / JVM issues)
+
+You are likely using an unsupported Java version. Use JDK 17.
+
+Tips
+
+Restart ADB if devices are not detected:
+
+adb kill-server
+adb start-server
