@@ -1,24 +1,31 @@
-import { FlatList } from "react-native"
+import { FlatList, StyleSheet } from "react-native"
 import FishListElement from "./FishListElement"
-import { fishListElementProps } from "./fishListElementProps"
+import { FishGetResponse } from "@/app/utils/fetch/fish/fetchFish"
 
 type fishListProps = {
-  data: fishListElementProps[]
+  fish?: FishGetResponse[]
 }
 
-export default function FishList({ data }: fishListProps) {
+export default function FishList({ fish }: fishListProps) {
   return (
-    <FlatList 
-      data={data}
+    <FlatList
+      contentContainerStyle={styles.list}
+      data={fish}
       renderItem={({item}) => 
         <FishListElement
           name={item.name} 
-          environment={item.environment}
-          isEndangered={item.isEndangered}
-          imageUrl={item.imageUrl}
+          isEndangered={item.is_endangered}
+          imageUrl={''}
         />
       }
       keyExtractor={item => item.name}
     />
   )
 }
+
+const styles = StyleSheet.create({
+  list: {
+    display: 'flex',
+    gap: 16
+  }
+})

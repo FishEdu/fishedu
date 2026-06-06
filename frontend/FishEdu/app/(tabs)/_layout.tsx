@@ -26,6 +26,15 @@ export default function TabsLayout() {
         }}
       />
 
+      <Tabs.Screen
+        name="fishSearch"
+        options={{
+          title: "Fish Search",
+          tabBarIcon: ({ size, color }) => 
+            <Ionicons name="fish" size={size} color={color}></Ionicons>
+        }}
+      />
+
       {/* <Tabs.Screen
         name="register"
         options={{

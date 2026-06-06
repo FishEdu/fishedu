@@ -1,30 +1,61 @@
-import { View } from "react-native"
+import { StyleSheet, View, Image } from "react-native"
 import FishInfoGroup from "./FishInfoGroup"
-import { fishListElementProps } from "./fishListElementProps"
+
+type localProps = {
+  imageUrl?: string,
+  name: string,
+  isEndangered: boolean,
+}
 
 export default function FishListElement({
   name, 
-  environment, 
   isEndangered,
-  imageUrl }: fishListElementProps
+  imageUrl }: localProps
   ) {
     return (
-      <View>
+      <View style={styles.container}>
         <View>
-          {/* <Image></Image> */}
+         <Image 
+          source={require('../../../assets/images/fish.jpg')}
+          alt='Fish image'
+          style={{
+            width: 100,
+            height: 75,
+          }}
+        />
         </View>
-        <FishInfoGroup
-          title='Name'
-          text={name}
-        />
-        <FishInfoGroup
-          title='Environment'
-          text={environment}
-        />
-        <FishInfoGroup
-          title='Endangered'
-          text={isEndangered ? 'Yes' : 'No'}
-        />
+        <View style={styles.textContainer}>
+          <FishInfoGroup
+            title='Name'
+            text={name}
+            containerStyles={styles.info}
+          />
+          <FishInfoGroup
+            title='Endangered'
+            text={ isEndangered ? 'Yes' : 'No' }
+            containerStyles={styles.info}
+          />
+        </View>
       </View>
     )
 }
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: 'hsl(0, 0%, 100%)',
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 24,
+    paddingEnd: 16,
+    borderRadius: 24,
+    overflow: 'hidden'
+  },
+  textContainer: {
+    flex: 1,
+    flexDirection: 'row',
+  },
+  info: {
+    width: '50%'
+  }
+})
