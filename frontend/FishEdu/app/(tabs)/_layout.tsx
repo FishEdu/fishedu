@@ -34,28 +34,6 @@ export default function TabsLayout() {
             <Ionicons name="fish" size={size} color={color}></Ionicons>
         }}
       />
-
-      {/* <Tabs.Screen
-        name="register"
-        options={{
-          title: "Register",
-          tabBarIcon: ({ size, color }) => (
-            <Ionicons name="person-outline" size={size} color={color}></Ionicons>
-          )
-        }}
-      >
-      </Tabs.Screen>
-
-        <Tabs.Screen
-        name="login"
-        options={{
-          title: "Login",
-          tabBarIcon: ({ size, color }) => (
-            <Ionicons name="bag-remove" size={size} color={color}></Ionicons>
-          )
-        }}
-      >
-      </Tabs.Screen> */}
     </Tabs>
   )  
 }
