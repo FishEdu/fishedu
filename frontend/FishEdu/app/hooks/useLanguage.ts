@@ -13,7 +13,7 @@ export const useLanguage = () => {
     });
   }, [])
 
-  return  { 
+  return { 
     language,
     languageCode: language as LanguageCode,
     setLanguage
