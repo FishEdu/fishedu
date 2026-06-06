@@ -4,7 +4,6 @@ import { getTranslation } from "@/app/utils/translation/getTranslation";
 import { useLanguage } from "@/app/hooks/useLanguage";
 import { StyleSheet } from "react-native";
 import { debounce } from "@/app/utils/debounce";
-import { fetchFishSingle } from "@/app/utils/fetch/fish/fetchFishSingle";
 import { fetchFish, FishGetResponse } from "@/app/utils/fetch/fish/fetchFish";
 
 type LocalProps  = {
@@ -28,14 +27,9 @@ export default function FishSearchInput ({ setFish }: LocalProps) {
         placeholder: getTranslation('fishSerach.searchFish', languageCode),
         onChangeText: debounce((text: string) => {
           text = text.trim().toLowerCase()
-          if(text === '') {
-            fetchFish()
-            .then((fish) => setFish(fish))
-            return
-          }
-          
-          fetchFishSingle(text)
-          .then(fish => setFish([fish]))
+
+          fetchFish(text)
+            .then(fish => setFish(fish))
         }, 500)
       }}
       icon={<Ionicons name='search' size={20} />}

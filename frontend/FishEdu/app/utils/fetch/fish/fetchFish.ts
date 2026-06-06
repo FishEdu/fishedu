@@ -14,9 +14,12 @@ export type FishGetResponse = {
   handling: string
 }
 
-export const fetchFish: () => Promise<FishGetResponse[]> = async () => {
+export const fetchFish: (name?: string) => Promise<FishGetResponse[]> = async (name) => {
   const language = await AsyncStorage.getItem('language')
-  const endpoint = `fish?language=${language}`
+  const endpoint = name === '' || !name 
+    ? `fish?language=${language}`
+    : `fish/search/${name}?language=${language}`
+  
   const fish = await fetchApi(endpoint)
 
   return fish
