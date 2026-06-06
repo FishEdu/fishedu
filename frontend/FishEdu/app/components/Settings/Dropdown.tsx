@@ -2,7 +2,7 @@ import { Host, DropdownMenu, DropdownMenuItem, Button, Text } from '@expo/ui/jet
 import { useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { LanguageCode, LanguageLabels } from '@/app/(tabs)/settings';
-import { useLanguage } from '@/app/hooks/useLanguage';
+import { useLanguage } from '@/app/hooks/useLanguage/useLanguage';
 import { getTranslation } from '@/app/utils/translation/getTranslation';
 
 
@@ -47,7 +47,7 @@ export default function BaseDropdownMenu({
                   onClick={async () => {
                     setIsExpanded(false)
                     await AsyncStorage.setItem('language', code)
-                    setLanguage(code)
+                    setLanguage(code as LanguageCode)
                   }}
                 >
                 <DropdownMenuItem.Text>

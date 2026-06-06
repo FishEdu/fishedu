@@ -1,7 +1,7 @@
 import { StyleSheet, View, Image } from "react-native"
 import FishInfoGroup from "./FishInfoGroup"
 import { getTranslation } from "@/app/utils/translation/getTranslation"
-import { useLanguage } from "@/app/hooks/useLanguage"
+import { useLanguage } from "@/app/hooks/useLanguage/useLanguage"
 
 type localProps = {
   imageUrl?: string,

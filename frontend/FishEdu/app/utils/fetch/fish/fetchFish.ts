@@ -21,6 +21,7 @@ export const fetchFish: (name?: string) => Promise<FishGetResponse[]> = async (n
     : `fish/search/${name}?language=${language}`
   
   const fish = await fetchApi(endpoint)
+  console.log(fish)
 
   return fish
 }

@@ -1,14 +1,14 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
 import InputGroup from "../FormInputs/InputGroup";
 import { getTranslation } from "@/app/utils/translation/getTranslation";
-import { useLanguage } from "@/app/hooks/useLanguage";
+import { useLanguage } from "@/app/hooks/useLanguage/useLanguage";
 import { StyleSheet } from "react-native";
 import { debounce } from "@/app/utils/debounce";
 import { fetchFish, FishGetResponse } from "@/app/utils/fetch/fish/fetchFish";
 
 type LocalProps  = {
   setFish: React.Dispatch<
-    React.SetStateAction<FishGetResponse[] | undefined>
+    React.SetStateAction<FishGetResponse[]>
   >
 }
 
@@ -43,7 +43,8 @@ const styles = StyleSheet.create({
   },
   container: {
     backgroundColor: 'white',
-    borderRadius: 24
+    borderRadius: 24,
+    marginBottom: 24
   },
   inputWrapper: {
     backgroundColor: 'white',

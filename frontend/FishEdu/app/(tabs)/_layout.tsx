@@ -1,6 +1,6 @@
 import { Tabs } from "expo-router"
 import Ionicons from '@expo/vector-icons/Ionicons'
-import { useLanguage } from "../hooks/useLanguage"
+import { useLanguage } from "../hooks/useLanguage/useLanguage"
 import { getTranslation } from "../utils/translation/getTranslation"
 
 export default function TabsLayout() {
