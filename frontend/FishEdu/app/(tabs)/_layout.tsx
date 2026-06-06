@@ -1,7 +1,11 @@
 import { Tabs } from "expo-router"
 import Ionicons from '@expo/vector-icons/Ionicons'
+import { useLanguage } from "../hooks/useLanguage"
+import { getTranslation } from "../utils/translation/getTranslation"
 
 export default function TabsLayout() {
+  const { languageCode } = useLanguage()
+  
   return (
     <Tabs
       screenOptions={{
@@ -11,27 +15,27 @@ export default function TabsLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: "Home",
+          title: getTranslation('tabs.home', languageCode),
           tabBarIcon: ({ size, color }) => 
             <Ionicons name="home" size={size} color={color}></Ionicons>
         }}
       />
       
-      <Tabs.Screen
-        name="settings"
+         <Tabs.Screen
+        name="fishSearch"
         options={{
-          title: "Settings",
+          title: getTranslation('tabs.fishSearch', languageCode),
           tabBarIcon: ({ size, color }) => 
-            <Ionicons name="settings" size={size} color={color}></Ionicons>
+            <Ionicons name="fish" size={size} color={color}></Ionicons>
         }}
       />
 
       <Tabs.Screen
-        name="fishSearch"
+        name="settings"
         options={{
-          title: "Fish Search",
+          title: getTranslation('tabs.settings', languageCode),
           tabBarIcon: ({ size, color }) => 
-            <Ionicons name="fish" size={size} color={color}></Ionicons>
+            <Ionicons name="settings" size={size} color={color}></Ionicons>
         }}
       />
     </Tabs>

@@ -1,5 +1,7 @@
 import { StyleSheet, View, Image } from "react-native"
 import FishInfoGroup from "./FishInfoGroup"
+import { getTranslation } from "@/app/utils/translation/getTranslation"
+import { useLanguage } from "@/app/hooks/useLanguage"
 
 type localProps = {
   imageUrl?: string,
@@ -12,6 +14,8 @@ export default function FishListElement({
   isEndangered,
   imageUrl }: localProps
   ) {
+    const { languageCode } = useLanguage()
+    
     return (
       <View style={styles.container}>
         <View>
@@ -26,13 +30,16 @@ export default function FishListElement({
         </View>
         <View style={styles.textContainer}>
           <FishInfoGroup
-            title='Name'
+            title={getTranslation('fishSearch.name', languageCode)}
             text={name}
             containerStyles={styles.info}
           />
           <FishInfoGroup
-            title='Endangered'
-            text={ isEndangered ? 'Yes' : 'No' }
+            title={getTranslation('fishSearch.endangered', languageCode)}
+            text={ isEndangered 
+              ? getTranslation('common.yes', languageCode)
+              : getTranslation('common.no', languageCode)
+            }
             containerStyles={styles.info}
           />
         </View>

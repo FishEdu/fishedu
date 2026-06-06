@@ -2,6 +2,8 @@ import { Host, DropdownMenu, DropdownMenuItem, Button, Text } from '@expo/ui/jet
 import { useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { LanguageCode, LanguageLabels } from '@/app/(tabs)/settings';
+import { useLanguage } from '@/app/hooks/useLanguage';
+import { getTranslation } from '@/app/utils/translation/getTranslation';
 
 
 type localProps = {
@@ -15,21 +17,24 @@ export default function BaseDropdownMenu({
   buttonText,
   menuItems,
 }: localProps) {
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false)
+  const { setLanguage, languageCode } = useLanguage()
   
   return (
     <Host matchContents>
       <DropdownMenu expanded={isExpanded} onDismissRequest={() => setIsExpanded(false)}>
         <DropdownMenu.Trigger>
           <Button 
-            onClick={() => setIsExpanded(true)}
+            onClick={
+              () => setIsExpanded(true)
+            }
             colors={{
               containerColor: 'hsl(226, 75%, 59%)',
               contentColor: 'white'
             }}
           >
             <Text>
-              { buttonText }
+              { getTranslation('common.changeLanguage', languageCode) }
             </Text>
           </Button>
         </DropdownMenu.Trigger>
@@ -42,14 +47,15 @@ export default function BaseDropdownMenu({
                   onClick={async () => {
                     setIsExpanded(false)
                     await AsyncStorage.setItem('language', code)
+                    setLanguage(code)
                   }}
                 >
-                  <DropdownMenuItem.Text>
-                    <Text>
-                      { language }
-                    </Text>
-                  </DropdownMenuItem.Text>
-                </DropdownMenuItem>
+                <DropdownMenuItem.Text>
+                  <Text>
+                    { language }
+                  </Text>
+                </DropdownMenuItem.Text>
+              </DropdownMenuItem>
           ))}
         </DropdownMenu.Items>
       </DropdownMenu>
