@@ -36,7 +36,6 @@ export const fetchFish: (name?: string) => Promise<FetchFishReturn> = async (nam
   const isDataStale = (Date.now() - stored.lastSaveTime) > staleTimeInMinutes
 
   if(stored?.fish[language] && !isDataStale && name && name !== '') {
-    console.log(name)
     const fish = stored.fish[language]
     const filteredFish = fish
       .filter(

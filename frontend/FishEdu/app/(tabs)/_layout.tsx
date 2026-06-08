@@ -13,20 +13,20 @@ export default function TabsLayout() {
       }}
     >
       <Tabs.Screen
-        name="index"
-        options={{
-          title: getTranslation('tabs.home', languageCode),
-          tabBarIcon: ({ size, color }) => 
-            <Ionicons name="home" size={size} color={color}></Ionicons>
-        }}
-      />
-      
-         <Tabs.Screen
         name="fishSearch"
         options={{
           title: getTranslation('tabs.fishSearch', languageCode),
           tabBarIcon: ({ size, color }) => 
             <Ionicons name="fish" size={size} color={color}></Ionicons>
+        }}
+      />
+      
+      <Tabs.Screen
+        name="index"
+        options={{
+          title: getTranslation('tabs.home', languageCode),
+          tabBarIcon: ({ size, color }) => 
+            <Ionicons name="home" size={size} color={color}></Ionicons>
         }}
       />
 

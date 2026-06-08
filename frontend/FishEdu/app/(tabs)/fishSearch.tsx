@@ -20,7 +20,6 @@ export default function FishSearch() {
     useCallback(() => {
       const load = async () => {
         setLoading(true)
-        console.log(dataStale)
 
         const { fish, isDataStale } = await fetchFish()
 
@@ -31,7 +30,6 @@ export default function FishSearch() {
       }
 
       if (previousLanguage.current !== language || fish.length === 0) {
-        console.log('Fetching')
         load()
       }
     }, [language])

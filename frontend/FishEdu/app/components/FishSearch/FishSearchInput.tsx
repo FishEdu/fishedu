@@ -30,12 +30,10 @@ export default function FishSearchInput ({ lastFishQuery, setFish, setLastFishQu
         placeholder: getTranslation('fishSearch.searchFish', languageCode),
         onChangeText: debounce((fishQuery: string) => {
           fishQuery = fishQuery.trim().toLowerCase()
-          console.log(`FishQuery: ${fishQuery}, last: ${lastFishQuery}`)
 
           if(fishQuery === lastFishQuery)
             return
 
-          console.log('Fetching from input')
           fetchFish(fishQuery)
             .then(({ fish }) => { 
               setFish(fish)
