@@ -20,12 +20,12 @@ export type FishLocalStorage = {
   lastSaveTime: number
 }
 
-export type FetchFishReturnType = {
+export type FetchFishReturn = {
   fish: FishGetResponse[],
   isDataStale: boolean
 }
 
-export const fetchFish: (name?: string) => Promise<FetchFishReturnType> = async (name) => {
+export const fetchFish: (name?: string) => Promise<FetchFishReturn> = async (name) => {
   const language = await AsyncStorage.getItem('language') as LanguageCode
 
   const raw = await AsyncStorage.getItem('fish')  

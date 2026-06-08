@@ -27,7 +27,7 @@ export default function FishSearchInput ({ lastFishQuery, setFish, setLastFishQu
         inputWrapper: styles.inputWrapper,
       }}
       inputProps={{
-        placeholder: getTranslation('fishSerach.searchFish', languageCode),
+        placeholder: getTranslation('fishSearch.searchFish', languageCode),
         onChangeText: debounce((fishQuery: string) => {
           fishQuery = fishQuery.trim().toLowerCase()
           console.log(`FishQuery: ${fishQuery}, last: ${lastFishQuery}`)
@@ -43,19 +43,22 @@ export default function FishSearchInput ({ lastFishQuery, setFish, setLastFishQu
             })
         }, 500)
       }}
-      icon={<Ionicons name='search' size={20} />}
+      icon={<Ionicons name='search' size={24} />}
     />
   )
 }
 
 const styles = StyleSheet.create({
   input: {
-    fontSize: 20
+    fontSize: 20,
+    width: '100%',
+    overflow: 'hidden'
   },
   container: {
     backgroundColor: 'white',
     borderRadius: 24,
-    marginBottom: 24
+    marginBottom: 24,
+    overflow: 'hidden'
   },
   inputWrapper: {
     backgroundColor: 'white',
@@ -64,7 +67,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingBlock: 12,
     paddingInline: 8,
-    borderRadius: 24
+    borderRadius: 24,
   }
 })
 
