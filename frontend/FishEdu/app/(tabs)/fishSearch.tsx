@@ -5,11 +5,12 @@ import Container from "@components/Container";
 import { fetchFish, FishGetResponse} from "@utils/fetch/fish/fetchFish";
 import FishSearchInput from "@components/FishSearch/FishSearchInput";
 import { useLanguage } from "../hooks/useLanguage/useLanguage";
+import { getTranslation } from "../utils/translation/getTranslation";
 
 export default function FishSearch() {
   const [ fish, setFish ] = useState<FishGetResponse[]>([])
   const { language } = useLanguage()
-  const [loading, setLoading] = useState(true)
+  const [ loading, setLoading ] = useState(true)
   
   useEffect(() => {
     fetchFish()
@@ -27,9 +28,13 @@ export default function FishSearch() {
         />
         
         {loading ? (
-          <Text>Ładowanie...</Text>
+          <Text>
+            { getTranslation('common.loading', language) }
+          </Text>
         ) : fish?.length === 0 || undefined ? (
-          <Text>Brak ryb</Text>
+          <Text>
+            { getTranslation('fishSearch.fishNotFound', language) }
+          </Text>
         ) : (
           <FishList fish={fish} />
         )}

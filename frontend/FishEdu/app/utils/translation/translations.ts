@@ -1,5 +1,6 @@
 export const translations = {
   pl: {
+    'common.loading': 'Ładowanie...',
     'common.yes': 'tak',
     'common.no': 'nie',
     'common.changeLanguage': 'Zmień język',
@@ -8,9 +9,11 @@ export const translations = {
     'tabs.fishSearch': 'Szukaj ryby',
     'fishSearch.name': 'nazwa',
     'fishSearch.endangered': 'zagrożona',
-    'fishSerach.searchFish': 'wyszukaj rybę...'
+    'fishSerach.searchFish': 'wyszukaj rybę...',
+    'fishSearch.fishNotFound': 'Nie znaleziono ryb'
   },
   en: {
+    'common.loading': 'Loading...',
     'common.yes': 'yes',
     'common.no': 'no',
     'common.changeLanguage': 'Change language',
@@ -19,6 +22,7 @@ export const translations = {
     'tabs.fishSearch': 'Search Fish',
     'fishSearch.name': 'name',
     'fishSearch.endangered': 'endangered',
-    'fishSerach.searchFish': 'search fish...'
+    'fishSerach.searchFish': 'search fish...',
+    'fishSearch.fishNotFound': 'No fish found'
   }
 } as const
