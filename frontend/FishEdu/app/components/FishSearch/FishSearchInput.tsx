@@ -7,12 +7,15 @@ import { debounce } from "@/app/utils/debounce";
 import { fetchFish, FishGetResponse } from "@/app/utils/fetch/fish/fetchFish";
 
 type LocalProps  = {
+  lastFishQuery: string,
+  setLastFishQuery: React.Dispatch<
+    React.SetStateAction<string>>,
   setFish: React.Dispatch<
     React.SetStateAction<FishGetResponse[]>
   >
 }
 
-export default function FishSearchInput ({ setFish }: LocalProps) {
+export default function FishSearchInput ({ lastFishQuery, setFish, setLastFishQuery }: LocalProps) {
   const { languageCode } = useLanguage()
   
   return (
@@ -25,11 +28,19 @@ export default function FishSearchInput ({ setFish }: LocalProps) {
       }}
       inputProps={{
         placeholder: getTranslation('fishSerach.searchFish', languageCode),
-        onChangeText: debounce((text: string) => {
-          text = text.trim().toLowerCase()
+        onChangeText: debounce((fishQuery: string) => {
+          fishQuery = fishQuery.trim().toLowerCase()
+          console.log(`FishQuery: ${fishQuery}, last: ${lastFishQuery}`)
 
-          fetchFish(text)
-            .then(fish => setFish(fish))
+          if(fishQuery === lastFishQuery)
+            return
+
+          console.log('Fetching from input')
+          fetchFish(fishQuery)
+            .then(({ fish }) => { 
+              setFish(fish)
+              setLastFishQuery(fishQuery)
+            })
         }, 500)
       }}
       icon={<Ionicons name='search' size={20} />}
