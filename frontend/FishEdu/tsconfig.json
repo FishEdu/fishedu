@@ -8,6 +8,12 @@
       ],
       "@components/*": [
         "./app/components/*"
+      ],
+      "@utils/*": [
+        "./app/utils/*"
+      ],
+      "@images/*": [
+        "./assets/images/*"
       ]
     }
   },
