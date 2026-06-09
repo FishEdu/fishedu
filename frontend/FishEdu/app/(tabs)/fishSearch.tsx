@@ -17,22 +17,22 @@ export default function FishSearch() {
   const previousLanguage = useRef(language)
 
     useFocusEffect(
-    useCallback(() => {
-      const load = async () => {
-        setLoading(true)
+      useCallback(() => {
+        const load = async () => {
+          setLoading(true)
 
-        const { fish, isDataStale } = await fetchFish()
+          const { fish, isDataStale } = await fetchFish()
 
-        setFish(fish)
-        previousLanguage.current = language
-        setLoading(false)
-        setDateStale(isDataStale)
-      }
+          setFish(fish)
+          previousLanguage.current = language
+          setLoading(false)
+          setDateStale(isDataStale)
+        }
 
-      if (previousLanguage.current !== language || fish.length === 0) {
-        load()
-      }
-    }, [language])
+        if (previousLanguage.current !== language || fish.length === 0) {
+          load()
+        }
+      }, [language])
   )
   
   return (

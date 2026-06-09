@@ -4,11 +4,23 @@ import { LanguageContext } from './LanguageContext';
 import { LanguageCode } from '@/app/(tabs)/settings';
 
 export const LanguageProvider = ({ children }: { children: ReactNode }) => {
-  const [language, setLanguageState] = useState<LanguageCode>(LanguageCode.PL);
+  const [language, setLanguageState] = useState<LanguageCode>(LanguageCode.EN);
 
+  //TODO: Add mechanism waiting for setting the language before rendering
   useEffect(() => {
-    AsyncStorage.getItem('language').then(value => {
-      if (value) setLanguageState(value as LanguageCode);
+    AsyncStorage.getItem('language')
+      .then(value => {
+        if (value) {
+          setLanguageState(value as LanguageCode)
+        } else {
+          const lang = LanguageCode.EN;
+          setLanguageState(lang)
+          AsyncStorage
+            .setItem('language',lang)
+            .then(
+              () => console.log(`No local language found. Setting langauge as ${lang}`)
+            )
+        }
     });
   }, []);
 
