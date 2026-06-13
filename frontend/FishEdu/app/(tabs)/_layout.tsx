@@ -27,6 +27,13 @@ export default function TabsLayout() {
           href: null,
         }}
       />
+
+      <Tabs.Screen
+        name="ecoTips/ecoTips"
+        options={{
+          href: null,
+        }}
+      />
       
       <Tabs.Screen
         name="index"

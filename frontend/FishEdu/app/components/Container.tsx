@@ -19,7 +19,8 @@ const styles = StyleSheet.create({
   container: {
     paddingInline: 16,
     display: "flex",
-    marginTop: 16
+    marginTop: 16,
+    flex: 1
   }
 })
 
