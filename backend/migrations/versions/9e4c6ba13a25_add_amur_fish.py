@@ -17,7 +17,7 @@ down_revision: Union[str, Sequence[str], None] = 'seed_example_data'
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 
-
+# TODO: Fix id to use ids from the database
 def upgrade():
     conn = op.get_bind()
 
@@ -39,7 +39,7 @@ def upgrade():
         RETURNING id
     """))
 
-    fish_id = result.fetchone()[0]
+    fish_id = result.first()[0]
 
     conn.execute(sa.text("""
         INSERT INTO fish_pl_translations (
@@ -56,7 +56,7 @@ def upgrade():
         )
         VALUES (
             :fish_id,
-            13,
+            1,
             'Amur',
             'Występuje głównie w jeziorach i zbiornikach zaporowych. Spotykany jest również w rzekach, szczególnie w Wiśle i Odrze. Często zarybia się nim łowiska komercyjne.',
             'Duża ryba karpiowata o wydłużonym ciele.',
@@ -83,7 +83,7 @@ def upgrade():
         )
         VALUES (
             :fish_id,
-            13,
+            1,
             'Grass Carp',
             'Commonly found in lakes and reservoirs. It can also be found in rivers, especially the Vistula and Oder. It is frequently stocked in commercial fisheries.',
             'Large elongated carp-like fish.',
