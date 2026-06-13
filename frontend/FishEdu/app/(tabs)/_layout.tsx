@@ -20,6 +20,13 @@ export default function TabsLayout() {
             <Ionicons name="fish" size={size} color={color}></Ionicons>
         }}
       />
+
+      <Tabs.Screen
+        name="fish/[id]"
+        options={{
+          href: null,
+        }}
+      />
       
       <Tabs.Screen
         name="index"

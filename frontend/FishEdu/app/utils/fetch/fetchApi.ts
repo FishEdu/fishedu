@@ -8,6 +8,7 @@ export const fetchApi = async (endpoint: string) => {
   
   const response = await fetch(url)
 
+  console.log(`FETCHING: ${url}`)
   if(!response.ok) {
     console.error(`FETCH FAILED. Status: ${response.status}.`)
     return
