@@ -1,4 +1,3 @@
---Remove all the tables
 DROP TABLE IF EXISTS fishing_methods_fish CASCADE;
 DROP TABLE IF EXISTS fishing_methods_en_translations CASCADE;
 DROP TABLE IF EXISTS fishing_methods_pl_translations CASCADE;
@@ -36,9 +35,11 @@ DROP TABLE IF EXISTS with_url_education_materials CASCADE;
 DROP TABLE IF EXISTS equipment CASCADE;
 DROP TABLE IF EXISTS education_materials CASCADE;
 
+DROP TABLE IF EXISTS eco_tips_pl_translations;
+DROP TABLE IF EXISTS eco_tips_en_translations;
+
 DROP TABLE IF EXISTS alembic_version;
 
---Recreated all the tables
 CREATE TABLE "users" (
   id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   "login" varchar,
@@ -289,6 +290,18 @@ CREATE TABLE "education_materials" (
   "is_for_expert" bool,
   "created_at" timestamp,
   "modified_at" timestamp
+);
+
+CREATE TABLE "eco_tips_pl_translations" (
+  id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  "title" varchar,
+  "description" text,
+);
+
+CREATE TABLE "eco_tips_en_translations" (
+  id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  "title" varchar,
+  "description" text,
 );
 
 ALTER TABLE "user_records" ADD FOREIGN KEY ("fish_id") REFERENCES "fish" ("id") DEFERRABLE INITIALLY IMMEDIATE;
