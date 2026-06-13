@@ -13,12 +13,14 @@ export default function FishList({ fish }: fishListProps) {
       data={fish}
       renderItem={({item}) => 
         <FishListElement
+          fish={item}
           name={item.name} 
           isEndangered={item.is_endangered}
+          feedingPlaces={item.feeding_places}
           imageUrl={''}
         />
       }
-      keyExtractor={item => item.name}
+      keyExtractor={item => String(item.id)}
     />
   )
 }

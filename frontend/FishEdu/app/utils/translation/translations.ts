@@ -15,9 +15,19 @@ export const translations = {
     'tabs.settings': 'Ustawienia',
     'tabs.fishSearch': 'Szukaj ryby',
     'fishSearch.name': 'nazwa',
+    'fishSearch.environment': 'środowisko',
     'fishSearch.endangered': 'zagrożona',
     'fishSearch.searchFish': 'wyszukaj rybę...',
-    'fishSearch.fishNotFound': 'Nie znaleziono ryb'
+    'fishSearch.fishNotFound': 'Nie znaleziono ryb',
+    'fishDetails.back': 'cofnij',
+    'fishDetails.favorite': 'ulubiona ryba',
+    'fishDetails.noFishData': 'Nie udało się wczytać danych ryby',
+    'fishDetails.occurrence': 'występowanie',
+    'fishDetails.appearance': 'wygląd',
+    'fishDetails.preferences': 'preferencje',
+    'fishDetails.handling': 'obchodzenie się',
+    'fishDetails.protectionInPoland': 'ochrona w Polsce',
+    'fishDetails.protectionLength': 'wymiar ochronny'
   },
   en: {
     'common.loading': 'Loading...',
@@ -35,8 +45,18 @@ export const translations = {
     'tabs.settings': 'Settings',
     'tabs.fishSearch': 'Search Fish',
     'fishSearch.name': 'name',
+    'fishSearch.environment': 'environment',
     'fishSearch.endangered': 'endangered',
     'fishSearch.searchFish': 'search fish...',
-    'fishSearch.fishNotFound': 'No fish found'
+    'fishSearch.fishNotFound': 'No fish found',
+    'fishDetails.back': 'back',
+    'fishDetails.favorite': 'favorite fish',
+    'fishDetails.noFishData': 'Could not load fish data',
+    'fishDetails.occurrence': 'occurrence',
+    'fishDetails.appearance': 'appearance',
+    'fishDetails.preferences': 'preferences',
+    'fishDetails.handling': 'handling',
+    'fishDetails.protectionInPoland': 'protection in Poland',
+    'fishDetails.protectionLength': 'protection length'
   }
 } as const

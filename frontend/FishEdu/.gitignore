@@ -41,3 +41,7 @@ app-example
 # generated native folders
 /ios
 /android
+
+# IP API
+./frontend/FishEdu/app/utils/getBaseApiUrl.ts
+
