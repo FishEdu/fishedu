@@ -6,7 +6,9 @@ const config = getDefaultConfig(__dirname);
 
 const ALIASES = {
   '@': './',
-  '@components': './app/components'
+  '@components': './app/components',
+  '@utils': './app/utils',
+  '@images': './assets/images'
 };
 
 config.resolver.resolveRequest = (context, moduleName, platform) => {

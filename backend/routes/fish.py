@@ -11,8 +11,8 @@ router = APIRouter(
 # =========================
 # GET SINGLE FISH
 # =========================
-@router.get("/{name}")
-def get_fish(name: str, language: str):
+@router.get("/search/{queryName}")
+def get_fish(queryName: str, language: str):
 
     db = SessionLocal()
 
@@ -29,39 +29,40 @@ def get_fish(name: str, language: str):
                 detail="Unsupported language"
             )
 
-        result = (
+        results = (
             db.query(Fish, translation_table)
             .join(
                 translation_table,
                 Fish.id == translation_table.fish_id
             )
             .filter(
-                translation_table.name.ilike(name)
+                translation_table.name.ilike(f'%{queryName}%')
             )
-            .first()
+            .all()
         )
 
-        if not result:
+        if not results:
             raise HTTPException(
                 status_code=404,
                 detail="Fish not found"
             )
 
-        fish, translation = result
+        return [
+            {
+                "id": fish.id,
+                "min_protection_length": fish.min_protection_length,
+                "max_protection_length": fish.max_protection_length,
+                "is_endangered": fish.is_endangered,
 
-        return {
-            "id": fish.id,
-            "min_protection_length": fish.min_protection_length,
-            "max_protection_length": fish.max_protection_length,
-            "is_endangered": fish.is_endangered,
-
-            "name": translation.name,
-            "description": translation.description,
-            "appearance": translation.appearance,
-            "feeding_places": translation.feeding_places,
-            "preferences": translation.preferences,
-            "handling": translation.handling,
-        }
+                "name": translation.name,
+                "description": translation.description,
+                "appearance": translation.appearance,
+                "feeding_places": translation.feeding_places,
+                "preferences": translation.preferences,
+                "handling": translation.handling,
+            }
+            for fish, translation in results
+        ] 
 
     finally:
         db.close()

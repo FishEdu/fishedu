@@ -1,7 +1,11 @@
 import { Tabs } from "expo-router"
 import Ionicons from '@expo/vector-icons/Ionicons'
+import { useLanguage } from "../hooks/useLanguage/useLanguage"
+import { getTranslation } from "../utils/translation/getTranslation"
 
 export default function TabsLayout() {
+  const { languageCode } = useLanguage()
+  
   return (
     <Tabs
       screenOptions={{
@@ -9,36 +13,31 @@ export default function TabsLayout() {
       }}
     >
       <Tabs.Screen
+        name="fishSearch"
+        options={{
+          title: getTranslation('tabs.fishSearch', languageCode),
+          tabBarIcon: ({ size, color }) => 
+            <Ionicons name="fish" size={size} color={color}></Ionicons>
+        }}
+      />
+      
+      <Tabs.Screen
         name="index"
         options={{
-          title: "Home",
+          title: getTranslation('tabs.home', languageCode),
           tabBarIcon: ({ size, color }) => 
             <Ionicons name="home" size={size} color={color}></Ionicons>
         }}
-      >
-      </Tabs.Screen>
+      />
 
       <Tabs.Screen
-        name="register"
+        name="settings"
         options={{
-          title: "Register",
-          tabBarIcon: ({ size, color }) => (
-            <Ionicons name="person-outline" size={size} color={color}></Ionicons>
-          )
+          title: getTranslation('tabs.settings', languageCode),
+          tabBarIcon: ({ size, color }) => 
+            <Ionicons name="settings" size={size} color={color}></Ionicons>
         }}
-      >
-      </Tabs.Screen>
-
-        <Tabs.Screen
-        name="login"
-        options={{
-          title: "Login",
-          tabBarIcon: ({ size, color }) => (
-            <Ionicons name="bag-remove" size={size} color={color}></Ionicons>
-          )
-        }}
-      >
-      </Tabs.Screen>
+      />
     </Tabs>
   )  
 }
