@@ -5,7 +5,7 @@ import Container from "@components/Container";
 import { fetchFish, FishGetResponse} from "@utils/fetch/fish/fetchFish";
 import FishSearchInput from "@components/FishSearch/FishSearchInput";
 import { useLanguage } from "../hooks/useLanguage/useLanguage";
-import { getTranslation } from "../utils/translation/getTranslation";
+import { getTranslation } from "@utils/translation/getTranslation";
 import { useFocusEffect } from "expo-router";
 
 export default function FishSearch() {

@@ -17,7 +17,6 @@ def get_fish(queryName: str, language: str):
     db = SessionLocal()
 
     try:
-
         translation_table = {
             "pl": FishPlTranslations,
             "en": FishEnTranslations

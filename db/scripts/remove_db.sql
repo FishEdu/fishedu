@@ -35,4 +35,7 @@ DROP TABLE IF EXISTS with_url_education_materials CASCADE;
 DROP TABLE IF EXISTS equipment CASCADE;
 DROP TABLE IF EXISTS education_materials CASCADE;
 
+DROP TABLE IF EXISTS eco_tips_pl_translations;
+DROP TABLE IF EXISTS eco_tips_en_translations;
+
 DROP TABLE IF EXISTS alembic_version;

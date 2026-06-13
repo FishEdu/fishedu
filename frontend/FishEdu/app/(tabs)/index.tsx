@@ -1,8 +1,9 @@
 import Container from "@components/Container";
-import { StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 import { getTranslation } from "../utils/translation/getTranslation";
 import { useLanguage } from "../hooks/useLanguage/useLanguage";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { router } from "expo-router";
 
 export default function Index() {
   const { language } = useLanguage()
@@ -23,7 +24,12 @@ export default function Index() {
             </Text>
           </View>
           
-          <View style={styles.button}>
+          <Pressable 
+            style={styles.button}
+            onPress={() => {
+              router.push('/(tabs)/ecoTips/ecoTips')
+            }}
+          >
             <Ionicons
               name='leaf'
               size={24} 
@@ -31,7 +37,10 @@ export default function Index() {
             <Text style={styles.buttonText}>
               { getTranslation('home.button.ecoTips', language)}
             </Text>
-          </View>
+          </Pressable>
+          {/* <View style={styles.button}>
+            
+          </View> */}
 
           <View style={styles.button}>
             <Ionicons
