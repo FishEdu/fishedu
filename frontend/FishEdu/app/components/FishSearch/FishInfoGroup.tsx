@@ -23,14 +23,16 @@ const styles = StyleSheet.create({
   container: {
     display: 'flex',
     flexDirection: 'column',
-    gap: 4
+    gap: 4,
+    flexWrap: 'nowrap'
   },
   title: {
     fontSize: 14,
     color: 'hsl(0, 0%, 40%)'
   },
   text: {
-    fontSize: 20,
-    fontWeight: 600
+    fontSize: 18,
+    fontWeight: 600,
+    wordWrap: 'break-word'
   }
 })

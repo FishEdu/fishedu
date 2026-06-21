@@ -82,10 +82,11 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 24,
-    paddingEnd: 16,
+    gap: 12,
+    paddingEnd: 8,
     borderRadius: 24,
-    overflow: 'hidden'
+    overflow: 'hidden',
+    paddingBlock: 8
   },
   containerPressed: {
     opacity: 0.75,
@@ -93,8 +94,9 @@ const styles = StyleSheet.create({
   textContainer: {
     flex: 1,
     flexDirection: 'row',
+    justifyContent: 'space-evenly'
   },
   info: {
-    width: '33.33%'
+    width: '31%'
   }
 })

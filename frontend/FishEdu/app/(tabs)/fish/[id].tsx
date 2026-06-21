@@ -99,7 +99,7 @@ export default function FishDetails() {
   }
 
   const protectionLength = fish
-    ? `${fish.min_protection_length}-${fish.max_protection_length} cm`
+    ? `${fish.min_protection_length} - ${fish.max_protection_length ? fish.max_protection_length : getTranslation('fishDetails.protectionLength.none', languageCode)}`
     : "";
 
   return (

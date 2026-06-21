@@ -27,7 +27,8 @@ export const translations = {
     'fishDetails.preferences': 'preferencje',
     'fishDetails.handling': 'obchodzenie się',
     'fishDetails.protectionInPoland': 'ochrona w Polsce',
-    'fishDetails.protectionLength': 'wymiar ochronny',
+    'fishDetails.protectionLength': 'wymiar ochronny (min - maks, w cm)',
+    'fishDetails.protectionLength.none': 'brak',
     'ecoTips.heading': 'WĘDKARSKIE PORADY EKOLOGICZNE'
   },
   en: {
@@ -58,7 +59,8 @@ export const translations = {
     'fishDetails.preferences': 'preferences',
     'fishDetails.handling': 'handling',
     'fishDetails.protectionInPoland': 'protection in Poland',
-    'fishDetails.protectionLength': 'protection length',
+    'fishDetails.protectionLength': 'protection length (min - max, in cm)',
+    'fishDetails.protectionLength.none': 'none',
     'ecoTips.heading': 'FISHING ECO TIPS'
   }
 } as const
