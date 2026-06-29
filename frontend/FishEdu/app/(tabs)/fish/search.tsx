@@ -1,19 +1,18 @@
-import { useCallback, useRef, useState } from "react";
-import { Text } from "react-native";
-import FishList from "@components/FishSearch/FishList"
+import { useLanguage } from "@/app/hooks/useLanguage/useLanguage";
 import Container from "@components/Container";
-import { fetchFish, FishGetResponse} from "@utils/fetch/fish/fetchFish";
+import FishList from "@components/FishSearch/FishList";
 import FishSearchInput from "@components/FishSearch/FishSearchInput";
-import { useLanguage } from "../hooks/useLanguage/useLanguage";
+import { fetchFish, FishGetResponse } from "@utils/fetch/fish/fetchFish";
 import { getTranslation } from "@utils/translation/getTranslation";
 import { useFocusEffect } from "expo-router";
+import { useCallback, useRef, useState } from "react";
+import { Text } from "react-native";
 
 export default function FishSearch() {
   const { language } = useLanguage()
   const [ lastFishQuery, setLastFishQuery ] = useState<string>('')
   const [ fish, setFish ] = useState<FishGetResponse[]>([])
   const [ loading, setLoading ] = useState(true)
-  const [ dataStale, setDateStale ] = useState<boolean>(false)
   const previousLanguage = useRef(language)
 
     useFocusEffect(
@@ -21,12 +20,11 @@ export default function FishSearch() {
         const load = async () => {
           setLoading(true)
 
-          const { fish, isDataStale } = await fetchFish()
+          const { fish } = await fetchFish()
 
           setFish(fish)
           previousLanguage.current = language
           setLoading(false)
-          setDateStale(isDataStale)
         }
 
         if (previousLanguage.current !== language || fish.length === 0) {

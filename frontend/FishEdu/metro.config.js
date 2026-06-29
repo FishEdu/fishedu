@@ -8,7 +8,11 @@ const ALIASES = {
   '@': './',
   '@components': './app/components',
   '@utils': './app/utils',
-  '@images': './assets/images'
+  '@images': './assets/images',
+  '@hooks': './app/hooks',
+  '@constants': './app/constants',
+  '@services': './app/services',
+  '@types': './app/types'
 };
 
 config.resolver.resolveRequest = (context, moduleName, platform) => {

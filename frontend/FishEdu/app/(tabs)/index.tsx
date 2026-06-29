@@ -1,9 +1,9 @@
 import Container from "@components/Container";
-import { Pressable, StyleSheet, Text, View } from "react-native";
-import { getTranslation } from "../utils/translation/getTranslation";
-import { useLanguage } from "../hooks/useLanguage/useLanguage";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { router } from "expo-router";
+import { Pressable, StyleSheet, Text, View } from "react-native";
+import { useLanguage } from "../hooks/useLanguage/useLanguage";
+import { getTranslation } from "../utils/translation/getTranslation";
 
 export default function Index() {
   const { language } = useLanguage()
@@ -27,7 +27,7 @@ export default function Index() {
           <Pressable 
             style={styles.button}
             onPress={() => {
-              router.push('/(tabs)/ecoTips/ecoTips')
+              router.push('../(screens)/ecoTips')
             }}
           >
             <Ionicons

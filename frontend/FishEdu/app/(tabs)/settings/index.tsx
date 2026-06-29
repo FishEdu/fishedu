@@ -1,8 +1,6 @@
-import { View, StyleSheet, Text } from "react-native";
 import BaseDropdownMenu from "@/app/components/Settings/Dropdown";
 import Container from "@components/Container";
-import { getTranslation } from "../utils/translation/getTranslation";
-import { useLanguage } from "../hooks/useLanguage/useLanguage";
+import { StyleSheet, View } from "react-native";
 
 
 export enum LanguageCode {
@@ -22,9 +20,6 @@ export default function Settings() {
         style={styles.container}
       >
         <View style={styles.optionContainer}>
-          {/* <Text style={styles.title}>
-            { getTranslation('common.changeLanguage', languageCode) }
-          </Text> */}
           <BaseDropdownMenu
             buttonText='Choose language'
             menuItems={

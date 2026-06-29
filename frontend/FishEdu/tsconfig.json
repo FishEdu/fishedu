@@ -14,7 +14,19 @@
       ],
       "@images/*": [
         "./assets/images/*"
-      ]
+      ],
+      "@hooks/*": [
+        "./app/hooks"
+      ],
+      "@constants/*": [
+        "./app/constants"
+      ],
+      "@services/*": [
+        "./app/services"
+      ],
+      "@types/*": [
+        "./app/types"
+      ],
     }
   },
   "include": [

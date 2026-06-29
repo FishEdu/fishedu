@@ -1,5 +1,5 @@
-import { Tabs } from "expo-router"
 import Ionicons from '@expo/vector-icons/Ionicons'
+import { Tabs } from "expo-router"
 import { useLanguage } from "../hooks/useLanguage/useLanguage"
 import { getTranslation } from "../utils/translation/getTranslation"
 
@@ -13,7 +13,7 @@ export default function TabsLayout() {
       }}
     >
       <Tabs.Screen
-        name="fishSearch"
+        name="fish/search"
         options={{
           title: getTranslation('tabs.fishSearch', languageCode),
           tabBarIcon: ({ size, color }) => 
@@ -28,12 +28,12 @@ export default function TabsLayout() {
         }}
       />
 
-      <Tabs.Screen
-        name="ecoTips/ecoTips"
+      {/* <Tabs.Screen
+        name="../(screens)/ecoTips"
         options={{
           href: null,
         }}
-      />
+      /> */}
       
       <Tabs.Screen
         name="index"

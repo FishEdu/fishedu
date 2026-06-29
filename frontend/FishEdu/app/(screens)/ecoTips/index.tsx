@@ -1,14 +1,14 @@
-import { useCallback, useRef, useState } from "react";
-import { EcoTipsGetResponse, fetchEcoTips } from "@utils/fetch/ecoTips/fetchEcoTips";
-import { useFocusEffect } from "expo-router";
-import { StyleSheet, Text, View } from "react-native";
-import { useLanguage } from "@/app/hooks/useLanguage/useLanguage";
 import Container from "@/app/components/Container";
-import { getTranslation } from "@/app/utils/translation/getTranslation";
 import EcoTipsList from "@/app/components/EcoTips/EcoTipsList";
+import { useFetchEcoTips } from "@/app/hooks/useFetchEcoTips/useFetchEcoTips";
+import { useLanguage } from "@/app/hooks/useLanguage/useLanguage";
+import { getTranslation } from "@/app/utils/translation/getTranslation";
+import { useFocusEffect } from "expo-router";
+import { useCallback, useRef, useState } from "react";
+import { StyleSheet, Text, View } from "react-native";
 
 export default function EcoTips() {
-  const [ tips, setTips ] = useState<EcoTipsGetResponse[]>([])
+  const { data: ecoTips } = useFetchEcoTips()
   const [ isLoading, setIsLoading ] = useState<boolean>(false)
   const { language } = useLanguage()
   const previousLanguage = useRef(language)
@@ -17,9 +17,6 @@ export default function EcoTips() {
     useCallback(() => {
       const load = async () => {
         setIsLoading(true)
-
-        const { ecoTips } = await fetchEcoTips()
-        setTips(ecoTips)
         setIsLoading(false)
       }
 
@@ -41,7 +38,7 @@ export default function EcoTips() {
           ) :
           (
             <EcoTipsList
-              tips={tips}
+              tips={ecoTips}
             />
           )
         }
