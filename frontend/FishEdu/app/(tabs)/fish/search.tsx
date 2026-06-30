@@ -1,8 +1,9 @@
+import { FishGetResponse } from "@/app/api/fish";
+import Container from "@/app/components/ui/Container";
 import { useLanguage } from "@/app/hooks/useLanguage/useLanguage";
-import Container from "@components/Container";
 import FishList from "@components/FishSearch/FishList";
 import FishSearchInput from "@components/FishSearch/FishSearchInput";
-import { fetchFish, FishGetResponse } from "@utils/fetch/fish/fetchFish";
+import { fetchFish } from "@utils/fetch/fish/fetchFish";
 import { getTranslation } from "@utils/translation/getTranslation";
 import { useFocusEffect } from "expo-router";
 import { useCallback, useRef, useState } from "react";

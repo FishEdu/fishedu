@@ -1,25 +1,22 @@
-import { STALE_TIME } from "@/app/constants/cache"
 import { fetchData } from "@/app/services/api"
-import { getCache, saveCache } from "@/app/services/storage"
-import { Cache } from "@/app/types/cache"
+import { createCache, getCache, getCacheEntry, isCacheValid, saveCache } from "@/app/services/storage"
+import { Cache, CacheEntry } from "@/app/types/cache"
 import { FetchQueryArguments } from "@/app/types/fetch"
 import { UseFetchQueryReturn } from "@/app/types/useFetchQueryReturn"
+import { getBaseApiUrl } from "@/app/utils/getBaseApiUrl"
 import { useEffect, useState } from "react"
-import { useLanguage } from "../useLanguage/useLanguage"
 
 export function useFetchQuery<T>({
   endpoint,
   localStorageId,
+  language
 }: FetchQueryArguments): UseFetchQueryReturn<T> {
-  const { language } = useLanguage()
-
   const [data, setData] = useState<T[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<Error | null>(null)
 
   useEffect(() => {
     async function loadData() {
-      console.log("REAL FETCH START")
       try {
         setLoading(true)
 
@@ -29,31 +26,19 @@ export function useFetchQuery<T>({
 
         const cache = await getCache<T>()
 
-        const cachedEntry =
-          cache?.[localStorageId]?.[language]
+        const cachedEntry: CacheEntry<T> | undefined = getCacheEntry(cache, localStorageId, language)
 
-        const isCacheValid =
-          cachedEntry &&
-          Date.now() - cachedEntry.lastSaveTime < STALE_TIME
+        const cacheValid = isCacheValid<T>(cachedEntry)
 
-        if (isCacheValid) {
+        if (cacheValid && cachedEntry) {
           setData(cachedEntry.value)
           return
         }
 
-        const apiData = await fetchData<T>(endpoint, language)
+        const url = `${getBaseApiUrl()}/${endpoint}`
+        const apiData = await fetchData<T>(url, language)
 
-        const newCache: Cache<T> = {
-          ...cache,
-          [localStorageId]: {
-            ...cache?.[localStorageId],
-            [language]: {
-              value: apiData,
-              lastSaveTime: Date.now(),
-            },
-          },
-        }
-
+        const newCache: Cache<T> | null = createCache<T>(cache, localStorageId, apiData, language)
         await saveCache(newCache)
 
         setData(apiData)

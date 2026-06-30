@@ -1,4 +1,4 @@
-import Container from "@/app/components/Container";
+import Container from "@/app/components/ui/Container";
 import EcoTipsList from "@/app/components/EcoTips/EcoTipsList";
 import { useFetchEcoTips } from "@/app/hooks/useFetchEcoTips/useFetchEcoTips";
 import { useLanguage } from "@/app/hooks/useLanguage/useLanguage";

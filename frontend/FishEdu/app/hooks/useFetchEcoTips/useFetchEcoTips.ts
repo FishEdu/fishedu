@@ -1,5 +1,4 @@
 import { EcoTipsGetResponse } from "@/app/api/ecoTips"
-import { getBaseApiUrl } from "@/app/utils/getBaseApiUrl"
 import { useFetchQuery } from "../useFetchQuery/useFetchQuery"
 import { useLanguage } from "../useLanguage/useLanguage"
 
@@ -8,8 +7,8 @@ export const useFetchEcoTips = () => {
   const {
     data
   } = useFetchQuery<EcoTipsGetResponse>({
-    endpoint: `${getBaseApiUrl()}/ecoTips`,
-    localStorageId: "ecoTips",
+    endpoint: 'ecoTips',
+    localStorageId: 'ecoTips',
     language: language
   })
 

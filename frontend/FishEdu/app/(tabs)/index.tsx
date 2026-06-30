@@ -1,4 +1,4 @@
-import Container from "@components/Container";
+import Container from "@/app/components/ui/Container";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { router } from "expo-router";
 import { Pressable, StyleSheet, Text, View } from "react-native";

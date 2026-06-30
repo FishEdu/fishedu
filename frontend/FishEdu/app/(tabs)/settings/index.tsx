@@ -1,5 +1,5 @@
 import BaseDropdownMenu from "@/app/components/Settings/Dropdown";
-import Container from "@components/Container";
+import Container from "@/app/components/ui/Container";
 import { StyleSheet, View } from "react-native";
 
 
