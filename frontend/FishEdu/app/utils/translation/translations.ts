@@ -17,7 +17,7 @@ export const translations = {
     'fishSearch.name': 'nazwa',
     'fishSearch.environment': 'środowisko',
     'fishSearch.endangered': 'zagrożona',
-    'fishSearch.searchFish': 'wyszukaj rybę...',
+    'fishSearch.searchFish': 'Wyszukaj rybę...',
     'fishSearch.fishNotFound': 'Nie znaleziono ryb',
     'fishDetails.back': 'cofnij',
     'fishDetails.favorite': 'ulubiona ryba',
@@ -30,7 +30,7 @@ export const translations = {
     'fishDetails.protectionLength': 'wymiar ochronny (min - maks, w cm)',
     'fishDetails.protectionLength.none': 'brak',
     'ecoTips.heading': 'WĘDKARSKIE PORADY EKOLOGICZNE',
-    'recipes.search': 'Wyszukaj zanęty i przynęt'
+    'recipes.search': 'Wyszukaj zanęty i przynęty...'
   },
   en: {
     'common.loading': 'Loading...',
@@ -63,6 +63,6 @@ export const translations = {
     'fishDetails.protectionLength': 'protection length (min - max, in cm)',
     'fishDetails.protectionLength.none': 'none',
     'ecoTips.heading': 'FISHING ECO TIPS',
-    'recipes.search': 'Search fish feeds'
+    'recipes.search': 'Search baits and groundbaits...'
   }
 } as const
