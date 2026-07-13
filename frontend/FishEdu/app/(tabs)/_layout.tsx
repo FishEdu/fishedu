@@ -27,13 +27,6 @@ export default function TabsLayout() {
           href: null,
         }}
       />
-
-      {/* <Tabs.Screen
-        name="../(screens)/ecoTips"
-        options={{
-          href: null,
-        }}
-      /> */}
       
       <Tabs.Screen
         name="index"

@@ -1,11 +1,11 @@
+import { FishGetResponse } from "@/app/api/fish";
+import { useLanguage } from "@/app/hooks/useLanguage/useLanguage";
+import { getTranslation } from "@/app/utils/translation/getTranslation";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { router, Stack, useLocalSearchParams } from "expo-router";
 import { useEffect, useMemo, useState } from "react";
 import { Image, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import Ionicons from "@expo/vector-icons/Ionicons";
-import { router, Stack, useLocalSearchParams } from "expo-router";
-import { FishGetResponse } from "@/app/utils/fetch/fish/fetchFish";
-import { getTranslation } from "@/app/utils/translation/getTranslation";
-import { useLanguage } from "@/app/hooks/useLanguage/useLanguage";
 
 const FAVORITE_FISH_IDS_KEY = "favoriteFishIds";
 

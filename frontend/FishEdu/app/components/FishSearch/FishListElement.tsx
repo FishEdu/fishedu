@@ -1,9 +1,9 @@
-import { StyleSheet, View, Image, Pressable } from "react-native"
-import FishInfoGroup from "./FishInfoGroup"
-import { getTranslation } from "@/app/utils/translation/getTranslation"
+import { FishGetResponse } from "@/app/api/fish"
 import { useLanguage } from "@/app/hooks/useLanguage/useLanguage"
-import { FishGetResponse } from "@/app/utils/fetch/fish/fetchFish"
+import { getTranslation } from "@/app/utils/translation/getTranslation"
 import { router } from "expo-router"
+import { Image, Pressable, StyleSheet, View } from "react-native"
+import FishInfoGroup from "./FishInfoGroup"
 
 type localProps = {
   fish: FishGetResponse,
