@@ -1,5 +1,5 @@
-import { EcoTipsGetResponse } from "@/app/utils/fetch/ecoTips/fetchEcoTips"
-import { View, Text, StyleSheet } from "react-native"
+import { EcoTipsGetResponse } from "@/app/api/ecoTips"
+import { StyleSheet, Text, View } from "react-native"
 
 type LocalProps = {
   ecoTip: EcoTipsGetResponse,

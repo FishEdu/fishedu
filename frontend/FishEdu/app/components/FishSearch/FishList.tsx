@@ -1,6 +1,6 @@
+import { FishGetResponse } from "@/app/api/fish"
 import { FlatList, StyleSheet } from "react-native"
 import FishListElement from "./FishListElement"
-import { FishGetResponse } from "@/app/utils/fetch/fish/fetchFish"
 
 type fishListProps = {
   fish?: FishGetResponse[]

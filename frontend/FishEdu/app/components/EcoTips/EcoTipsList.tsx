@@ -1,4 +1,4 @@
-import { EcoTipsGetResponse } from "@/app/utils/fetch/ecoTips/fetchEcoTips"
+import { EcoTipsGetResponse } from "@/app/api/ecoTips"
 import { FlatList } from "react-native"
 import EcoTipsListElement from "./EcoTipsListElement"
 

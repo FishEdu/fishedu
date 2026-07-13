@@ -1,10 +1,11 @@
-import Ionicons from "@expo/vector-icons/Ionicons";
-import InputGroup from "../FormInputs/InputGroup";
-import { getTranslation } from "@/app/utils/translation/getTranslation";
+import { FishGetResponse } from "@/app/api/fish";
 import { useLanguage } from "@/app/hooks/useLanguage/useLanguage";
-import { StyleSheet } from "react-native";
 import { debounce } from "@/app/utils/debounce";
-import { fetchFish, FishGetResponse } from "@/app/utils/fetch/fish/fetchFish";
+import { fetchFish } from "@/app/utils/fetch/fish/fetchFish";
+import { getTranslation } from "@/app/utils/translation/getTranslation";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import { StyleSheet } from "react-native";
+import InputGroup from "../FormInputs/InputGroup";
 
 type LocalProps  = {
   lastFishQuery: string,
