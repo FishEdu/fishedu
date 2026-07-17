@@ -7,7 +7,7 @@ from utils.utils import get_utc_date
 
 # revision identifiers
 revision = "seed_eco_tips"
-down_revision = None
+down_revision = '9e4c6ba13a25'
 branch_labels = None
 depends_on = None
 

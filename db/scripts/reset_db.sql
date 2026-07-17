@@ -266,12 +266,16 @@ CREATE TABLE "eco_tips_pl_translations" (
   id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   "title" varchar,
   "description" text,
+  "created_at" timestamp,
+  "modified_at" timestamp
 );
 
 CREATE TABLE "eco_tips_en_translations" (
   id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   "title" varchar,
   "description" text,
+  "created_at" timestamp,
+  "modified_at" timestamp
 );
 
 ALTER TABLE "user_records" ADD FOREIGN KEY ("fish_id") REFERENCES "fish" ("id") DEFERRABLE INITIALLY IMMEDIATE;
