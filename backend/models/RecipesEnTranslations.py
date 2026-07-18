@@ -3,7 +3,7 @@ from sqlalchemy import Column, ForeignKey, Integer, String, Text, DateTime
 from database import Base
 
 
-class RecipeEnTranslations(Base):
+class RecipesEnTranslations(Base):
     __tablename__ = "recipes_en_translations"
 
     id = Column(Integer, primary_key=True)
