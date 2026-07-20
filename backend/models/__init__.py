@@ -5,3 +5,4 @@ from .FishPlTranslations import FishPlTranslations
 from .FishEnTranslations import FishEnTranslations
 from .EcoTipsEnTranslations import EcoTipsEnTranslations
 from .EcoTipsPlTranslations import EcoTipsPlTranslations
+from .CatchRecord import CatchRecord

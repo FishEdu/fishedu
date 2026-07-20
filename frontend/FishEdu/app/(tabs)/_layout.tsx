@@ -45,6 +45,14 @@ export default function TabsLayout() {
             <Ionicons name="settings" size={size} color={color}></Ionicons>
         }}
       />
+
+            <Tabs.Screen
+        name="records/add"
+        options={{
+          href: null,
+          title: "Nowy post",
+        }}
+      />
     </Tabs>
   )  
 }
