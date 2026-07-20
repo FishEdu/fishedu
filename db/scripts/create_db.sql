@@ -137,6 +137,7 @@ CREATE TABLE "fishing_methods_fish" (
 
 CREATE TABLE "recipes" (
   id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  content text,
   "created_at" timestamp,
   "modified_at" timestamp
 );

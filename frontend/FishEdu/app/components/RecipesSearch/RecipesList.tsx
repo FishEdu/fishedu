@@ -1,4 +1,4 @@
-import { RecipesGetResponse } from "@/app/api/feeds"
+import { RecipesGetResponse } from "@/app/api/recipes"
 import { FlatList, StyleSheet } from "react-native"
 import RecipesListElement from "./RecipesListElement"
 

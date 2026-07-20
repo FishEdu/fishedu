@@ -1,29 +1,19 @@
+import RecipesList from "@/app/components/RecipesSearch/RecipesList";
 import RecipesSearchBar from "@/app/components/RecipesSearch/RecipesSearchBar";
 import Container from "@/app/components/ui/Container";
+import { useFetchRecipes } from "@/app/hooks/useFetchRecipes/useFetchRecipes";
 
 export default function RecipesSearch() {
+  const recipes = useFetchRecipes()
+  
   return (
     <Container>
-      <RecipesSearchBar />
-      {/* <> */}
-        {/* <FishSearchInput
-          lastFishQuery={lastFishQuery}
-          setLastFishQuery={setLastFishQuery}
-          setFish={setFish} 
-        /> */}
-        
-        {/* {loading ? (
-          <Text>
-            { getTranslation('common.loading', language) }
-          </Text>
-        ) : fish?.length === 0 || undefined ? (
-            <Text>
-              { getTranslation('fishSearch.fishNotFound', language) }
-            </Text>
-        ) : (
-          <FishList fish={fish} />
-        )} */}
-      {/* </> */}
+      <>
+        <RecipesSearchBar />
+        <RecipesList 
+          recipes={recipes}
+        />
+      </>
     </Container>
   )
 }

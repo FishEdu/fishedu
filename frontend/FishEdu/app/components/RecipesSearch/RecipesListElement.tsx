@@ -1,16 +1,31 @@
-import { RecipesGetResponse } from "@/app/api/feeds"
+import { RecipesGetResponse } from "@/app/api/recipes"
+import { router } from "expo-router"
 import { Pressable, StyleSheet, Text, View } from "react-native"
 
 export default function RecipesListElement({ id, content, name }: RecipesGetResponse) {
+  const handlePress = () => {
+    const recipeDetailsHref = {
+      pathname: "/(screens)/recipes/[id]",
+      params: {
+        id: String(id),
+        name: name,
+        content: content
+      }
+    } as unknown as Parameters<typeof router.push>[0]
+
+    router.push(recipeDetailsHref)
+  }
+  
   return (
     <Pressable
+      onPress={handlePress}
       style={({ pressed }) => [
         styles.container,
         pressed && styles.containerPressed
       ]}
     >
       <View>
-        <Text>
+        <Text style={styles.name}>
           { name }
         </Text>
       </View>
@@ -28,9 +43,13 @@ const styles = StyleSheet.create({
     paddingEnd: 8,
     borderRadius: 24,
     overflow: 'hidden',
-    paddingBlock: 8
+    paddingBlock: 24,
+    paddingInline: 16
   },
   containerPressed: {
     opacity: 0.75,
   },
+  name: {
+    fontSize: 18
+  }
 })

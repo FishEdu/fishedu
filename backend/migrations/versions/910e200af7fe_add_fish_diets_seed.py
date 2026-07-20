@@ -1,7 +1,7 @@
 """Add fish diets seed
 
 Revision ID: 910e200af7fe
-Revises: seed_eco_tips
+Revises: c554f6cc5c4a
 Create Date: 2026-07-17 14:11:37.326136
 
 """
@@ -13,7 +13,7 @@ import sqlalchemy as sa
 
 # revision identifiers, used by Alembic.
 revision: str = '910e200af7fe'
-down_revision: Union[str, Sequence[str], None] = 'seed_eco_tips'
+down_revision: Union[str, Sequence[str], None] = 'c554f6cc5c4a'
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 

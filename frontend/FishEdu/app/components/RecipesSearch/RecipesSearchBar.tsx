@@ -1,4 +1,4 @@
-import { RecipesGetResponse } from "@/app/api/feeds";
+import { RecipesGetResponse } from "@/app/api/recipes";
 import { useLanguage } from "@/app/hooks/useLanguage/useLanguage";
 import { getTranslation } from "@/app/utils/translation/getTranslation";
 import { useState } from "react";
