@@ -5,3 +5,9 @@ from .FishPlTranslations import FishPlTranslations
 from .FishEnTranslations import FishEnTranslations
 from .EcoTipsEnTranslations import EcoTipsEnTranslations
 from .EcoTipsPlTranslations import EcoTipsPlTranslations
+from .Diet import Diet
+from .DietsEnTranslations import DietEnTranslations
+from .DietsPlTranslations import DietPlTranslations
+from .Recipe import Recipe
+from .RecipesEnTranslations import RecipesEnTranslations
+from .RecipesPlTranslations import RecipesPlTranslations
