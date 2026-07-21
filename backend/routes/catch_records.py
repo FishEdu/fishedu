@@ -103,10 +103,31 @@ def create_record(record: CatchRecordRequest):
                 detail="Fish is required"
             )
 
+        fish_name = record.fish_name
+
+
+        if record.fish_id:
+            fish_translation = (
+                db.query(FishPlTranslations)
+                .filter(
+                    FishPlTranslations.fish_id == record.fish_id
+                )
+                .first()
+            )
+
+            if not fish_translation:
+                raise HTTPException(
+                    status_code=404,
+                    detail="Fish translation not found"
+                )
+
+            fish_name = fish_translation.name
+
+
         new_record = CatchRecord(
             user_id=record.user_id,
             fish_id=record.fish_id,
-            fish_name=record.fish_name,
+            fish_name=fish_name,
             fishing_spot=record.fishing_spot,
             total_length=record.total_length,
             fork_length=record.fork_length,

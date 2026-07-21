@@ -25,6 +25,7 @@ DROP TABLE IF EXISTS fishing_areas_en_translations CASCADE;
 DROP TABLE IF EXISTS fishing_areas_pl_translations CASCADE;
 DROP TABLE IF EXISTS fishing_areas CASCADE;
 
+DROP TABLE IF EXISTS catch_records CASCADE;
 DROP TABLE IF EXISTS user_records CASCADE;
 
 DROP TABLE IF EXISTS users_roles CASCADE;
@@ -296,12 +297,31 @@ CREATE TABLE "eco_tips_pl_translations" (
   id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   "title" varchar,
   "description" text,
+  "created_at" timestamp,
+  "modified_at" timestamp
 );
 
 CREATE TABLE "eco_tips_en_translations" (
   id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   "title" varchar,
   "description" text,
+  "created_at" timestamp,
+  "modified_at" timestamp
+);
+
+CREATE TABLE "catch_records" (
+  id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  "user_id" integer,
+  "fish_id" integer,
+  "fish_name" varchar,
+  "fishing_spot" varchar NOT NULL,
+  "total_length" float,
+  "fork_length" float,
+  "weight" float,
+  "description" text,
+  "image_url" varchar,
+  "created_at" timestamp,
+  "modified_at" timestamp
 );
 
 ALTER TABLE "user_records" ADD FOREIGN KEY ("fish_id") REFERENCES "fish" ("id") DEFERRABLE INITIALLY IMMEDIATE;
@@ -408,3 +428,7 @@ ALTER TABLE "recipes_ingredients" ADD FOREIGN KEY ("ingredient_id") REFERENCES "
 ALTER TABLE "fishing_areas_pl_translations" ADD FOREIGN KEY ("fishing_area_id") REFERENCES "fishing_areas" ("id") DEFERRABLE INITIALLY IMMEDIATE;
 
 ALTER TABLE "fishing_areas_en_translations" ADD FOREIGN KEY ("fishing_area_id") REFERENCES "fishing_areas" ("id") DEFERRABLE INITIALLY IMMEDIATE;
+
+ALTER TABLE "catch_records" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id") DEFERRABLE INITIALLY IMMEDIATE;
+
+ALTER TABLE "catch_records" ADD FOREIGN KEY ("fish_id") REFERENCES "fish" ("id") DEFERRABLE INITIALLY IMMEDIATE;
