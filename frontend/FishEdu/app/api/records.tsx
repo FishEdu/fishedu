@@ -8,6 +8,7 @@ export type CatchRecordGetResponse = {
   fishing_spot: string,
   total_length?: number,
   fork_length?: number,
+  weight?: number,
   description?: string,
   image_url?: string,
   created_at: string
@@ -20,6 +21,7 @@ export type CatchRecordCreateRequest = {
   fishing_spot: string,
   total_length?: number,
   fork_length?: number,
+  weight?: number,
   description?: string,
   image_url?: string
 }

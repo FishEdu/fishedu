@@ -15,8 +15,8 @@ class CatchRecord(Base):
     fish_name = Column(String, nullable=True)
     fishing_spot = Column(String, nullable=False)
     total_length = Column(Float, nullable=True)
-    weight = Column(Float, nullable=True)
     fork_length = Column(Float, nullable=True)
+    weight = Column(Float, nullable=True)
     description = Column(Text, nullable=True)
     image_url = Column(String, nullable=True)
 

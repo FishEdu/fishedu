@@ -1,11 +1,12 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { ScrollView } from "react-native"
 import { Pressable, StyleSheet, Text, View } from "react-native"
 import { router } from "expo-router"
 import InputGroup from "../FormInputs/InputGroup"
-import { createRecord } from "@/app/utils/fetch/records/fetchRecords"
+import { createRecord, updateRecord } from "@/app/utils/fetch/records/fetchRecords"
 import FishingSpotPicker from "../FormInputs/FishingSpotPicker"
 import { useFetchFish } from "@/app/hooks/useFetchFish/useFetchFish"
+import { CatchRecordGetResponse } from "@/app/api/records"
 
 type FormData = {
     fish_id: number
@@ -13,22 +14,42 @@ type FormData = {
     fishing_spot: string
     total_length: string
     fork_length: string
+    weight: string
     description: string
 }
 
 
-export default function AddRecordForm() {
+type Props = {
+  record?: CatchRecordGetResponse
+}
+
+export default function AddRecordForm({ record }: Props) {
   const [formData, setFormData] = useState<FormData>({
     fish_id: 0,
     fish_name: "",
     fishing_spot: "",
     total_length: "",
     fork_length: "",
+    weight: "",
     description: "",
   })
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
   const [showFishList, setShowFishList] = useState(false)
+  
+  useEffect(() => {
+  if(record) {
+    setFormData({
+      fish_id: record.fish_id ?? 0,
+      fish_name: record.fish_name ?? "",
+      fishing_spot: record.fishing_spot,
+      total_length: record.total_length?.toString() ?? "",
+      fork_length: record.fork_length?.toString() ?? "",
+      weight: record.weight?.toString() ?? "",
+      description: record.description ?? "",
+    })
+  }
+}, [record])
 
   const { data: fishes } = useFetchFish(formData.fish_name)
 
@@ -47,23 +68,41 @@ export default function AddRecordForm() {
     setLoading(true)
     setError("")
 
-    const record = await createRecord({
-      fish_id: formData.fish_id,
-      fish_name: formData.fish_name.trim(),
-      fishing_spot: formData.fishing_spot.trim(),
-      total_length: Number(formData.total_length) || undefined,
-      fork_length: Number(formData.fork_length) || undefined,
-      description: formData.description.trim() || undefined,
-    })
+  const data = {
+    fish_id: formData.fish_id,
+    fish_name: formData.fish_name.trim(),
+    fishing_spot: formData.fishing_spot.trim(),
+    total_length: Number(formData.total_length) || undefined,
+    fork_length: Number(formData.fork_length) || undefined,
+    weight: Number(formData.weight.replace(",", ".")) || undefined,
+    description: formData.description.trim() || undefined,
+  }
+
+  const result = record
+    ? await updateRecord(record.id, data)
+    : await createRecord(data)
+
 
     setLoading(false)
 
-    if(!record) {
-      setError("Nie udalo sie dodac rekordu")
+    if(!result) {
+      setError("Nie udalo sie zapisać rekordu")
       return
     }
+    if(!record) {
+      setFormData({
+        fish_id: 0,
+        fish_name: "",
+        fishing_spot: "",
+        total_length: "",
+        fork_length: "",
+        weight: "",
+        description: "",
+      })
+    }
 
-    router.back()
+
+    router.replace("/(tabs)/records")
   }
 
   return (
@@ -152,7 +191,17 @@ export default function AddRecordForm() {
             onChangeText: value => updateField("fork_length", value),
           }}
         />
-      </View>
+
+        <InputGroup
+          styles={{ ...inputStyles, containerStyles: styles.lengthInput }}
+          inputProps={{
+            placeholder: "Waga kg",
+            keyboardType: "numeric",
+            value: formData.weight,
+            onChangeText: value => updateField("weight", value),
+          }}
+        />
+</View>
 
       <InputGroup
         styles={{
@@ -180,7 +229,12 @@ export default function AddRecordForm() {
         disabled={loading}
       >
         <Text style={styles.submitText}>
-          {loading ? "DODAWANIE..." : "DODAJ"}
+          {loading
+            ? "ZAPISYWANIE..."
+            : record
+              ? "ZAPISZ ZMIANY"
+              : "DODAJ"
+          }
         </Text>
       </Pressable>
     </View>

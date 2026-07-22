@@ -109,6 +109,7 @@ const createLocalRecord = async (record: CatchRecordCreateRequest) => {
     fishing_spot: record.fishing_spot,
     total_length: record.total_length,
     fork_length: record.fork_length,
+    weight: record.weight,
     description: record.description,
     image_url: record.image_url,
     created_at: new Date().toISOString(),
@@ -118,3 +119,53 @@ const createLocalRecord = async (record: CatchRecordCreateRequest) => {
 
   return localRecord
 }
+
+export const deleteRecord = async (id: number) => {
+  try {
+    const apiBaseUrl = getBaseApiUrl()
+
+    const response = await fetch(
+      `${apiBaseUrl}/records/${id}`,
+      {
+        method: "DELETE",
+      }
+    )
+
+    return response.ok
+
+  } catch(error) {
+    console.error("Failed to delete record", error)
+    return false
+  }
+}
+
+export const updateRecord = async (
+  id: number,
+  record: CatchRecordCreateRequest
+): Promise<CatchRecordGetResponse | null> => {
+  try {
+    const apiBaseUrl = getBaseApiUrl()
+
+    const response = await fetch(
+      `${apiBaseUrl}/records/${id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(record),
+      }
+    )
+
+    if (!response.ok)
+      return null
+
+    return await response.json()
+
+  } catch(error) {
+    console.error("Failed to update record", error)
+    return null
+  }
+}
+
+

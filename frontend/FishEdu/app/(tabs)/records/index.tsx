@@ -13,12 +13,20 @@ export default function Records() {
   const [records, setRecords] = useState<CatchRecordGetResponse[]>([])
   const [loading, setLoading] = useState(true)
 
-  const loadRecords = useCallback(async (mode = selectedMode, query = "") => {
-    setLoading(true)
-    const fetchedRecords = await fetchRecords({ mode, query: query.trim() })
-    setRecords(fetchedRecords)
-    setLoading(false)
-  }, [selectedMode])
+  const loadRecords = useCallback(
+    async (mode = selectedMode, query = "") => {
+      setLoading(true)
+
+      const fetchedRecords = await fetchRecords({
+        mode,
+        query: query.trim(),
+      })
+
+      setRecords(fetchedRecords)
+      setLoading(false)
+    },
+    [selectedMode]
+  )
 
   useFocusEffect(
     useCallback(() => {
@@ -31,13 +39,17 @@ export default function Records() {
     loadRecords(mode)
   }
 
-  const searchPlaceholder = selectedMode === "spots"
-    ? "Wyszukaj łowisko"
-    : "Wyszukaj rybę"
+  const searchPlaceholder =
+    selectedMode === "spots"
+      ? "Wyszukaj łowisko"
+      : "Wyszukaj rybę"
 
   return (
     <Container>
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 100 }}
+      >
         <View style={styles.header}>
           <Text style={styles.heading}>Twoje rekordy</Text>
         </View>
@@ -47,16 +59,16 @@ export default function Records() {
           setSelectedMode={handleModeChange}
         />
 
-        {selectedMode !== "recent" ? (
+        {selectedMode !== "recent" && (
           <RecordSearchInput
             placeholder={searchPlaceholder}
-            onChangeText={value => loadRecords(selectedMode, value)}
+            onChangeText={(value) => loadRecords(selectedMode, value)}
           />
-        ) : undefined}
+        )}
 
-        {selectedMode === "recent" ? (
+        {selectedMode === "recent" && (
           <Text style={styles.sectionTitle}>Ostatnio dodane</Text>
-        ) : undefined}
+        )}
 
         {loading ? (
           <Text style={styles.statusText}>Ładowanie...</Text>
@@ -66,21 +78,23 @@ export default function Records() {
             emptyText="Nie masz jeszcze rekordów"
           />
         )}
-
-        {selectedMode === "recent" ? (
-          <Pressable
-            onPress={() => router.push({
-              pathname: "/(tabs)/records/add"
-            } as unknown as Parameters<typeof router.push>[0])}
-            style={({ pressed }) => [
-              styles.addButton,
-              pressed && styles.addButtonPressed
-            ]}
-          >
-            <Text style={styles.addButtonText}>DODAJ</Text>
-          </Pressable>
-        ) : undefined}
       </ScrollView>
+
+      {selectedMode === "recent" && (
+        <Pressable
+          onPress={() =>
+            router.push(
+              "/(tabs)/records/add" as Parameters<typeof router.push>[0]
+            )
+          }
+          style={({ pressed }) => [
+            styles.floatingButton,
+            pressed && styles.addButtonPressed,
+          ]}
+        >
+          <Text style={styles.floatingButtonText}>DODAJ</Text>
+        </Pressable>
+      )}
     </Container>
   )
 }
@@ -89,33 +103,44 @@ const styles = StyleSheet.create({
   header: {
     marginBottom: 12,
   },
+
   heading: {
     fontSize: 24,
     fontWeight: "700",
   },
+
   sectionTitle: {
     fontSize: 18,
     marginBottom: 12,
   },
+
   statusText: {
     color: "hsl(0, 0%, 35%)",
     fontSize: 16,
   },
-  addButton: {
-    alignItems: "center",
-    alignSelf: "center",
-    backgroundColor: "white",
-    borderRadius: 16,
-    marginBlock: 28,
-    paddingBlock: 12,
-    paddingInline: 28,
-  },
+
   addButtonPressed: {
     opacity: 0.8,
   },
-  addButtonText: {
-    color: "hsl(226, 75%, 59%)",
-    fontSize: 13,
+
+  floatingButton: {
+    position: "absolute",
+    bottom: 20,
+    alignSelf: "center",
+
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+
+    borderRadius: 20,
+    backgroundColor: "hsl(226, 75%, 59%)",
+
+    elevation: 8,
+    zIndex: 999,
+  },
+
+  floatingButtonText: {
+    color: "white",
+    fontSize: 20,
     fontWeight: "700",
-  }
+  },
 })

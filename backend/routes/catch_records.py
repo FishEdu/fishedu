@@ -23,6 +23,7 @@ def serialize_record(record: CatchRecord, translated_fish_name: Optional[str]):
         "fishing_spot": record.fishing_spot,
         "total_length": record.total_length,
         "fork_length": record.fork_length,
+        "weight": record.weight,
         "description": record.description,
         "image_url": record.image_url,
         "created_at": record.created_at,
@@ -131,6 +132,7 @@ def create_record(record: CatchRecordRequest):
             fishing_spot=record.fishing_spot,
             total_length=record.total_length,
             fork_length=record.fork_length,
+            weight=record.weight,
             description=record.description,
             image_url=record.image_url,
         )
@@ -143,3 +145,68 @@ def create_record(record: CatchRecordRequest):
 
     finally:
         db.close()
+
+@router.delete("/{record_id}")
+def delete_record(record_id: int):
+    db = SessionLocal()
+
+    try:
+        record = (
+            db.query(CatchRecord)
+            .filter(CatchRecord.id == record_id)
+            .first()
+        )
+
+        if not record:
+            raise HTTPException(
+                status_code=404,
+                detail="Record not found"
+            )
+
+        db.delete(record)
+        db.commit()
+
+        return {
+            "message": "Record deleted"
+        }
+
+    finally:
+        db.close()
+
+@router.put("/{record_id}")
+def update_record(
+    record_id: int,
+    record_data: CatchRecordRequest
+):
+    db = SessionLocal()
+
+    try:
+        record = (
+            db.query(CatchRecord)
+            .filter(CatchRecord.id == record_id)
+            .first()
+        )
+
+        if not record:
+            raise HTTPException(
+                status_code=404,
+                detail="Record not found"
+            )
+
+        record.fish_id = record_data.fish_id
+        record.fish_name = record_data.fish_name
+        record.fishing_spot = record_data.fishing_spot
+        record.total_length = record_data.total_length
+        record.fork_length = record_data.fork_length
+        record.weight = record_data.weight
+        record.description = record_data.description
+        record.image_url = record_data.image_url
+
+        db.commit()
+        db.refresh(record)
+
+        return serialize_record(record, record.fish_name)
+
+    finally:
+        db.close()
+

@@ -10,5 +10,6 @@ class CatchRecordRequest(BaseModel):
     fishing_spot: str
     total_length: Optional[float] = None
     fork_length: Optional[float] = None
+    weight: Optional[float] = None
     description: Optional[str] = None
     image_url: Optional[str] = None
