@@ -38,6 +38,16 @@ export default function TabsLayout() {
       />
 
       <Tabs.Screen
+        name="records/index"
+        options={{
+          title: "Rekordy",
+          tabBarIcon: ({ size, color }) => (
+            <Ionicons name="document-text-outline" size={size} color={color} />
+          ),
+        }}
+      />
+
+      <Tabs.Screen
         name="settings"
         options={{
           title: getTranslation('tabs.settings', languageCode),
@@ -46,7 +56,7 @@ export default function TabsLayout() {
         }}
       />
 
-            <Tabs.Screen
+      <Tabs.Screen
         name="records/add"
         options={{
           href: null,

@@ -1,5 +1,7 @@
 import { CatchRecordGetResponse } from "@/app/api/records"
+import { useState } from "react"
 import { Image, Pressable, StyleSheet, Text, View } from "react-native"
+import Ionicons from "@expo/vector-icons/Ionicons"
 import { router } from "expo-router"
 
 
@@ -8,6 +10,9 @@ type LocalProps = {
 }
 
 export default function RecordCard({ record }: LocalProps) {
+  const [descriptionExpanded, setDescriptionExpanded] = useState(false)
+  const [descriptionLong, setDescriptionLong] = useState(false)
+
   return (
     <View style={styles.container}>
       <Image
@@ -54,16 +59,43 @@ export default function RecordCard({ record }: LocalProps) {
       </View>
 
 
-      {record.description && (
-        <View style={styles.descriptionRow}>
-          <Text style={styles.label}>Opis</Text>
+        {record.description && (
+          <View style={styles.descriptionRow}>
+            <Text style={styles.label}>Opis</Text>
 
-          <Text style={styles.description}>
-            {record.description}
-          </Text>
-        </View>
-      )}
+            <View style={styles.descriptionContainer}>
+              {/* Tekst widoczny */}
+              <Text
+                style={styles.description}
+                numberOfLines={descriptionExpanded ? undefined : 2}
+              >
+                {record.description}
+              </Text>
 
+              {/* Ukryty tekst do sprawdzenia długości */}
+              {!descriptionExpanded && (
+                <Text
+                  style={styles.hiddenDescription}
+                  onTextLayout={(event) => {
+                    setDescriptionLong(event.nativeEvent.lines.length > 2)
+                  }}
+                >
+                  {record.description}
+                </Text>
+              )}
+
+              {descriptionLong && (
+                <Pressable
+                  onPress={() => setDescriptionExpanded(!descriptionExpanded)}
+                >
+                  <Text style={styles.expandText}>
+                    {descriptionExpanded ? "Zwiń" : "Pokaż więcej"}
+                  </Text>
+                </Pressable>
+              )}
+            </View>
+          </View>
+        )}
       <Pressable
         style={styles.editButton}
         onPress={() =>
@@ -75,9 +107,7 @@ export default function RecordCard({ record }: LocalProps) {
           })
         }
       >
-        <Text style={styles.editText}>
-          EDYTUJ
-        </Text>
+        <Ionicons name="pencil-outline" size={20} color="#4a6cf7" />
       </Pressable>
     </View>
   )
@@ -144,25 +174,44 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
 
+  
+  editButton: {
+    position: "absolute",
+    right: 12,
+    bottom: 12,
+
+    width: 36,
+    height: 36,
+
+    borderRadius: 18,
+    backgroundColor: "#eef2ff",
+
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
+  descriptionContainer: {
+    flex: 1,
+    paddingRight: 45,
+    position: "relative",
+    },
 
   description: {
-    flex: 1,
     color: "#333",
     fontSize: 12,
     lineHeight: 16,
   },
-  
-  editButton: {
-    marginTop: 12,
-    backgroundColor: "#4a6cf7",
-    borderRadius: 10,
-    paddingVertical: 8,
-    alignItems: "center",
+
+  expandText: {
+    marginTop: 4,
+    color: "#4a6cf7",
+    fontSize: 11,
+    fontWeight: "600",
   },
 
-  editText: {
-    color: "white",
-    fontSize: 12,
-    fontWeight: "700",
+  hiddenDescription: {
+    position: "absolute",
+    opacity: 0,
+    width: "100%",
   },
 })

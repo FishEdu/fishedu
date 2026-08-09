@@ -122,6 +122,16 @@ const createLocalRecord = async (record: CatchRecordCreateRequest) => {
 
 export const deleteRecord = async (id: number) => {
   try {
+    // Usuń z lokalnych rekordów
+    const localRecords = await getLocalRecords()
+
+    const updatedLocalRecords = localRecords.filter(
+      record => record.id !== id
+    )
+
+    await saveLocalRecords(updatedLocalRecords)
+
+    // Spróbuj usunąć również z API
     const apiBaseUrl = getBaseApiUrl()
 
     const response = await fetch(
@@ -131,7 +141,7 @@ export const deleteRecord = async (id: number) => {
       }
     )
 
-    return response.ok
+    return response.ok || updatedLocalRecords.length !== localRecords.length
 
   } catch(error) {
     console.error("Failed to delete record", error)
