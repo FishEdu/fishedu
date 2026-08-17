@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
     backgroundColor: "lightgray",
   },
   buttonActive: {
-    backgroundColor: "hsl(207, 51%, 69%)",
+    backgroundColor: "hsla(200, 75%, 52%, 0.77)",
   },
   buttonText: {
     fontSize: 12,

@@ -4,6 +4,7 @@ import { Picker } from "@react-native-picker/picker";
 type Props = {
   value: string;
   onChange: (value: string) => void;
+  disabled?: boolean;
 };
 
 const fishingSpots = [
@@ -13,13 +14,18 @@ const fishingSpots = [
   { label: "Morze", value: "morze" },
 ];
 
-export default function FishingSpotPicker({ value, onChange }: Props) {
+export default function FishingSpotPicker({
+  value,
+  onChange,
+  disabled = false,
+}: Props) {
   return (
     <View style={styles.container}>
-      <Picker
-        selectedValue={value}
-        onValueChange={(itemValue) => onChange(itemValue)}
-      >
+        <Picker
+          selectedValue={value}
+          onValueChange={(itemValue) => onChange(itemValue)}
+          enabled={!disabled}
+        >
         <Picker.Item label="Wybierz łowisko" value="" />
 
         {fishingSpots.map((spot) => (

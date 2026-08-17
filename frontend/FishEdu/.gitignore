@@ -43,5 +43,5 @@ app-example
 /android
 
 # IP API
-./frontend/FishEdu/app/utils/getBaseApiUrl.ts
+frontend/FishEdu/app/utils/getBaseApiUrl.ts
 

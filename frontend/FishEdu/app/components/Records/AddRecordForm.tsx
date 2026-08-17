@@ -49,19 +49,21 @@ export default function AddRecordForm({ record }: Props) {
   const [loading, setLoading] = useState(false)
   const [showFishList, setShowFishList] = useState(false)
 
-  useEffect(() => {
-    if (record) {
-      setFormData({
-        fish_id: record.fish_id ?? 0,
-        fish_name: record.fish_name ?? "",
-        fishing_spot: record.fishing_spot,
-        total_length: record.total_length?.toString() ?? "",
-        fork_length: record.fork_length?.toString() ?? "",
-        weight: record.weight?.toString() ?? "",
-        description: record.description ?? "",
-      })
-    }
-  }, [record])
+useEffect(() => {
+  if (record) {
+    console.log("EDIT RECORD:", record)
+
+    setFormData({
+      fish_id: record.fish_id ?? 0,
+      fish_name: record.fish_name ?? "",
+      fishing_spot: record.fishing_spot,
+      total_length: record.total_length?.toString() ?? "",
+      fork_length: record.fork_length?.toString() ?? "",
+      weight: record.weight?.toString() ?? "",
+      description: record.description ?? "",
+    })
+  }
+}, [record])
 
   const { data: fishes } = useFetchFish(formData.fish_name)
 
@@ -150,12 +152,12 @@ export default function AddRecordForm({ record }: Props) {
 
       {/* FISH */}
 
-      <View style={styles.section}>
+      <View style={[styles.section, styles.fishSection]}>
         <View style={styles.sectionHeader}>
           <Ionicons
             name="fish-outline"
             size={18}
-            color="#4a6cf7"
+            color="hsla(200, 75%, 52%, 0.96)"
           />
 
           <Text style={styles.sectionTitle}>
@@ -187,11 +189,6 @@ export default function AddRecordForm({ record }: Props) {
                   setShowFishList(true)
                 },
 
-                onBlur: () => {
-                  setTimeout(() => {
-                    setShowFishList(false)
-                  }, 200)
-                },
               }}
             />
 
@@ -260,7 +257,7 @@ export default function AddRecordForm({ record }: Props) {
                               size={18}
                               color={
                                 selected
-                                  ? "#4a6cf7"
+                                  ? "hsla(200, 75%, 52%, 0.96)"
                                   : "#777"
                               }
                             />
@@ -282,7 +279,7 @@ export default function AddRecordForm({ record }: Props) {
                           <Ionicons
                             name="checkmark-circle"
                             size={20}
-                            color="#4a6cf7"
+                            color="hsla(200, 75%, 52%, 0.96)"
                           />
                         )}
                       </Pressable>
@@ -303,7 +300,7 @@ export default function AddRecordForm({ record }: Props) {
           <Ionicons
             name="location-outline"
             size={18}
-            color="#4a6cf7"
+            color="hsla(200, 75%, 52%, 0.96)"
           />
 
           <Text style={styles.sectionTitle}>
@@ -316,6 +313,7 @@ export default function AddRecordForm({ record }: Props) {
           onChange={value =>
             updateField("fishing_spot", value)
           }
+          disabled={showFishList}
         />
       </View>
 
@@ -328,7 +326,7 @@ export default function AddRecordForm({ record }: Props) {
           <Ionicons
             name="resize-outline"
             size={18}
-            color="#4a6cf7"
+            color="hsla(200, 75%, 52%, 0.96)"
           />
 
           <Text style={styles.sectionTitle}>
@@ -412,7 +410,7 @@ export default function AddRecordForm({ record }: Props) {
           <Ionicons
             name="document-text-outline"
             size={18}
-            color="#4a6cf7"
+            color="hsla(200, 75%, 52%, 0.96)"
           />
 
           <Text style={styles.sectionTitle}>
@@ -538,21 +536,28 @@ const fishInputStyles = StyleSheet.create({
 
 const measureInputStyles = StyleSheet.create({
   containerStyles: {
-    flex: 1,
+    width: "100%",
     marginBottom: 0,
   },
 
   inputWrapper: {
+    width: "100%",
+    height: 50,
     backgroundColor: "#f5f5f5",
     borderRadius: 10,
-    paddingVertical: 8,
-    paddingHorizontal: 9,
+    paddingVertical: 0,
+    paddingHorizontal: 8,
+    justifyContent: "center",
   },
 
   inputStyles: {
-    fontSize: 13,
+    width: "100%",
+    height: 50,
+    fontSize: 14,
     color: "#222",
     textAlign: "center",
+    padding: 0,
+    margin: 0,
   },
 })
 
@@ -608,7 +613,7 @@ const styles = StyleSheet.create({
   /* SECTIONS */
 
   section: {
-    marginTop: 10,
+    marginTop: 14,
   },
 
   sectionHeader: {
@@ -626,10 +631,16 @@ const styles = StyleSheet.create({
 
 
   /* FISH */
+  fishSection: {
+    position: "relative",
+    zIndex: 1000,
+    elevation: 1000,
+  },
 
   fishWrapper: {
     position: "relative",
     zIndex: 20,
+    elevation: 20,
   },
 
   fishInputContainer: {
@@ -661,7 +672,7 @@ const styles = StyleSheet.create({
       height: 5,
     },
 
-    elevation: 8,
+    elevation: 30,
     zIndex: 100,
   },
 
@@ -711,7 +722,7 @@ const styles = StyleSheet.create({
   },
 
   selectedFishText: {
-    color: "#4a6cf7",
+    color: "hsla(200, 75%, 52%, 0.96)",
     fontWeight: "600",
   },
 
@@ -725,6 +736,8 @@ const styles = StyleSheet.create({
 
   measureInput: {
     flex: 1,
+    minWidth: 0,
+    minHeight: 74,
   },
 
   measureLabel: {
@@ -773,7 +786,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     minHeight: 48,
     borderRadius: 13,
-    backgroundColor: "#4a6cf7",
+    backgroundColor: "hsla(200, 75%, 52%, 0.96)",
 
     flexDirection: "row",
     alignItems: "center",

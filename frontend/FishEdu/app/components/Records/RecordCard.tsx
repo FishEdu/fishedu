@@ -107,7 +107,7 @@ export default function RecordCard({ record }: LocalProps) {
           })
         }
       >
-        <Ionicons name="pencil-outline" size={20} color="#4a6cf7" />
+        <Ionicons name="pencil-outline" size={20} color="hsla(200, 75%, 52%, 0.96)" />
       </Pressable>
     </View>
   )
@@ -204,7 +204,7 @@ const styles = StyleSheet.create({
 
   expandText: {
     marginTop: 4,
-    color: "#4a6cf7",
+    color: "hsla(200, 75%, 52%, 0.96)",
     fontSize: 11,
     fontWeight: "600",
   },

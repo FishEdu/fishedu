@@ -92,7 +92,7 @@ export default function Records() {
             pressed && styles.addButtonPressed,
           ]}
         >
-          <Text style={styles.floatingButtonText}>DODAJ</Text>
+          <Text style={styles.floatingButtonText}>+</Text>
         </Pressable>
       )}
     </Container>
@@ -128,11 +128,14 @@ const styles = StyleSheet.create({
     bottom: 20,
     alignSelf: "center",
 
-    paddingHorizontal: 20,
-    paddingVertical: 10,
+    width: 60,
+    height: 60,
 
-    borderRadius: 20,
-    backgroundColor: "hsl(226, 75%, 59%)",
+    borderRadius: 30,
+    backgroundColor: "hsla(200, 75%, 52%, 0.96)",
+
+    alignItems: "center",
+    justifyContent: "center",
 
     elevation: 8,
     zIndex: 999,
@@ -140,7 +143,8 @@ const styles = StyleSheet.create({
 
   floatingButtonText: {
     color: "white",
-    fontSize: 20,
+    fontSize: 32,
     fontWeight: "700",
+    lineHeight: 36,
   },
 })
