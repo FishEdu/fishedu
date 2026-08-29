@@ -17,8 +17,8 @@ router = APIRouter(
 def serialize_record(record: CatchRecord, translated_fish_name: Optional[str]):
     return {
         "id": record.id,
-        "user_id": record.user_id,
         "fish_id": record.fish_id,
+        "user_id": record.user_id,
         "fish_name": record.fish_name or translated_fish_name,
         "fishing_spot": record.fishing_spot,
         "total_length": record.total_length,
@@ -126,8 +126,8 @@ def create_record(record: CatchRecordRequest):
 
 
         new_record = CatchRecord(
-            user_id=record.user_id,
             fish_id=record.fish_id,
+            user_id=record.user_id,
             fish_name=fish_name,
             fishing_spot=record.fishing_spot,
             total_length=record.total_length,
@@ -194,6 +194,7 @@ def update_record(
             )
 
         record.fish_id = record_data.fish_id
+        record.user_id = record_data.user_id
         record.fish_name = record_data.fish_name
         record.fishing_spot = record_data.fishing_spot
         record.total_length = record_data.total_length

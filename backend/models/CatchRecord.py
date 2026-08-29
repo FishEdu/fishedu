@@ -9,8 +9,9 @@ class CatchRecord(Base):
 
     id = Column(Integer, primary_key=True)
 
-    user_id = Column(Integer, ForeignKey("users.id"), nullable=False,)
+
     fish_id = Column(Integer, ForeignKey("fish.id"), nullable=True)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False,)
 
     fish_name = Column(String, nullable=True)
     fishing_spot = Column(String, nullable=False)

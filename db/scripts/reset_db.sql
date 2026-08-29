@@ -53,6 +53,7 @@ CREATE TABLE "users" (
 
 CREATE TABLE "user_records" (
   id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  "user_id" integer,
   "fish_id" integer,
   "total_length" float,
   "fork_length" float,
@@ -311,8 +312,8 @@ CREATE TABLE "eco_tips_en_translations" (
 
 CREATE TABLE "catch_records" (
   id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-  "user_id" integer,
   "fish_id" integer,
+  "user_id" integer,
   "fish_name" varchar,
   "fishing_spot" varchar NOT NULL,
   "total_length" float,

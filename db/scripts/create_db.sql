@@ -268,8 +268,8 @@ CREATE TABLE "eco_tips_en_translations" (
 
 CREATE TABLE "catch_records" (
   id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-  "user_id" integer,
   "fish_id" integer,
+  "user_id" integer,
   "fish_name" varchar,
   "fishing_spot" varchar NOT NULL,
   "total_length" float,
