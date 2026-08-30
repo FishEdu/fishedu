@@ -14,6 +14,11 @@ type FetchRecordsParams = {
 
 const LOCAL_RECORDS_KEY = "catchRecords"
 
+
+// =========================
+// LOKALNE REKORDY
+// =========================
+
 const getLocalRecords = async (): Promise<CatchRecordGetResponse[]> => {
   const rawRecords = await AsyncStorage.getItem(LOCAL_RECORDS_KEY)
 
@@ -21,6 +26,7 @@ const getLocalRecords = async (): Promise<CatchRecordGetResponse[]> => {
     ? (JSON.parse(rawRecords) as CatchRecordGetResponse[])
     : []
 }
+
 
 const saveLocalRecords = async (
   records: CatchRecordGetResponse[]
@@ -30,6 +36,26 @@ const saveLocalRecords = async (
     JSON.stringify(records)
   )
 }
+
+
+// =========================
+// SORTOWANIE
+// =========================
+
+const sortRecordsByDate = (
+  records: CatchRecordGetResponse[]
+) => {
+  return [...records].sort(
+    (a, b) =>
+      new Date(b.created_at).getTime() -
+      new Date(a.created_at).getTime()
+  )
+}
+
+
+// =========================
+// FILTROWANIE
+// =========================
 
 const filterRecords = (
   records: CatchRecordGetResponse[],
@@ -69,23 +95,113 @@ const filterRecords = (
 
 
 // =========================
+// SYNCHRONIZACJA LOKALNYCH
+// REKORDÓW Z API
+// =========================
+
+const syncLocalRecords = async (): Promise<boolean> => {
+  const localRecords = await getLocalRecords()
+
+  // Nie ma czego synchronizować
+  if (localRecords.length === 0)
+    return true
+
+  const apiBaseUrl = getBaseApiUrl()
+
+  const remainingLocalRecords: CatchRecordGetResponse[] = []
+
+  for (const localRecord of localRecords) {
+
+    try {
+
+      const response = await fetch(
+        `${apiBaseUrl}/records`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            user_id: localRecord.user_id,
+            fish_id: localRecord.fish_id,
+            fish_name: localRecord.fish_name,
+            fishing_spot: localRecord.fishing_spot,
+            total_length: localRecord.total_length,
+            fork_length: localRecord.fork_length,
+            weight: localRecord.weight,
+            description: localRecord.description,
+            image_url: localRecord.image_url,
+          }),
+        }
+      )
+
+      if (!response.ok) {
+
+        // API odrzuciło rekord.
+        // Zostawiamy go lokalnie.
+        remainingLocalRecords.push(localRecord)
+
+        continue
+      }
+
+      // Rekord został poprawnie zapisany
+      // w bazie.
+      //
+      // Nie dodajemy go ponownie do AsyncStorage,
+      // ponieważ od teraz jego wersja z API
+      // jest źródłem prawdy.
+
+    } catch (error) {
+
+      console.error(
+        "Failed to sync local record",
+        localRecord.id,
+        error
+      )
+
+      // Brak internetu/API.
+      // Rekord zostaje lokalnie.
+      remainingLocalRecords.push(localRecord)
+    }
+  }
+
+  await saveLocalRecords(
+    remainingLocalRecords
+  )
+
+  return remainingLocalRecords.length === 0
+}
+
+
+// =========================
 // POBIERANIE REKORDÓW
 // =========================
 
 export const fetchRecords = async (
   params: FetchRecordsParams = {}
 ): Promise<CatchRecordGetResponse[]> => {
+
   try {
+
+    // Najpierw próbujemy zsynchronizować
+    // rekordy zapisane lokalnie.
+    await syncLocalRecords()
+
     const localRecords = await getLocalRecords()
 
     const language =
-      await AsyncStorage.getItem("language") as LanguageCode
+      await AsyncStorage.getItem(
+        "language"
+      ) as LanguageCode
 
-    const apiBaseUrl = getBaseApiUrl()
+    const apiBaseUrl =
+      getBaseApiUrl()
 
-    const searchParams = new URLSearchParams({
-      language: language ?? LanguageCode.PL,
-    })
+    const searchParams =
+      new URLSearchParams({
+        language:
+          language ?? LanguageCode.PL,
+      })
 
     if (
       params.mode &&
@@ -108,32 +224,88 @@ export const fetchRecords = async (
       `${apiBaseUrl}/records?${searchParams.toString()}`
     )
 
+
+    // =========================
+    // API NIE DZIAŁA
+    // =========================
+
     if (!response.ok) {
+
       return filterRecords(
-        localRecords,
+        sortRecordsByDate(
+          localRecords
+        ),
         params
       )
     }
 
+
+    // =========================
+    // API DZIAŁA
+    // =========================
+
     const apiRecords =
       await response.json() as CatchRecordGetResponse[]
 
+
+    /*
+      API jest teraz źródłem prawdy.
+
+      Lokalnie mogą zostać tylko rekordy,
+      których nie udało się zsynchronizować.
+
+      Usuwamy ewentualne duplikaty po ID.
+    */
+
+    const apiIds = new Set(
+      apiRecords.map(record => record.id)
+    )
+
+    const unsyncedLocalRecords =
+      localRecords.filter(
+        record => !apiIds.has(record.id)
+      )
+
+
+    /*
+      API + niesynchronizowane lokalne rekordy.
+
+      Jeżeli internet działa i synchronizacja
+      się udała, localRecords będzie puste.
+    */
+
+    const allRecords = [
+      ...apiRecords,
+      ...unsyncedLocalRecords,
+    ]
+
+
     return filterRecords(
-      [...localRecords, ...apiRecords],
+      sortRecordsByDate(
+        allRecords
+      ),
       params
     )
 
   } catch (error) {
+
     console.error(
       "Failed to fetch records",
       error
     )
 
+
+    // =========================
+    // BRAK INTERNETU
+    // =========================
+
     const localRecords =
       await getLocalRecords()
 
     return filterRecords(
-      localRecords,
+      sortRecordsByDate(
+        localRecords
+      ),
       params
     )
   }
@@ -149,22 +321,40 @@ export const createRecord = async (
 ): Promise<CatchRecordGetResponse | null> => {
 
   try {
-    const apiBaseUrl = getBaseApiUrl()
+
+    const apiBaseUrl =
+      getBaseApiUrl()
 
     const response = await fetch(
       `${apiBaseUrl}/records`,
       {
         method: "POST",
+
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type":
+            "application/json",
         },
+
         body: JSON.stringify(record),
       }
     )
 
+
+    // =========================
+    // API NIE ZADZIAŁAŁO
+    // =========================
+
     if (!response.ok) {
-      return await createLocalRecord(record)
+
+      return await createLocalRecord(
+        record
+      )
     }
+
+
+    // =========================
+    // API ZADZIAŁAŁO
+    // =========================
 
     return await response.json()
 
@@ -175,10 +365,19 @@ export const createRecord = async (
       error
     )
 
-    return await createLocalRecord(record)
+    // Brak internetu.
+    // Zapisujemy lokalnie.
+
+    return await createLocalRecord(
+      record
+    )
   }
 }
 
+
+// =========================
+// DODAWANIE LOKALNE
+// =========================
 
 const createLocalRecord = async (
   record: CatchRecordCreateRequest
@@ -187,24 +386,48 @@ const createLocalRecord = async (
   const localRecords =
     await getLocalRecords()
 
-  const localRecord: CatchRecordGetResponse = {
+  const localRecord:
+    CatchRecordGetResponse = {
+
     id: Date.now(),
-    user_id: record.user_id,
-    fish_id: record.fish_id,
-    fish_name: record.fish_name,
-    fishing_spot: record.fishing_spot,
-    total_length: record.total_length,
-    fork_length: record.fork_length,
-    weight: record.weight,
-    description: record.description,
-    image_url: record.image_url,
-    created_at: new Date().toISOString(),
+
+    user_id:
+      record.user_id,
+
+    fish_id:
+      record.fish_id,
+
+    fish_name:
+      record.fish_name,
+
+    fishing_spot:
+      record.fishing_spot,
+
+    total_length:
+      record.total_length,
+
+    fork_length:
+      record.fork_length,
+
+    weight:
+      record.weight,
+
+    description:
+      record.description,
+
+    image_url:
+      record.image_url,
+
+    created_at:
+      new Date().toISOString(),
   }
+
 
   await saveLocalRecords([
     localRecord,
     ...localRecords,
   ])
+
 
   return localRecord
 }
@@ -220,27 +443,41 @@ export const updateRecord = async (
 ): Promise<CatchRecordGetResponse | null> => {
 
   try {
-    const apiBaseUrl = getBaseApiUrl()
+
+    const apiBaseUrl =
+      getBaseApiUrl()
 
     const response = await fetch(
       `${apiBaseUrl}/records/${id}`,
       {
         method: "PUT",
+
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type":
+            "application/json",
         },
+
         body: JSON.stringify(record),
       }
     )
 
-    // API nie zadziałało
-    // → spróbuj zaktualizować rekord lokalnie
+
+    // =========================
+    // API NIE ZADZIAŁAŁO
+    // =========================
+
     if (!response.ok) {
+
       return await updateLocalRecord(
         id,
         record
       )
     }
+
+
+    // =========================
+    // API ZADZIAŁAŁO
+    // =========================
 
     return await response.json()
 
@@ -251,8 +488,9 @@ export const updateRecord = async (
       error
     )
 
-    // Brak połączenia z API
-    // → aktualizacja lokalna
+    // Brak internetu.
+    // Aktualizujemy lokalnie.
+
     return await updateLocalRecord(
       id,
       record
@@ -260,6 +498,10 @@ export const updateRecord = async (
   }
 }
 
+
+// =========================
+// EDYCJA LOKALNA
+// =========================
 
 const updateLocalRecord = async (
   id: number,
@@ -269,25 +511,34 @@ const updateLocalRecord = async (
   const localRecords =
     await getLocalRecords()
 
-  const index = localRecords.findIndex(
-    item => item.id === id
-  )
+  const index =
+    localRecords.findIndex(
+      item => item.id === id
+    )
 
-  // Nie znaleziono rekordu lokalnie
-  if (index === -1) {
+
+  // Nie znaleziono rekordu
+  if (index === -1)
     return null
-  }
 
-  const updatedRecord: CatchRecordGetResponse = {
+
+  const updatedRecord:
+    CatchRecordGetResponse = {
+
     ...localRecords[index],
+
     ...record,
   }
 
-  localRecords[index] = updatedRecord
+
+  localRecords[index] =
+    updatedRecord
+
 
   await saveLocalRecords(
     localRecords
   )
+
 
   return updatedRecord
 }
@@ -303,7 +554,10 @@ export const deleteRecord = async (
 
   try {
 
-    // Usuń lokalnie
+    // =========================
+    // NAJPIERW USUWAMY LOKALNIE
+    // =========================
+
     const localRecords =
       await getLocalRecords()
 
@@ -312,25 +566,36 @@ export const deleteRecord = async (
         record => record.id !== id
       )
 
+
+    const wasLocalRecord =
+      updatedLocalRecords.length !==
+      localRecords.length
+
+
     await saveLocalRecords(
       updatedLocalRecords
     )
 
-    // Spróbuj usunąć z API
+
+    // =========================
+    // USUWAMY Z API
+    // =========================
+
     const apiBaseUrl =
       getBaseApiUrl()
 
-    const response = await fetch(
-      `${apiBaseUrl}/records/${id}`,
-      {
-        method: "DELETE",
-      }
-    )
+    const response =
+      await fetch(
+        `${apiBaseUrl}/records/${id}`,
+        {
+          method: "DELETE",
+        }
+      )
+
 
     return (
       response.ok ||
-      updatedLocalRecords.length !==
-        localRecords.length
+      wasLocalRecord
     )
 
   } catch (error) {
