@@ -19,7 +19,7 @@ def serialize_record(record: CatchRecord, translated_fish_name: Optional[str]):
         "id": record.id,
         "fish_id": record.fish_id,
         "user_id": record.user_id,
-        "fish_name": record.fish_name or translated_fish_name,
+        "fish_name": translated_fish_name or record.fish_name,
         "fishing_spot": record.fishing_spot,
         "total_length": record.total_length,
         "fork_length": record.fork_length,

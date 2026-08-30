@@ -1,16 +1,31 @@
 import Ionicons from "@expo/vector-icons/Ionicons"
 import { Pressable, StyleSheet, Text, View } from "react-native"
 import { RecordViewMode } from "@/app/api/records"
+import { getTranslation } from "@/app/utils/translation/getTranslation"
+import { useLanguage } from "@/app/hooks/useLanguage/useLanguage"
 
 type LocalProps = {
   selectedMode: RecordViewMode,
   setSelectedMode: (mode: RecordViewMode) => void
 }
 
-export default function RecordModeSelector({ selectedMode, setSelectedMode }: LocalProps) {
+export default function RecordModeSelector({
+  selectedMode,
+  setSelectedMode,
+}: LocalProps) {
+  const { languageCode } = useLanguage()
+
   const modes = [
-    { mode: "fish" as const, label: "Ryby", icon: "fish" as const },
-    { mode: "spots" as const, label: "Lowiska", icon: "location" as const },
+    {
+      mode: "fish" as const,
+      label: getTranslation("records.fish", languageCode),
+      icon: "fish" as const,
+    },
+    {
+      mode: "spots" as const,
+      label: getTranslation("records.fishingSpot", languageCode),
+      icon: "location" as const,
+    },
   ]
 
   return (

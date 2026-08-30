@@ -1,24 +1,16 @@
 import { useEffect, useState } from "react"
-import {
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native"
+import {Pressable, ScrollView, StyleSheet, Text, View, } from "react-native"
 import { router } from "expo-router"
 import Ionicons from "@expo/vector-icons/Ionicons"
-
 import InputGroup from "../FormInputs/InputGroup"
 import FishingSpotPicker from "../FormInputs/FishingSpotPicker"
-
-import {
-  createRecord,
-  updateRecord,
-} from "@/app/utils/fetch/records/fetchRecords"
-
+import {createRecord, updateRecord, } from "@/app/utils/fetch/records/fetchRecords"
 import { useFetchFish } from "@/app/hooks/useFetchFish/useFetchFish"
 import { CatchRecordGetResponse } from "@/app/api/records"
+import { getTranslation } from "@/app/utils/translation/getTranslation"
+import { LanguageCode } from "@/app/(tabs)/settings"
+import AsyncStorage from "@react-native-async-storage/async-storage"
+
 
 type FormData = {
   fish_id: number
@@ -48,6 +40,22 @@ export default function AddRecordForm({ record }: Props) {
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
   const [showFishList, setShowFishList] = useState(false)
+
+const [language, setLanguage] = useState<LanguageCode>(
+  LanguageCode.PL
+)
+
+useEffect(() => {
+  const loadLanguage = async () => {
+    const savedLanguage = await AsyncStorage.getItem("language")
+
+    setLanguage(
+      (savedLanguage as LanguageCode) ?? LanguageCode.PL
+    )
+  }
+
+  loadLanguage()
+}, [])
 
 useEffect(() => {
   if (record) {
@@ -79,7 +87,7 @@ useEffect(() => {
       !formData.fish_name.trim() ||
       !formData.fishing_spot.trim()
     ) {
-      setError("Uzupełnij rybę i łowisko")
+      setError(getTranslation("records.completeFishAndSpot", language))
       return
     }
 
@@ -107,7 +115,7 @@ useEffect(() => {
     setLoading(false)
 
     if (!result) {
-      setError("Nie udało się zapisać rekordu")
+      setError(getTranslation("records.saveError", language))
       return
     }
 
@@ -141,11 +149,11 @@ useEffect(() => {
         </View>
 
         <Text style={styles.imageTitle}>
-          Dodaj zdjęcie
+          {getTranslation("records.addPhoto", language)}
         </Text>
 
         <Text style={styles.imageSubtitle}>
-          Opcjonalnie
+          {getTranslation("records.optional", language)}
         </Text>
       </View>
 
@@ -161,7 +169,7 @@ useEffect(() => {
           />
 
           <Text style={styles.sectionTitle}>
-            Ryba
+            {getTranslation("records.fish", language)}
           </Text>
         </View>
 
@@ -177,7 +185,7 @@ useEffect(() => {
             <InputGroup
               styles={fishInputStyles}
               inputProps={{
-                placeholder: "Wyszukaj rybę...",
+                placeholder: getTranslation("records.searchFish", language),
                 value: formData.fish_name,
 
                 onFocus: () => {
@@ -219,7 +227,7 @@ useEffect(() => {
               <View style={styles.fishResults}>
 
                 <Text style={styles.resultsTitle}>
-                  Wyniki wyszukiwania
+                  {getTranslation("records.searchResults", language)}
                 </Text>
 
                 <ScrollView
@@ -304,7 +312,7 @@ useEffect(() => {
           />
 
           <Text style={styles.sectionTitle}>
-            Łowisko
+            {getTranslation("records.fishingSpot", language)}
           </Text>
         </View>
 
@@ -330,7 +338,7 @@ useEffect(() => {
           />
 
           <Text style={styles.sectionTitle}>
-            Wymiary i waga
+            {getTranslation("records.measurementsAndWeight", language)}
           </Text>
         </View>
 
@@ -414,7 +422,7 @@ useEffect(() => {
           />
 
           <Text style={styles.sectionTitle}>
-            Opis
+            {getTranslation("records.description", language)}
           </Text>
         </View>
 
@@ -426,7 +434,7 @@ useEffect(() => {
           }}
           inputProps={{
             placeholder:
-              "Dodaj opis połowu...",
+              getTranslation("records.descriptionPlaceholder", language),
             multiline: true,
             value: formData.description,
             onChangeText: value =>
@@ -482,10 +490,10 @@ useEffect(() => {
 
         <Text style={styles.submitText}>
           {loading
-            ? "Zapisywanie..."
+            ? getTranslation("records.saving", language)
             : record
-              ? "Zapisz zmiany"
-              : "Dodaj rekord"}
+              ? getTranslation("records.saveChanges", language)
+              : getTranslation("records.addRecord", language)}
         </Text>
       </Pressable>
 

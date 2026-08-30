@@ -1,16 +1,27 @@
 import { useCallback, useState } from "react"
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native"
 import { router, useFocusEffect } from "expo-router"
+
 import Container from "@/app/components/ui/Container"
 import RecordModeSelector from "@/app/components/Records/RecordModeSelector"
 import RecordSearchInput from "@/app/components/Records/RecordSearchInput"
 import RecordsList from "@/app/components/Records/RecordsList"
+
 import { CatchRecordGetResponse, RecordViewMode } from "@/app/api/records"
 import { fetchRecords } from "@/app/utils/fetch/records/fetchRecords"
 
+import { getTranslation } from "@/app/utils/translation/getTranslation"
+import { useLanguage } from "@/app/hooks/useLanguage/useLanguage"
+
 export default function Records() {
-  const [selectedMode, setSelectedMode] = useState<RecordViewMode>("recent")
-  const [records, setRecords] = useState<CatchRecordGetResponse[]>([])
+  const { languageCode } = useLanguage()
+
+  const [selectedMode, setSelectedMode] =
+    useState<RecordViewMode>("recent")
+
+  const [records, setRecords] =
+    useState<CatchRecordGetResponse[]>([])
+
   const [loading, setLoading] = useState(true)
 
   const loadRecords = useCallback(
@@ -41,8 +52,8 @@ export default function Records() {
 
   const searchPlaceholder =
     selectedMode === "spots"
-      ? "Wyszukaj łowisko"
-      : "Wyszukaj rybę"
+      ? getTranslation("records.searchSpot", languageCode)
+      : getTranslation("records.searchFishInput", languageCode)
 
   return (
     <Container>
@@ -51,7 +62,9 @@ export default function Records() {
         contentContainerStyle={{ paddingBottom: 100 }}
       >
         <View style={styles.header}>
-          <Text style={styles.heading}>Twoje rekordy</Text>
+          <Text style={styles.heading}>
+            {getTranslation("records.yourRecords", languageCode)}
+          </Text>
         </View>
 
         <RecordModeSelector
@@ -62,20 +75,32 @@ export default function Records() {
         {selectedMode !== "recent" && (
           <RecordSearchInput
             placeholder={searchPlaceholder}
-            onChangeText={(value) => loadRecords(selectedMode, value)}
+            onChangeText={(value) =>
+              loadRecords(selectedMode, value)
+            }
           />
         )}
 
         {selectedMode === "recent" && (
-          <Text style={styles.sectionTitle}>Ostatnio dodane</Text>
+          <Text style={styles.sectionTitle}>
+            {getTranslation(
+              "records.recentlyAdded",
+              languageCode
+            )}
+          </Text>
         )}
 
         {loading ? (
-          <Text style={styles.statusText}>Ładowanie...</Text>
+          <Text style={styles.statusText}>
+            {getTranslation("common.loading", languageCode)}
+          </Text>
         ) : (
           <RecordsList
             records={records}
-            emptyText="Nie masz jeszcze rekordów"
+            emptyText={getTranslation(
+              "records.noRecords",
+              languageCode
+            )}
           />
         )}
       </ScrollView>
@@ -84,7 +109,9 @@ export default function Records() {
         <Pressable
           onPress={() =>
             router.push(
-              "/(tabs)/records/add" as Parameters<typeof router.push>[0]
+              "/(tabs)/records/add" as Parameters<
+                typeof router.push
+              >[0]
             )
           }
           style={({ pressed }) => [

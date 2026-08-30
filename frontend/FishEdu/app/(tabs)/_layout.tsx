@@ -40,7 +40,7 @@ export default function TabsLayout() {
       <Tabs.Screen
         name="records/index"
         options={{
-          title: "Rekordy",
+          title: getTranslation('tabs.records', languageCode),
           tabBarIcon: ({ size, color }) => (
             <Ionicons name="document-text-outline" size={size} color={color} />
           ),
