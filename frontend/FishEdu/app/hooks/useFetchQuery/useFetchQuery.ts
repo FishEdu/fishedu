@@ -36,6 +36,7 @@ export function useFetchQuery<T>({
         }
 
         const url = `${getBaseApiUrl()}/${endpoint}`
+        console.warn(url)
         const apiData = await fetchData<T>(url, language)
 
         const newCache: Cache<T> | null = createCache<T>(cache, localStorageId, apiData, language)

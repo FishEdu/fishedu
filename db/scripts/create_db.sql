@@ -137,6 +137,7 @@ CREATE TABLE "fishing_methods_fish" (
 
 CREATE TABLE "recipes" (
   id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  content text,
   "created_at" timestamp,
   "modified_at" timestamp
 );
@@ -145,6 +146,7 @@ CREATE TABLE "recipes_pl_translations" (
   id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   "recipe_id" int,
   "name" varchar,
+  "content" text,
   "created_at" timestamp,
   "modified_at" timestamp
 );
@@ -153,6 +155,7 @@ CREATE TABLE "recipes_en_translations" (
   id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   "recipe_id" int,
   "name" varchar,
+  "content" text,
   "created_at" timestamp,
   "modified_at" timestamp
 );
@@ -161,38 +164,6 @@ CREATE TABLE "recipes_fish" (
   id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   "fish_id" integer,
   "recipe_id" integer,
-  "created_at" timestamp,
-  "modified_at" timestamp
-);
-
-CREATE TABLE "ingredients" (
-  id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-  "created_at" timestamp,
-  "modified_at" timestamp
-);
-
-CREATE TABLE "ingredients_en_translations" (
-  id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-  "ingredient_id" int,
-  "name" varchar,
-  "created_at" timestamp,
-  "modified_at" timestamp
-);
-
-CREATE TABLE "ingredients_pl_translations" (
-  id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-  "ingredient_id" int,
-  "name" varchar,
-  "created_at" timestamp,
-  "modified_at" timestamp
-);
-
-CREATE TABLE "recipes_ingredients" (
-  id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-  "recipe_id" integer,
-  "ingredient_id" integer,
-  "ammount" float,
-  "unit" varchar,
   "created_at" timestamp,
   "modified_at" timestamp
 );
@@ -306,14 +277,6 @@ ALTER TABLE "recipes_fish" ADD FOREIGN KEY ("fish_id") REFERENCES "fish" ("id") 
 
 ALTER TABLE "recipes_fish" ADD FOREIGN KEY ("recipe_id") REFERENCES "recipes" ("id") DEFERRABLE INITIALLY IMMEDIATE;
 
-ALTER TABLE "ingredients_en_translations" ADD FOREIGN KEY ("ingredient_id") REFERENCES "ingredients" ("id") DEFERRABLE INITIALLY IMMEDIATE;
-
-ALTER TABLE "ingredients_pl_translations" ADD FOREIGN KEY ("ingredient_id") REFERENCES "ingredients" ("id") DEFERRABLE INITIALLY IMMEDIATE;
-
-ALTER TABLE "recipes_ingredients" ADD FOREIGN KEY ("recipe_id") REFERENCES "recipes" ("id") DEFERRABLE INITIALLY IMMEDIATE;
-
-ALTER TABLE "recipes_ingredients" ADD FOREIGN KEY ("ingredient_id") REFERENCES "ingredients" ("id") DEFERRABLE INITIALLY IMMEDIATE;
-
 ALTER TABLE "fishing_areas_pl_translations" ADD FOREIGN KEY ("fishing_area_id") REFERENCES "fishing_areas" ("id") DEFERRABLE INITIALLY IMMEDIATE;
 
 ALTER TABLE "fishing_areas_en_translations" ADD FOREIGN KEY ("fishing_area_id") REFERENCES "fishing_areas" ("id") DEFERRABLE INITIALLY IMMEDIATE;
@@ -358,14 +321,6 @@ ALTER TABLE "recipes_en_translations" ADD FOREIGN KEY ("recipe_id") REFERENCES "
 ALTER TABLE "recipes_fish" ADD FOREIGN KEY ("fish_id") REFERENCES "fish" ("id") DEFERRABLE INITIALLY IMMEDIATE;
 
 ALTER TABLE "recipes_fish" ADD FOREIGN KEY ("recipe_id") REFERENCES "recipes" ("id") DEFERRABLE INITIALLY IMMEDIATE;
-
-ALTER TABLE "ingredients_en_translations" ADD FOREIGN KEY ("ingredient_id") REFERENCES "ingredients" ("id") DEFERRABLE INITIALLY IMMEDIATE;
-
-ALTER TABLE "ingredients_pl_translations" ADD FOREIGN KEY ("ingredient_id") REFERENCES "ingredients" ("id") DEFERRABLE INITIALLY IMMEDIATE;
-
-ALTER TABLE "recipes_ingredients" ADD FOREIGN KEY ("recipe_id") REFERENCES "recipes" ("id") DEFERRABLE INITIALLY IMMEDIATE;
-
-ALTER TABLE "recipes_ingredients" ADD FOREIGN KEY ("ingredient_id") REFERENCES "ingredients" ("id") DEFERRABLE INITIALLY IMMEDIATE;
 
 ALTER TABLE "fishing_areas_pl_translations" ADD FOREIGN KEY ("fishing_area_id") REFERENCES "fishing_areas" ("id") DEFERRABLE INITIALLY IMMEDIATE;
 

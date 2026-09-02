@@ -1,24 +1,30 @@
-import { FishGetResponse } from "@/app/api/fish";
-import { useLanguage } from "@/app/hooks/useLanguage/useLanguage";
 import { debounce } from "@/app/utils/debounce";
-import { fetchFish } from "@/app/utils/fetch/fish/fetchFish";
-import { getTranslation } from "@/app/utils/translation/getTranslation";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { StyleSheet } from "react-native";
 import InputGroup from "../FormInputs/InputGroup";
 
-type LocalProps  = {
-  lastFishQuery: string,
-  setLastFishQuery: React.Dispatch<
-    React.SetStateAction<string>>,
-  setFish: React.Dispatch<
-    React.SetStateAction<FishGetResponse[]>
-  >
+type FetchResult<T> = {
+  result: T[]
 }
 
-export default function FishSearchInput ({ lastFishQuery, setFish, setLastFishQuery }: LocalProps) {
-  const { languageCode } = useLanguage()
-  
+type LocalProps<T> = {
+  lastQuery: string,
+  placeholder: string,
+  setLastQuery: React.Dispatch<
+    React.SetStateAction<string>>,
+  setItems: React.Dispatch<
+    React.SetStateAction<T[]>
+  >,
+  fetchFn: ((query: string) => Promise<FetchResult<T>>) | undefined
+}
+
+export default function Search<T>({
+  lastQuery,
+  placeholder,
+  setLastQuery,
+  setItems,
+  fetchFn,
+}: LocalProps<T>) {  
   return (
     <InputGroup
        styles={{
@@ -27,21 +33,27 @@ export default function FishSearchInput ({ lastFishQuery, setFish, setLastFishQu
         inputStyles: styles.input,
         inputWrapper: styles.inputWrapper,
       }}
-      inputProps={{
-        placeholder: getTranslation('fishSearch.searchFish', languageCode),
-        onChangeText: debounce((fishQuery: string) => {
-          fishQuery = fishQuery.trim().toLowerCase()
 
-          if(fishQuery === lastFishQuery)
+      inputProps={{
+        placeholder: placeholder,
+        onChangeText: debounce((query: string) => {
+          query = query.trim().toLowerCase()
+
+          if(query === lastQuery)
             return
 
-          fetchFish(fishQuery)
-            .then(({ fish }) => { 
-              setFish(fish)
-              setLastFishQuery(fishQuery)
+          //TODO: Remove type of undefined after implementing backend
+          if(fetchFn === undefined)
+            return
+          
+          fetchFn(query)
+            .then(({ result }) => { 
+              setItems(result)
+              setLastQuery(query)
             })
         }, 500)
       }}
+
       icon={<Ionicons name='search' size={24} />}
     />
   )

@@ -7,6 +7,7 @@ import { getTranslation } from "../utils/translation/getTranslation";
 
 export default function Index() {
   const { language } = useLanguage()
+  
   return (
     <Container>
       <View>
@@ -38,9 +39,6 @@ export default function Index() {
               { getTranslation('home.button.ecoTips', language)}
             </Text>
           </Pressable>
-          {/* <View style={styles.button}>
-            
-          </View> */}
 
           <View style={styles.button}>
             <Ionicons
@@ -52,15 +50,20 @@ export default function Index() {
             </Text>
           </View>
 
-          <View style={styles.button}>
-             <Ionicons
+          <Pressable
+            style={styles.button}
+            onPress={() => {
+              router.push('/(screens)/recipes/search')
+            }}
+          >
+            <Ionicons
               name='receipt'
               size={24}
             />
             <Text style={styles.buttonText}>
               { getTranslation('home.button.recipes', language)}
             </Text>
-          </View>
+          </Pressable>
 
           <View style={styles.button}>
              <Ionicons

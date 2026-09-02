@@ -4,6 +4,7 @@ export const translations = {
     'common.yes': 'tak',
     'common.no': 'nie',
     'common.changeLanguage': 'Zmień język',
+    'common.back': 'Confnij',
     'home.welcome': 'Witaj, użytkowniku!',
     'home.button.begginerGuide': 'Niezbędnik początkującego',
     'home.button.ecoTips': 'Wędkarskie porady ekologiczne',
@@ -17,7 +18,7 @@ export const translations = {
     'fishSearch.name': 'nazwa',
     'fishSearch.environment': 'środowisko',
     'fishSearch.endangered': 'zagrożona',
-    'fishSearch.searchFish': 'wyszukaj rybę...',
+    'fishSearch.searchFish': 'Wyszukaj rybę...',
     'fishSearch.fishNotFound': 'Nie znaleziono ryb',
     'fishDetails.back': 'cofnij',
     'fishDetails.favorite': 'ulubiona ryba',
@@ -29,13 +30,15 @@ export const translations = {
     'fishDetails.protectionInPoland': 'ochrona w Polsce',
     'fishDetails.protectionLength': 'wymiar ochronny (min - maks, w cm)',
     'fishDetails.protectionLength.none': 'brak',
-    'ecoTips.heading': 'WĘDKARSKIE PORADY EKOLOGICZNE'
+    'ecoTips.heading': 'WĘDKARSKIE PORADY EKOLOGICZNE',
+    'recipes.search': 'Wyszukaj zanęty i przynęty...'
   },
   en: {
     'common.loading': 'Loading...',
     'common.yes': 'yes',
     'common.no': 'no',
     'common.changeLanguage': 'Change language',
+    'common.back': 'Back',
     'home.welcome': 'Welcome, user!',
     'home.button.begginerGuide': 'Beginner’s Essentials',
     'home.button.ecoTips': 'Eco‑friendly Fishing Tips',
@@ -61,6 +64,7 @@ export const translations = {
     'fishDetails.protectionInPoland': 'protection in Poland',
     'fishDetails.protectionLength': 'protection length (min - max, in cm)',
     'fishDetails.protectionLength.none': 'none',
-    'ecoTips.heading': 'FISHING ECO TIPS'
+    'ecoTips.heading': 'FISHING ECO TIPS',
+    'recipes.search': 'Search baits and groundbaits...'
   }
 } as const
