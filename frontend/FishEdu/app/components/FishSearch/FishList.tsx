@@ -16,7 +16,7 @@ export default function FishList({ fish }: fishListProps) {
           fish={item}
           name={item.name} 
           isEndangered={item.is_endangered}
-          feedingPlaces={item.feeding_places}
+
           imageUrl={''}
         />
       }

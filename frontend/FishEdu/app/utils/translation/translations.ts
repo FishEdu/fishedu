@@ -31,7 +31,8 @@ export const translations = {
     'fishDetails.protectionLength': 'wymiar ochronny (min - maks, w cm)',
     'fishDetails.protectionLength.none': 'brak',
     'ecoTips.heading': 'WĘDKARSKIE PORADY EKOLOGICZNE',
-    'recipes.search': 'Wyszukaj zanęty i przynęty...'
+    'recipes.search': 'Wyszukaj zanęty i przynęty...',
+    'fish.description': 'opis ryby'
   },
   en: {
     'common.loading': 'Loading...',
@@ -65,6 +66,7 @@ export const translations = {
     'fishDetails.protectionLength': 'protection length (min - max, in cm)',
     'fishDetails.protectionLength.none': 'none',
     'ecoTips.heading': 'FISHING ECO TIPS',
-    'recipes.search': 'Search baits and groundbaits...'
+    'recipes.search': 'Search baits and groundbaits...',
+    'fish.description': 'fish description'
   }
 } as const
