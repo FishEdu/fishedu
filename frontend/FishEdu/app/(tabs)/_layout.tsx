@@ -38,6 +38,15 @@ export default function TabsLayout() {
       />
 
       <Tabs.Screen
+        name="education"
+        options={{
+          title: languageCode === 'pl' ? 'Edukacja' : 'Education',
+          tabBarIcon: ({ size, color }) =>
+            <Ionicons name="library" size={size} color={color}></Ionicons>
+        }}
+      />
+
+      <Tabs.Screen
         name="settings"
         options={{
           title: getTranslation('tabs.settings', languageCode),
