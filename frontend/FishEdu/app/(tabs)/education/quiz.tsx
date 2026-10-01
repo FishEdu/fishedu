@@ -1,7 +1,9 @@
 import { EducationMaterial } from "@/app/api/education";
 import Container from "@/app/components/ui/Container";
+import { colors } from "@/app/constants/theme";
 import { useLanguage } from "@/app/hooks/useLanguage/useLanguage";
 import { getBaseApiUrl } from "@/app/utils/getBaseApiUrl";
+import { getTranslation } from "@/app/utils/translation/getTranslation";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { router, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
@@ -12,39 +14,6 @@ type QuizResult = {
   total_questions: number;
   score: number;
   passed: boolean;
-};
-
-const copy = {
-  pl: {
-    back: "Opis quizu",
-    loading: "Ładowanie quizu...",
-    unavailable: "Nie udało się pobrać quizu.",
-    question: "Pytanie",
-    previous: "Wstecz",
-    next: "Dalej",
-    finish: "Sprawdź wynik",
-    selectAnswer: "Wybierz odpowiedź, aby przejść dalej.",
-    submitError: "Nie udało się zapisać wyniku. Spróbuj ponownie.",
-    result: "Twój wynik",
-    passed: "Quiz zaliczony",
-    notPassed: "Spróbuj jeszcze raz",
-    retry: "Rozwiąż ponownie",
-  },
-  en: {
-    back: "Quiz details",
-    loading: "Loading quiz...",
-    unavailable: "Could not load the quiz.",
-    question: "Question",
-    previous: "Back",
-    next: "Next",
-    finish: "Check result",
-    selectAnswer: "Choose an answer to continue.",
-    submitError: "Could not save the result. Try again.",
-    result: "Your result",
-    passed: "Quiz passed",
-    notPassed: "Try again",
-    retry: "Try again",
-  },
 };
 
 export default function EducationQuiz() {
@@ -58,7 +27,6 @@ export default function EducationQuiz() {
   const [submitError, setSubmitError] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [result, setResult] = useState<QuizResult | null>(null);
-  const text = copy[language];
 
   useEffect(() => {
     const controller = new AbortController();
@@ -139,11 +107,11 @@ export default function EducationQuiz() {
   };
 
   if (loading) {
-    return <View style={styles.centered}><ActivityIndicator color="hsl(226, 75%, 45%)" /><Text>{text.loading}</Text></View>;
+    return <View style={styles.centered}><ActivityIndicator color={colors.primary} /><Text>{getTranslation("education.quiz.loading", language)}</Text></View>;
   }
 
   if (!material?.quiz) {
-    return <View style={styles.centered}><Text>{text.unavailable}</Text></View>;
+    return <View style={styles.centered}><Text>{getTranslation("education.quiz.unavailable", language)}</Text></View>;
   }
 
   if (result) {
@@ -152,17 +120,17 @@ export default function EducationQuiz() {
         <Container>
           <View style={styles.resultPage}>
             <Pressable accessibilityRole="button" onPress={() => router.back()} style={styles.backButton}>
-              <Ionicons name="chevron-back" size={20} color="hsl(226, 75%, 45%)" />
-              <Text style={styles.backText}>{text.back}</Text>
+              <Ionicons name="chevron-back" size={20} color={colors.primary} />
+              <Text style={styles.backText}>{getTranslation("education.quiz.back", language)}</Text>
             </Pressable>
             <View style={styles.resultCard}>
-              <Ionicons name={result.passed ? "checkmark-circle" : "refresh-circle"} size={56} color={result.passed ? "hsl(145, 52%, 36%)" : "hsl(226, 75%, 45%)"} />
-              <Text style={styles.resultTitle}>{text.result}</Text>
+              <Ionicons name={result.passed ? "checkmark-circle" : "refresh-circle"} size={56} color={result.passed ? colors.secondary : colors.primary} />
+              <Text style={styles.resultTitle}>{getTranslation("education.quiz.result", language)}</Text>
               <Text style={styles.score}>{result.score}%</Text>
               <Text style={styles.resultText}>{result.correct_answers}/{result.total_questions}</Text>
-              <Text style={styles.resultText}>{result.passed ? text.passed : text.notPassed}</Text>
+              <Text style={styles.resultText}>{getTranslation(result.passed ? "education.quiz.passed" : "education.quiz.notPassed", language)}</Text>
               <Pressable accessibilityRole="button" onPress={restartQuiz} style={styles.primaryButton}>
-                <Text style={styles.primaryButtonText}>{text.retry}</Text>
+                <Text style={styles.primaryButtonText}>{getTranslation("education.quiz.retry", language)}</Text>
               </Pressable>
             </View>
           </View>
@@ -180,12 +148,12 @@ export default function EducationQuiz() {
       <Container>
         <View style={styles.page}>
           <Pressable accessibilityRole="button" onPress={() => router.back()} style={styles.backButton}>
-            <Ionicons name="chevron-back" size={20} color="hsl(226, 75%, 45%)" />
-            <Text style={styles.backText}>{text.back}</Text>
+            <Ionicons name="chevron-back" size={20} color={colors.primary} />
+            <Text style={styles.backText}>{getTranslation("education.quiz.back", language)}</Text>
           </Pressable>
           <Text numberOfLines={2} style={styles.title}>{material.title}</Text>
           <View style={styles.progressGroup}>
-            <Text style={styles.progressLabel}>{text.question} {questionIndex + 1} / {material.quiz.questions.length}</Text>
+            <Text style={styles.progressLabel}>{getTranslation("education.quiz.question", language)} {questionIndex + 1} / {material.quiz.questions.length}</Text>
             <View style={styles.progressTrack}>
               <View style={[styles.progressValue, { width: `${progress}%` }]} />
             </View>
@@ -211,13 +179,13 @@ export default function EducationQuiz() {
                 </Pressable>
               ))}
             </View>
-            {answerError ? <Text style={styles.errorText}>{text.selectAnswer}</Text> : null}
-            {submitError ? <Text style={styles.errorText}>{text.submitError}</Text> : null}
+            {answerError ? <Text style={styles.errorText}>{getTranslation("education.quiz.selectAnswer", language)}</Text> : null}
+            {submitError ? <Text style={styles.errorText}>{getTranslation("education.quiz.submitError", language)}</Text> : null}
           </View>
           <View style={styles.actions}>
             {questionIndex > 0 ? (
               <Pressable accessibilityRole="button" onPress={() => setQuestionIndex(current => current - 1)} style={styles.secondaryButton}>
-                <Text style={styles.secondaryButtonText}>{text.previous}</Text>
+                <Text style={styles.secondaryButtonText}>{getTranslation("education.quiz.previous", language)}</Text>
               </Pressable>
             ) : <View style={styles.actionSpacer} />}
             <Pressable
@@ -226,8 +194,8 @@ export default function EducationQuiz() {
               onPress={continueQuiz}
               style={[styles.primaryButton, submitting && styles.primaryButtonDisabled]}
             >
-              <Text style={styles.primaryButtonText}>{questionIndex === material.quiz.questions.length - 1 ? text.finish : text.next}</Text>
-              {!submitting ? <Ionicons name="arrow-forward" size={18} color="hsl(0, 0%, 100%)" /> : <ActivityIndicator color="hsl(0, 0%, 100%)" />}
+              <Text style={styles.primaryButtonText}>{getTranslation(questionIndex === material.quiz.questions.length - 1 ? "education.quiz.finish" : "education.quiz.next", language)}</Text>
+              {!submitting ? <Ionicons name="arrow-forward" size={18} color={colors.text.onPrimary} /> : <ActivityIndicator color={colors.text.onPrimary} />}
             </Pressable>
           </View>
         </View>
@@ -237,37 +205,37 @@ export default function EducationQuiz() {
 }
 
 const styles = StyleSheet.create({
-  screen: { backgroundColor: "hsl(210, 5%, 96%)", flex: 1 },
-  centered: { alignItems: "center", backgroundColor: "hsl(210, 5%, 96%)", flex: 1, gap: 12, justifyContent: "center" },
+  screen: { backgroundColor: colors.background.app, flex: 1 },
+  centered: { alignItems: "center", backgroundColor: colors.background.app, flex: 1, gap: 12, justifyContent: "center" },
   page: { flex: 1, gap: 20, paddingBlock: 12 },
   resultPage: { flex: 1, gap: 20, paddingBlock: 12 },
   backButton: { alignItems: "center", alignSelf: "flex-start", flexDirection: "row", gap: 2, paddingBlock: 6, paddingEnd: 8 },
-  backText: { color: "hsl(226, 75%, 45%)", fontSize: 16, fontWeight: "600" },
-  title: { color: "hsl(210, 15%, 12%)", fontSize: 24, fontWeight: "700", lineHeight: 31 },
+  backText: { color: colors.primary, fontSize: 16, fontWeight: "600" },
+  title: { color: colors.text.main, fontSize: 24, fontWeight: "700", lineHeight: 31 },
   progressGroup: { gap: 8 },
-  progressLabel: { color: "hsl(210, 8%, 38%)", fontSize: 14, fontWeight: "600" },
-  progressTrack: { backgroundColor: "hsl(210, 12%, 86%)", borderRadius: 3, height: 6, overflow: "hidden" },
-  progressValue: { backgroundColor: "hsl(226, 75%, 52%)", height: "100%" },
-  questionCard: { backgroundColor: "hsl(0, 0%, 100%)", borderColor: "hsl(210, 12%, 88%)", borderRadius: 8, borderWidth: 1, gap: 22, padding: 20 },
-  questionText: { color: "hsl(210, 15%, 14%)", fontSize: 20, fontWeight: "700", lineHeight: 28 },
+  progressLabel: { color: colors.text.muted, fontSize: 14, fontWeight: "600" },
+  progressTrack: { backgroundColor: colors.border.card, borderRadius: 3, height: 6, overflow: "hidden" },
+  progressValue: { backgroundColor: colors.primary, height: "100%" },
+  questionCard: { backgroundColor: colors.background.card, borderColor: colors.border.card, borderRadius: 8, borderWidth: 1, gap: 22, padding: 20 },
+  questionText: { color: colors.text.main, fontSize: 20, fontWeight: "700", lineHeight: 28 },
   options: { gap: 10 },
-  option: { alignItems: "center", borderColor: "hsl(210, 12%, 82%)", borderRadius: 8, borderWidth: 1, flexDirection: "row", gap: 12, minHeight: 54, paddingHorizontal: 14, paddingVertical: 10 },
-  optionSelected: { backgroundColor: "hsl(226, 75%, 95%)", borderColor: "hsl(226, 75%, 45%)" },
-  radio: { alignItems: "center", borderColor: "hsl(210, 12%, 62%)", borderRadius: 10, borderWidth: 1, height: 20, justifyContent: "center", width: 20 },
-  radioSelected: { borderColor: "hsl(226, 75%, 45%)" },
-  radioDot: { backgroundColor: "hsl(226, 75%, 45%)", borderRadius: 5, height: 10, width: 10 },
-  optionText: { color: "hsl(210, 12%, 28%)", flex: 1, fontSize: 16, lineHeight: 22 },
-  optionTextSelected: { color: "hsl(226, 75%, 36%)", fontWeight: "600" },
-  errorText: { color: "hsl(0, 65%, 42%)", fontSize: 14 },
+  option: { alignItems: "center", borderColor: colors.badges.all.border, borderRadius: 8, borderWidth: 1, flexDirection: "row", gap: 12, minHeight: 54, paddingHorizontal: 14, paddingVertical: 10 },
+  optionSelected: { backgroundColor: colors.background.primarySoft, borderColor: colors.primary },
+  radio: { alignItems: "center", borderColor: colors.text.muted, borderRadius: 10, borderWidth: 1, height: 20, justifyContent: "center", width: 20 },
+  radioSelected: { borderColor: colors.primary },
+  radioDot: { backgroundColor: colors.primary, borderRadius: 5, height: 10, width: 10 },
+  optionText: { color: colors.text.main, flex: 1, fontSize: 16, lineHeight: 22 },
+  optionTextSelected: { color: colors.primary, fontWeight: "600" },
+  errorText: { color: colors.danger, fontSize: 14 },
   actions: { flexDirection: "row", gap: 12, justifyContent: "space-between" },
   actionSpacer: { flex: 1 },
-  secondaryButton: { alignItems: "center", borderColor: "hsl(226, 75%, 45%)", borderRadius: 8, borderWidth: 1, flex: 1, justifyContent: "center", minHeight: 50, paddingHorizontal: 16 },
-  secondaryButtonText: { color: "hsl(226, 75%, 45%)", fontSize: 16, fontWeight: "600" },
-  primaryButton: { alignItems: "center", backgroundColor: "hsl(226, 75%, 45%)", borderRadius: 8, flex: 1, flexDirection: "row", gap: 8, justifyContent: "center", minHeight: 50, paddingHorizontal: 16 },
+  secondaryButton: { alignItems: "center", borderColor: colors.primary, borderRadius: 8, borderWidth: 1, flex: 1, justifyContent: "center", minHeight: 50, paddingHorizontal: 16 },
+  secondaryButtonText: { color: colors.primary, fontSize: 16, fontWeight: "600" },
+  primaryButton: { alignItems: "center", backgroundColor: colors.primary, borderRadius: 8, flex: 1, flexDirection: "row", gap: 8, justifyContent: "center", minHeight: 50, paddingHorizontal: 16 },
   primaryButtonDisabled: { opacity: 0.65 },
-  primaryButtonText: { color: "hsl(0, 0%, 100%)", fontSize: 16, fontWeight: "600" },
-  resultCard: { alignItems: "center", alignSelf: "stretch", backgroundColor: "hsl(0, 0%, 100%)", borderColor: "hsl(210, 12%, 88%)", borderRadius: 8, borderWidth: 1, gap: 12, justifyContent: "center", marginTop: 36, padding: 28 },
-  resultTitle: { color: "hsl(210, 15%, 14%)", fontSize: 22, fontWeight: "700" },
-  score: { color: "hsl(226, 75%, 45%)", fontSize: 42, fontWeight: "700" },
-  resultText: { color: "hsl(210, 8%, 38%)", fontSize: 16 },
+  primaryButtonText: { color: colors.text.onPrimary, fontSize: 16, fontWeight: "600" },
+  resultCard: { alignItems: "center", alignSelf: "stretch", backgroundColor: colors.background.card, borderColor: colors.border.card, borderRadius: 8, borderWidth: 1, gap: 12, justifyContent: "center", marginTop: 36, padding: 28 },
+  resultTitle: { color: colors.text.main, fontSize: 22, fontWeight: "700" },
+  score: { color: colors.primary, fontSize: 42, fontWeight: "700" },
+  resultText: { color: colors.text.muted, fontSize: 16 },
 });

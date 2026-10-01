@@ -1,29 +1,14 @@
 import { EducationMaterial } from "@/app/api/education";
 import Container from "@/app/components/ui/Container";
+import { colors } from "@/app/constants/theme";
 import { useEducationFavorites } from "@/app/hooks/useEducationFavorites/useEducationFavorites";
 import { useLanguage } from "@/app/hooks/useLanguage/useLanguage";
 import { getBaseApiUrl } from "@/app/utils/getBaseApiUrl";
+import { getTranslation } from "@/app/utils/translation/getTranslation";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { router, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import { ActivityIndicator, Image, Linking, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
-
-const copy = {
-  pl: {
-    back: "Edukacja",
-    open: "Otwórz materiał",
-    startQuiz: "Rozpocznij quiz",
-    loading: "Ładowanie materiału...",
-    unavailable: "Nie udało się pobrać materiału",
-  },
-  en: {
-    back: "Education",
-    open: "Open material",
-    startQuiz: "Start quiz",
-    loading: "Loading material...",
-    unavailable: "Could not load material",
-  }
-};
 
 export default function EducationMaterialDetails() {
   const { language } = useLanguage();
@@ -31,7 +16,6 @@ export default function EducationMaterialDetails() {
   const [material, setMaterial] = useState<EducationMaterial | null>(null);
   const [loading, setLoading] = useState(true);
   const { favoriteIds, toggleFavorite } = useEducationFavorites();
-  const text = copy[language];
 
   useEffect(() => {
     const controller = new AbortController();
@@ -67,6 +51,15 @@ export default function EducationMaterialDetails() {
       return;
     }
 
+    if (material.type === "video") {
+      const videoHref = {
+        pathname: "/(tabs)/education/video",
+        params: { id: String(material.id), title: material.title, url: material.file_url }
+      } as unknown as Parameters<typeof router.push>[0];
+      router.push(videoHref);
+      return;
+    }
+
     Linking.openURL(material.file_url);
   };
 
@@ -80,11 +73,11 @@ export default function EducationMaterialDetails() {
   };
 
   if (loading) {
-    return <View style={styles.centered}><ActivityIndicator color="hsl(226, 75%, 45%)" /><Text>{text.loading}</Text></View>;
+    return <View style={styles.centered}><ActivityIndicator color={colors.primary} /><Text>{getTranslation("education.detail.loading", language)}</Text></View>;
   }
 
   if (!material) {
-    return <View style={styles.centered}><Text>{text.unavailable}</Text></View>;
+    return <View style={styles.centered}><Text>{getTranslation("education.detail.unavailable", language)}</Text></View>;
   }
 
   const isFavorite = favoriteIds.includes(material.id);
@@ -94,14 +87,14 @@ export default function EducationMaterialDetails() {
       <Container>
         <View style={styles.page}>
           <Pressable accessibilityRole="button" onPress={() => router.back()} style={styles.backButton}>
-            <Ionicons name="chevron-back" size={20} color="hsl(226, 75%, 45%)" />
-            <Text style={styles.backText}>{text.back}</Text>
+            <Ionicons name="chevron-back" size={20} color={colors.primary} />
+            <Text style={styles.backText}>{getTranslation("education.detail.back", language)}</Text>
           </Pressable>
           {material.image_url ? (
             <Image source={{ uri: material.image_url }} style={styles.image} />
           ) : (
             <View style={styles.imageFallback}>
-              <Ionicons name="library-outline" size={48} color="hsl(226, 75%, 45%)" />
+              <Ionicons name="library-outline" size={48} color={colors.primary} />
             </View>
           )}
           <View style={styles.titleGroup}>
@@ -109,14 +102,14 @@ export default function EducationMaterialDetails() {
               <Text style={styles.title}>{material.title}</Text>
               <Pressable
                 accessibilityRole="button"
-                accessibilityLabel={isFavorite ? "Usuń z ulubionych" : "Dodaj do ulubionych"}
+                accessibilityLabel={getTranslation(isFavorite ? "education.favorite.remove" : "education.favorite.add", language)}
                 onPress={() => toggleFavorite(material.id)}
                 style={styles.favoriteButton}
               >
                 <Ionicons
                   name={isFavorite ? "star" : "star-outline"}
-                  size={25}
-                  color="hsl(226, 75%, 52%)"
+                  size={21}
+                  color={colors.favorite}
                 />
               </Pressable>
             </View>
@@ -125,15 +118,15 @@ export default function EducationMaterialDetails() {
           {material.content ? <Text style={styles.contentText}>{material.content}</Text> : null}
           {material.file_url && material.type !== "quiz" ? (
             <Pressable accessibilityRole="button" style={styles.openButton} onPress={openMaterial}>
-              <Ionicons name="open-outline" size={20} color="hsl(0, 0%, 100%)" />
-              <Text style={styles.openButtonText}>{text.open}</Text>
+              <Ionicons name="open-outline" size={20} color={colors.text.onPrimary} />
+              <Text style={styles.openButtonText}>{getTranslation("education.detail.open", language)}</Text>
             </Pressable>
           ) : null}
           {material.quiz ? (
             <View style={styles.quiz}>
               <Pressable accessibilityRole="button" onPress={openQuiz} style={styles.openButton}>
-                <Ionicons name="play-outline" size={20} color="hsl(0, 0%, 100%)" />
-                <Text style={styles.openButtonText}>{text.startQuiz}</Text>
+                <Ionicons name="play-outline" size={20} color={colors.text.onPrimary} />
+                <Text style={styles.openButtonText}>{getTranslation("education.detail.startQuiz", language)}</Text>
               </Pressable>
             </View>
           ) : null}
@@ -144,21 +137,21 @@ export default function EducationMaterialDetails() {
 }
 
 const styles = StyleSheet.create({
-  screen: { backgroundColor: "hsl(180, 5%, 96%)", flex: 1 },
+  screen: { backgroundColor: colors.background.app, flex: 1 },
   content: { flexGrow: 1 },
   centered: { alignItems: "center", flex: 1, gap: 12, justifyContent: "center" },
   page: { gap: 20, paddingBlock: 12, paddingBottom: 28 },
   backButton: { alignItems: "center", alignSelf: "flex-start", flexDirection: "row", gap: 2, paddingBlock: 6, paddingEnd: 8 },
-  backText: { color: "hsl(226, 75%, 45%)", fontSize: 16, fontWeight: "600" },
+  backText: { color: colors.primary, fontSize: 16, fontWeight: "600" },
   image: { aspectRatio: 1.65, borderRadius: 8, width: "100%" },
-  imageFallback: { alignItems: "center", aspectRatio: 1.65, backgroundColor: "hsl(226, 75%, 95%)", borderRadius: 8, justifyContent: "center" },
+  imageFallback: { alignItems: "center", aspectRatio: 1.65, backgroundColor: colors.background.primarySoft, borderRadius: 8, justifyContent: "center" },
   titleGroup: { gap: 8 },
   titleRow: { alignItems: "flex-start", flexDirection: "row", gap: 12, justifyContent: "space-between" },
-  title: { color: "hsl(210, 15%, 12%)", flex: 1, fontSize: 28, fontWeight: "700" },
-  favoriteButton: { alignItems: "center", height: 40, justifyContent: "center", width: 40 },
-  description: { color: "hsl(210, 8%, 36%)", fontSize: 17, lineHeight: 25 },
-  contentText: { color: "hsl(210, 12%, 22%)", fontSize: 16, lineHeight: 25 },
-  openButton: { alignItems: "center", backgroundColor: "hsl(226, 75%, 45%)", borderRadius: 8, flexDirection: "row", gap: 8, justifyContent: "center", padding: 14 },
-  openButtonText: { color: "hsl(0, 0%, 100%)", fontSize: 16, fontWeight: "600" },
+  title: { color: colors.text.main, flex: 1, fontSize: 28, fontWeight: "700" },
+  favoriteButton: { alignItems: "center", height: 36, justifyContent: "center", width: 36 },
+  description: { color: colors.text.muted, fontSize: 17, lineHeight: 25 },
+  contentText: { color: colors.text.main, fontSize: 16, lineHeight: 25 },
+  openButton: { alignItems: "center", backgroundColor: colors.primary, borderRadius: 8, flexDirection: "row", gap: 8, justifyContent: "center", padding: 14 },
+  openButtonText: { color: colors.text.onPrimary, fontSize: 16, fontWeight: "600" },
   quiz: { gap: 20 },
 });

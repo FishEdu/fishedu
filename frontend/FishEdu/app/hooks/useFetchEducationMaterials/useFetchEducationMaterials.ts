@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 
 type Filters = {
   language: LanguageCode;
-  type: EducationMaterialType | "guidesPdf" | "all";
+  type: EducationMaterialType | "all";
   level: EducationLevel | "all";
   search: string;
 };
@@ -22,8 +22,7 @@ export const useFetchEducationMaterials = ({ language, type, level, search }: Fi
       setError(false);
 
       const params = new URLSearchParams({ language });
-      if (type === "guidesPdf") params.set("type", "guide,pdf");
-      if (type !== "all" && type !== "guidesPdf") params.set("type", type);
+      if (type !== "all") params.set("type", type);
       if (level !== "all") params.set("level", level);
       if (search.trim()) params.set("query", search.trim());
 

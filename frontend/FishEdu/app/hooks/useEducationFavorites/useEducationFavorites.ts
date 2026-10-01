@@ -1,25 +1,48 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useEffect, useState } from "react";
-
-const FAVORITE_EDUCATION_MATERIAL_IDS_KEY = "favoriteEducationMaterialIds";
+import { educationFavoritesRepository } from "@/app/services/educationFavorites";
+import { useFocusEffect } from "expo-router";
+import { useCallback, useState } from "react";
 
 export const useEducationFavorites = () => {
   const [favoriteIds, setFavoriteIds] = useState<number[]>([]);
   const [isReady, setIsReady] = useState(false);
 
-  useEffect(() => {
-    AsyncStorage.getItem(FAVORITE_EDUCATION_MATERIAL_IDS_KEY)
-      .then(rawValue => setFavoriteIds(rawValue ? JSON.parse(rawValue) as number[] : []))
-      .finally(() => setIsReady(true));
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      let isActive = true;
+
+      const loadFavoriteIds = async () => {
+        try {
+          const loadedFavoriteIds = await educationFavoritesRepository.getFavoriteIds();
+          if (isActive) setFavoriteIds(loadedFavoriteIds);
+        } finally {
+          if (isActive) setIsReady(true);
+        }
+      };
+
+      void loadFavoriteIds();
+      return () => {
+        isActive = false;
+      };
+    }, [])
+  );
 
   const toggleFavorite = async (materialId: number) => {
-    const nextFavoriteIds = favoriteIds.includes(materialId)
+    const isFavorite = favoriteIds.includes(materialId);
+    const nextFavoriteIds = isFavorite
       ? favoriteIds.filter(id => id !== materialId)
       : [...favoriteIds, materialId];
 
     setFavoriteIds(nextFavoriteIds);
-    await AsyncStorage.setItem(FAVORITE_EDUCATION_MATERIAL_IDS_KEY, JSON.stringify(nextFavoriteIds));
+    try {
+      if (isFavorite) {
+        await educationFavoritesRepository.removeFavorite(materialId);
+      } else {
+        await educationFavoritesRepository.addFavorite(materialId);
+      }
+    } catch (error) {
+      setFavoriteIds(favoriteIds);
+      throw error;
+    }
   };
 
   return { favoriteIds, isReady, toggleFavorite };

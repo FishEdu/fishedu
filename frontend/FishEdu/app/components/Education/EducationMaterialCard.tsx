@@ -1,4 +1,5 @@
 import { EducationMaterial } from "@/app/api/education";
+import { colors } from "@/app/constants/theme";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 
@@ -7,7 +8,6 @@ type LocalProps = {
   typeLabel: string;
   onPress: () => void;
   isFavorite?: boolean;
-  onToggleFavorite?: () => void;
 };
 
 const typeIcons = {
@@ -23,7 +23,6 @@ export default function EducationMaterialCard({
   typeLabel,
   onPress,
   isFavorite = false,
-  onToggleFavorite,
 }: LocalProps) {
   return (
     <View style={styles.card}>
@@ -36,7 +35,7 @@ export default function EducationMaterialCard({
           <Image source={{ uri: material.image_url }} style={styles.image} />
         ) : (
           <View style={styles.imageFallback}>
-            <Ionicons name={typeIcons[material.type]} size={34} color="hsl(226, 75%, 45%)" />
+            <Ionicons name={typeIcons[material.type]} size={34} color={colors.primary} />
           </View>
         )}
         <View style={styles.copy}>
@@ -47,16 +46,10 @@ export default function EducationMaterialCard({
           </View>
         </View>
       </Pressable>
-      {onToggleFavorite ? (
-        <Pressable
-          accessibilityRole="button"
-          accessibilityLabel={isFavorite ? "Usuń z ulubionych" : "Dodaj do ulubionych"}
-          hitSlop={8}
-          onPress={onToggleFavorite}
-          style={styles.favoriteButton}
-        >
-          <Ionicons name={isFavorite ? "star" : "star-outline"} size={21} color="hsl(226, 75%, 45%)" />
-        </Pressable>
+      {isFavorite ? (
+        <View pointerEvents="none" style={styles.favoriteIndicator}>
+          <Ionicons name="star" size={16} color={colors.favorite} />
+        </View>
       ) : null}
     </View>
   );
@@ -64,8 +57,8 @@ export default function EducationMaterialCard({
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: "hsl(0, 0%, 100%)",
-    borderColor: "hsl(210, 12%, 88%)",
+    backgroundColor: colors.background.card,
+    borderColor: colors.border.card,
     borderRadius: 8,
     borderWidth: 1,
     flex: 1,
@@ -75,7 +68,7 @@ const styles = StyleSheet.create({
   cardPressed: {
     opacity: 0.7
   },
-  favoriteButton: { alignItems: "center", backgroundColor: "hsl(0, 0%, 100%)", borderRadius: 18, elevation: 2, height: 36, justifyContent: "center", position: "absolute", right: 8, shadowOpacity: 0.12, top: 8, width: 36 },
+  favoriteIndicator: { alignItems: "center", backgroundColor: colors.background.card, borderRadius: 12, elevation: 1, height: 24, justifyContent: "center", position: "absolute", right: 7, top: 7, width: 24 },
   image: {
     aspectRatio: 1.35,
     width: "100%"
@@ -83,7 +76,7 @@ const styles = StyleSheet.create({
   imageFallback: {
     alignItems: "center",
     aspectRatio: 1.35,
-    backgroundColor: "hsl(226, 75%, 95%)",
+    backgroundColor: colors.background.primarySoft,
     justifyContent: "center"
   },
   copy: {
@@ -91,7 +84,7 @@ const styles = StyleSheet.create({
     padding: 12
   },
   title: {
-    color: "hsl(210, 15%, 14%)",
+    color: colors.text.main,
     fontSize: 16,
     fontWeight: "600",
     lineHeight: 21
@@ -101,12 +94,12 @@ const styles = StyleSheet.create({
     justifyContent: "space-between"
   },
   type: {
-    color: "hsl(226, 75%, 45%)",
+    color: colors.primary,
     fontSize: 12,
     fontWeight: "600"
   },
   duration: {
-    color: "hsl(210, 8%, 42%)",
+    color: colors.text.muted,
     fontSize: 12
   }
 });

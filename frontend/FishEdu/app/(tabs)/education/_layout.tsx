@@ -6,6 +6,7 @@ export default function EducationLayout() {
       <Stack.Screen name="index" />
       <Stack.Screen name="[id]" />
       <Stack.Screen name="pdf" />
+      <Stack.Screen name="video" />
       <Stack.Screen name="quiz" />
     </Stack>
   );

@@ -1,4 +1,7 @@
 import { PdfView } from "@kishannareshpal/expo-pdf";
+import { colors } from "@/app/constants/theme";
+import { useLanguage } from "@/app/hooks/useLanguage/useLanguage";
+import { getTranslation } from "@/app/utils/translation/getTranslation";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Directory, File, Paths } from "expo-file-system";
 import { router, useLocalSearchParams } from "expo-router";
@@ -6,16 +9,18 @@ import { useEffect, useState } from "react";
 import { ActivityIndicator, Pressable, StyleSheet, Text, View } from "react-native";
 
 export default function EducationPdfViewer() {
-  const { id, title, url } = useLocalSearchParams<{ id: string; title: string; url: string }>();
+  const { language } = useLanguage();
+  const { title, url } = useLocalSearchParams<{ title: string; url: string }>();
   const [loading, setLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
   const [localUri, setLocalUri] = useState<string | null>(null);
 
   const goBackToMaterial = () => {
-    const destination = id
-      ? { pathname: "/(tabs)/education/[id]", params: { id } }
-      : "/(tabs)/education";
-    router.replace(destination as Parameters<typeof router.replace>[0]);
+    if (router.canGoBack()) {
+      router.back();
+      return;
+    }
+    router.replace("/(tabs)/education");
   };
 
   useEffect(() => {
@@ -63,20 +68,20 @@ export default function EducationPdfViewer() {
     <View style={styles.screen}>
       <View style={styles.header}>
         <Pressable accessibilityRole="button" onPress={goBackToMaterial} style={styles.backButton}>
-          <Ionicons name="chevron-back" size={24} color="hsl(226, 75%, 52%)" />
+          <Ionicons name="chevron-back" size={24} color={colors.primary} />
         </Pressable>
-        <Text numberOfLines={1} style={styles.title}>{title || "PDF"}</Text>
+        <Text numberOfLines={1} style={styles.title}>{title || getTranslation("education.pdf.defaultTitle", language)}</Text>
       </View>
       {loading && !hasError ? (
         <View style={styles.feedback}>
-          <ActivityIndicator color="hsl(226, 75%, 52%)" />
-          <Text style={styles.feedbackText}>Pobieranie dokumentu...</Text>
+          <ActivityIndicator color={colors.primary} />
+          <Text style={styles.feedbackText}>{getTranslation("education.pdf.downloading", language)}</Text>
         </View>
       ) : null}
       {hasError ? (
         <View style={styles.feedback}>
-          <Ionicons name="document-text-outline" size={38} color="hsl(210, 8%, 42%)" />
-          <Text style={styles.feedbackText}>Nie udało się wczytać dokumentu.</Text>
+          <Ionicons name="document-text-outline" size={38} color={colors.text.muted} />
+          <Text style={styles.feedbackText}>{getTranslation("education.pdf.error", language)}</Text>
         </View>
       ) : localUri ? (
         <PdfView
@@ -92,11 +97,11 @@ export default function EducationPdfViewer() {
 }
 
 const styles = StyleSheet.create({
-  screen: { backgroundColor: "hsl(210, 5%, 96%)", flex: 1 },
-  header: { alignItems: "center", backgroundColor: "hsl(0, 0%, 100%)", borderBottomColor: "hsl(210, 12%, 88%)", borderBottomWidth: 1, flexDirection: "row", gap: 8, minHeight: 58, paddingHorizontal: 12 },
+  screen: { backgroundColor: colors.background.app, flex: 1 },
+  header: { alignItems: "center", backgroundColor: colors.background.card, borderBottomColor: colors.border.card, borderBottomWidth: 1, flexDirection: "row", gap: 8, minHeight: 58, paddingHorizontal: 12 },
   backButton: { alignItems: "center", height: 40, justifyContent: "center", width: 40 },
-  title: { color: "hsl(210, 15%, 14%)", flex: 1, fontSize: 17, fontWeight: "600" },
+  title: { color: colors.text.main, flex: 1, fontSize: 17, fontWeight: "600" },
   pdf: { flex: 1 },
   feedback: { alignItems: "center", flex: 1, gap: 12, justifyContent: "center", padding: 24 },
-  feedbackText: { color: "hsl(210, 8%, 42%)", fontSize: 16, textAlign: "center" }
+  feedbackText: { color: colors.text.muted, fontSize: 16, textAlign: "center" }
 });
