@@ -1,7 +1,8 @@
 import { EducationLevel, EducationMaterialType } from "@/app/api/education";
 import EducationMaterialCard from "@/app/components/Education/EducationMaterialCard";
 import Container from "@/app/components/ui/Container";
-import { colors } from "@/app/constants/theme";
+import { AppColors } from "@/app/constants/theme";
+import { useTheme } from "@/app/hooks/useTheme/useTheme";
 import { useEducationFavorites } from "@/app/hooks/useEducationFavorites/useEducationFavorites";
 import { useFetchEducationMaterials } from "@/app/hooks/useFetchEducationMaterials/useFetchEducationMaterials";
 import { useLanguage } from "@/app/hooks/useLanguage/useLanguage";
@@ -35,6 +36,8 @@ const materialTypeTranslationKeys: Record<EducationMaterialType, typeof tabTrans
 };
 
 export default function Education() {
+  const { colors } = useTheme();
+  const styles = createStyles(colors);
   const { language } = useLanguage();
   const [type, setType] = useState<EducationTab>("all");
   const [level, setLevel] = useState<EducationLevel | "all">("beginner");
@@ -53,6 +56,7 @@ export default function Education() {
               onChangeText={setSearch}
               placeholder={getTranslation("education.search", language)}
               placeholderTextColor={colors.text.muted}
+              selectionColor={colors.primary}
               style={styles.searchInput}
             />
           </View>
@@ -136,7 +140,7 @@ export default function Education() {
   );
 }
 
-const styles = StyleSheet.create({
+const createStyles = (colors: AppColors) => StyleSheet.create({
   screen: { backgroundColor: colors.background.app, flex: 1 },
   page: { flex: 1, gap: 14, paddingTop: 2 },
   search: {
@@ -150,7 +154,7 @@ const styles = StyleSheet.create({
     gap: 9,
     minHeight: 48,
     paddingHorizontal: 13,
-    shadowColor: colors.text.main,
+    shadowColor: colors.background.photoOverlay,
     shadowOpacity: 0.06,
     shadowRadius: 6
   },

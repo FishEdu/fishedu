@@ -1,6 +1,7 @@
 import { EducationMaterial } from "@/app/api/education";
 import Container from "@/app/components/ui/Container";
-import { colors } from "@/app/constants/theme";
+import { AppColors } from "@/app/constants/theme";
+import { useTheme } from "@/app/hooks/useTheme/useTheme";
 import { useLanguage } from "@/app/hooks/useLanguage/useLanguage";
 import { getBaseApiUrl } from "@/app/utils/getBaseApiUrl";
 import { getTranslation } from "@/app/utils/translation/getTranslation";
@@ -17,6 +18,8 @@ type QuizResult = {
 };
 
 export default function EducationQuiz() {
+  const { colors } = useTheme();
+  const styles = createStyles(colors);
   const { language } = useLanguage();
   const { id } = useLocalSearchParams<{ id: string }>();
   const [material, setMaterial] = useState<EducationMaterial | null>(null);
@@ -107,11 +110,11 @@ export default function EducationQuiz() {
   };
 
   if (loading) {
-    return <View style={styles.centered}><ActivityIndicator color={colors.primary} /><Text>{getTranslation("education.quiz.loading", language)}</Text></View>;
+    return <View style={styles.centered}><ActivityIndicator color={colors.primary} /><Text style={styles.feedbackText}>{getTranslation("education.quiz.loading", language)}</Text></View>;
   }
 
   if (!material?.quiz) {
-    return <View style={styles.centered}><Text>{getTranslation("education.quiz.unavailable", language)}</Text></View>;
+    return <View style={styles.centered}><Text style={styles.feedbackText}>{getTranslation("education.quiz.unavailable", language)}</Text></View>;
   }
 
   if (result) {
@@ -204,7 +207,8 @@ export default function EducationQuiz() {
   );
 }
 
-const styles = StyleSheet.create({
+const createStyles = (colors: AppColors) => StyleSheet.create({
+  feedbackText: { color: colors.text.muted, fontSize: 16, textAlign: "center" },
   screen: { backgroundColor: colors.background.app, flex: 1 },
   centered: { alignItems: "center", backgroundColor: colors.background.app, flex: 1, gap: 12, justifyContent: "center" },
   page: { flex: 1, gap: 20, paddingBlock: 12 },

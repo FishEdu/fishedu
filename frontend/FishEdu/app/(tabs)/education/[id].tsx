@@ -1,6 +1,7 @@
 import { EducationMaterial } from "@/app/api/education";
 import Container from "@/app/components/ui/Container";
-import { colors } from "@/app/constants/theme";
+import { AppColors } from "@/app/constants/theme";
+import { useTheme } from "@/app/hooks/useTheme/useTheme";
 import { useEducationFavorites } from "@/app/hooks/useEducationFavorites/useEducationFavorites";
 import { useLanguage } from "@/app/hooks/useLanguage/useLanguage";
 import { getBaseApiUrl } from "@/app/utils/getBaseApiUrl";
@@ -11,6 +12,8 @@ import { useEffect, useState } from "react";
 import { ActivityIndicator, Image, Linking, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 
 export default function EducationMaterialDetails() {
+  const { colors } = useTheme();
+  const styles = createStyles(colors);
   const { language } = useLanguage();
   const { id } = useLocalSearchParams<{ id: string }>();
   const [material, setMaterial] = useState<EducationMaterial | null>(null);
@@ -73,11 +76,11 @@ export default function EducationMaterialDetails() {
   };
 
   if (loading) {
-    return <View style={styles.centered}><ActivityIndicator color={colors.primary} /><Text>{getTranslation("education.detail.loading", language)}</Text></View>;
+    return <View style={styles.centered}><ActivityIndicator color={colors.primary} /><Text style={styles.feedbackText}>{getTranslation("education.detail.loading", language)}</Text></View>;
   }
 
   if (!material) {
-    return <View style={styles.centered}><Text>{getTranslation("education.detail.unavailable", language)}</Text></View>;
+    return <View style={styles.centered}><Text style={styles.feedbackText}>{getTranslation("education.detail.unavailable", language)}</Text></View>;
   }
 
   const isFavorite = favoriteIds.includes(material.id);
@@ -136,10 +139,11 @@ export default function EducationMaterialDetails() {
   );
 }
 
-const styles = StyleSheet.create({
+const createStyles = (colors: AppColors) => StyleSheet.create({
+  feedbackText: { color: colors.text.muted, fontSize: 16, textAlign: "center" },
   screen: { backgroundColor: colors.background.app, flex: 1 },
   content: { flexGrow: 1 },
-  centered: { alignItems: "center", flex: 1, gap: 12, justifyContent: "center" },
+  centered: { alignItems: "center", backgroundColor: colors.background.app, flex: 1, gap: 12, justifyContent: "center" },
   page: { gap: 20, paddingBlock: 12, paddingBottom: 28 },
   backButton: { alignItems: "center", alignSelf: "flex-start", flexDirection: "row", gap: 2, paddingBlock: 6, paddingEnd: 8 },
   backText: { color: colors.primary, fontSize: 16, fontWeight: "600" },

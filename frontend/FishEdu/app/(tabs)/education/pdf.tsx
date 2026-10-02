@@ -1,5 +1,6 @@
 import { PdfView } from "@kishannareshpal/expo-pdf";
-import { colors } from "@/app/constants/theme";
+import { AppColors } from "@/app/constants/theme";
+import { useTheme } from "@/app/hooks/useTheme/useTheme";
 import { useLanguage } from "@/app/hooks/useLanguage/useLanguage";
 import { getTranslation } from "@/app/utils/translation/getTranslation";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -9,6 +10,8 @@ import { useEffect, useState } from "react";
 import { ActivityIndicator, Pressable, StyleSheet, Text, View } from "react-native";
 
 export default function EducationPdfViewer() {
+  const { colors } = useTheme();
+  const styles = createStyles(colors);
   const { language } = useLanguage();
   const { title, url } = useLocalSearchParams<{ title: string; url: string }>();
   const [loading, setLoading] = useState(true);
@@ -96,12 +99,12 @@ export default function EducationPdfViewer() {
   );
 }
 
-const styles = StyleSheet.create({
+const createStyles = (colors: AppColors) => StyleSheet.create({
   screen: { backgroundColor: colors.background.app, flex: 1 },
   header: { alignItems: "center", backgroundColor: colors.background.card, borderBottomColor: colors.border.card, borderBottomWidth: 1, flexDirection: "row", gap: 8, minHeight: 58, paddingHorizontal: 12 },
   backButton: { alignItems: "center", height: 40, justifyContent: "center", width: 40 },
   title: { color: colors.text.main, flex: 1, fontSize: 17, fontWeight: "600" },
-  pdf: { flex: 1 },
+  pdf: { backgroundColor: colors.background.app, flex: 1 },
   feedback: { alignItems: "center", flex: 1, gap: 12, justifyContent: "center", padding: 24 },
   feedbackText: { color: colors.text.muted, fontSize: 16, textAlign: "center" }
 });

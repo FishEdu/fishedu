@@ -1,5 +1,6 @@
 import { EducationMaterial } from "@/app/api/education";
-import { colors } from "@/app/constants/theme";
+import { AppColors } from "@/app/constants/theme";
+import { useTheme } from "@/app/hooks/useTheme/useTheme";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 
@@ -24,6 +25,8 @@ export default function EducationMaterialCard({
   onPress,
   isFavorite = false,
 }: LocalProps) {
+  const { colors } = useTheme();
+  const styles = createStyles(colors);
   return (
     <View style={styles.card}>
       <Pressable
@@ -55,7 +58,7 @@ export default function EducationMaterialCard({
   );
 }
 
-const styles = StyleSheet.create({
+const createStyles = (colors: AppColors) => StyleSheet.create({
   card: {
     backgroundColor: colors.background.card,
     borderColor: colors.border.card,
