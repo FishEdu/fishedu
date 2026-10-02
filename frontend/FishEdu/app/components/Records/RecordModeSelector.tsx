@@ -1,3 +1,5 @@
+import { AppColors } from "@/app/constants/theme"
+import { useTheme } from "@/app/hooks/useTheme/useTheme"
 import Ionicons from "@expo/vector-icons/Ionicons"
 import { Pressable, StyleSheet, Text, View } from "react-native"
 import { RecordViewMode } from "@/app/api/records"
@@ -14,6 +16,8 @@ export default function RecordModeSelector({
   setSelectedMode,
 }: LocalProps) {
   const { languageCode } = useLanguage()
+  const { colors } = useTheme()
+  const styles = createStyles(colors)
 
   const modes = [
     {
@@ -45,15 +49,15 @@ export default function RecordModeSelector({
             selectedMode === mode && styles.buttonActive
           ]}
         >
-          <Ionicons name={icon} size={18} color="hsl(0, 0%, 5%)" />
-          <Text style={styles.buttonText}>{label}</Text>
+          <Ionicons name={icon} size={18} color={selectedMode === mode ? colors.text.onPrimary : colors.text.main} />
+          <Text style={[styles.buttonText, selectedMode === mode && styles.buttonTextActive]}>{label}</Text>
         </Pressable>
       ))}
     </View>
   )
 }
 
-const styles = StyleSheet.create({
+const createStyles = (colors: AppColors) => StyleSheet.create({
   container: {
     flexDirection: "row",
     gap: 8,
@@ -65,12 +69,16 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 4,
     paddingBlock: 10,
-    backgroundColor: "lightgray",
+    backgroundColor: colors.border.card,
   },
   buttonActive: {
-    backgroundColor: "hsla(200, 75%, 52%, 0.77)",
+    backgroundColor: colors.primary,
   },
   buttonText: {
     fontSize: 12,
+    color: colors.text.main,
+  },
+  buttonTextActive: {
+    color: colors.text.onPrimary,
   }
 })

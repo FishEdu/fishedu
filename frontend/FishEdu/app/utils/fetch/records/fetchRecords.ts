@@ -6,6 +6,7 @@ import {
 import { LanguageCode } from "@/app/(tabs)/settings"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { getBaseApiUrl } from "@/app/utils/getBaseApiUrl"
+import { prepareRecordPhotoForApi } from "./recordPhoto"
 
 type FetchRecordsParams = {
   mode?: RecordViewMode
@@ -13,6 +14,20 @@ type FetchRecordsParams = {
 }
 
 const LOCAL_RECORDS_KEY = "catchRecords"
+const RECORD_ID_MAPPINGS_KEY = "catchRecordIdMappings"
+
+const getRecordApiId = async (id: number): Promise<number> => {
+  const rawMappings = await AsyncStorage.getItem(RECORD_ID_MAPPINGS_KEY)
+  const mappings: Record<string, number> = rawMappings ? JSON.parse(rawMappings) : {}
+  return mappings[id] ?? id
+}
+
+const saveRecordApiId = async (localId: number, apiId: number) => {
+  const rawMappings = await AsyncStorage.getItem(RECORD_ID_MAPPINGS_KEY)
+  const mappings: Record<string, number> = rawMappings ? JSON.parse(rawMappings) : {}
+  mappings[localId] = apiId
+  await AsyncStorage.setItem(RECORD_ID_MAPPINGS_KEY, JSON.stringify(mappings))
+}
 
 
 // =========================
@@ -114,6 +129,8 @@ const syncLocalRecords = async (): Promise<boolean> => {
 
     try {
 
+      const recordForApi = await prepareRecordPhotoForApi(localRecord)
+
       const response = await fetch(
         `${apiBaseUrl}/records`,
         {
@@ -130,7 +147,7 @@ const syncLocalRecords = async (): Promise<boolean> => {
             fork_length: localRecord.fork_length,
             weight: localRecord.weight,
             description: localRecord.description,
-            image_url: localRecord.image_url,
+            image_url: recordForApi.image_url,
           }),
         }
       )
@@ -139,10 +156,13 @@ const syncLocalRecords = async (): Promise<boolean> => {
 
         // API odrzuciło rekord.
         // Zostawiamy go lokalnie.
-        remainingLocalRecords.push(localRecord)
+        remainingLocalRecords.push({ ...localRecord, image_url: recordForApi.image_url })
 
         continue
       }
+
+      const apiRecord: CatchRecordGetResponse = await response.json()
+      await saveRecordApiId(localRecord.id, apiRecord.id)
 
       // Rekord został poprawnie zapisany
       // w bazie.
@@ -320,6 +340,8 @@ export const createRecord = async (
   record: CatchRecordCreateRequest
 ): Promise<CatchRecordGetResponse | null> => {
 
+  const recordForApi = await prepareRecordPhotoForApi(record)
+
   try {
 
     const apiBaseUrl =
@@ -335,7 +357,7 @@ export const createRecord = async (
             "application/json",
         },
 
-        body: JSON.stringify(record),
+        body: JSON.stringify(recordForApi),
       }
     )
 
@@ -347,7 +369,7 @@ export const createRecord = async (
     if (!response.ok) {
 
       return await createLocalRecord(
-        record
+        recordForApi
       )
     }
 
@@ -369,7 +391,7 @@ export const createRecord = async (
     // Zapisujemy lokalnie.
 
     return await createLocalRecord(
-      record
+      recordForApi
     )
   }
 }
@@ -442,22 +464,27 @@ export const updateRecord = async (
   record: CatchRecordCreateRequest
 ): Promise<CatchRecordGetResponse | null> => {
 
+  const recordForApi = await prepareRecordPhotoForApi(record)
+  const apiId = await getRecordApiId(id)
+  const localRecords = await getLocalRecords()
+  const isLocalRecord = localRecords.some(item => item.id === id) && apiId === id
+
   try {
 
     const apiBaseUrl =
       getBaseApiUrl()
 
     const response = await fetch(
-      `${apiBaseUrl}/records/${id}`,
+      isLocalRecord ? `${apiBaseUrl}/records` : `${apiBaseUrl}/records/${apiId}`,
       {
-        method: "PUT",
+        method: isLocalRecord ? "POST" : "PUT",
 
         headers: {
           "Content-Type":
             "application/json",
         },
 
-        body: JSON.stringify(record),
+        body: JSON.stringify(recordForApi),
       }
     )
 
@@ -470,7 +497,7 @@ export const updateRecord = async (
 
       return await updateLocalRecord(
         id,
-        record
+        recordForApi
       )
     }
 
@@ -479,7 +506,13 @@ export const updateRecord = async (
     // API ZADZIAŁAŁO
     // =========================
 
-    return await response.json()
+    const apiRecord: CatchRecordGetResponse = await response.json()
+    if (isLocalRecord) {
+      await saveRecordApiId(id, apiRecord.id)
+      const remainingRecords = (await getLocalRecords()).filter(item => item.id !== id)
+      await saveLocalRecords(remainingRecords)
+    }
+    return apiRecord
 
   } catch (error) {
 
@@ -493,7 +526,7 @@ export const updateRecord = async (
 
     return await updateLocalRecord(
       id,
-      record
+      recordForApi
     )
   }
 }
@@ -502,6 +535,14 @@ export const updateRecord = async (
 // =========================
 // EDYCJA LOKALNA
 // =========================
+
+export const fetchRecord = async (id: number): Promise<CatchRecordGetResponse | null> => {
+  const localRecord = (await getLocalRecords()).find(item => item.id === id)
+  if (localRecord) return localRecord
+  const apiId = await getRecordApiId(id)
+  const records = await fetchRecords()
+  return records.find(item => item.id === apiId) ?? null
+}
 
 const updateLocalRecord = async (
   id: number,
@@ -554,6 +595,8 @@ export const deleteRecord = async (
 
   try {
 
+    const apiId = await getRecordApiId(id)
+
     // =========================
     // NAJPIERW USUWAMY LOKALNIE
     // =========================
@@ -586,7 +629,7 @@ export const deleteRecord = async (
 
     const response =
       await fetch(
-        `${apiBaseUrl}/records/${id}`,
+        `${apiBaseUrl}/records/${apiId}`,
         {
           method: "DELETE",
         }

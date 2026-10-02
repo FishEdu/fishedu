@@ -1,14 +1,18 @@
+import { AppColors } from "@/app/constants/theme"
+import { useTheme } from "@/app/hooks/useTheme/useTheme"
 import { useEffect, useState } from "react"
-import { Modal, Pressable, StyleSheet, Text, View,} from "react-native"
+import { Modal, Pressable, ScrollView, StyleSheet, Text, View,} from "react-native"
 import { router, useLocalSearchParams } from "expo-router"
 import Ionicons from "@expo/vector-icons/Ionicons"
 
 import AddRecordForm from "@/app/components/Records/AddRecordForm"
 import Container from "@/app/components/ui/Container"
 import { CatchRecordGetResponse } from "@/app/api/records"
-import {deleteRecord,fetchRecords,} from "@/app/utils/fetch/records/fetchRecords"
+import {deleteRecord,fetchRecord,} from "@/app/utils/fetch/records/fetchRecords"
 
 export default function EditRecord() {
+  const { colors } = useTheme()
+  const styles = createStyles(colors)
   const { id } = useLocalSearchParams<{ id: string }>()
 
   const [record, setRecord] = useState<CatchRecordGetResponse | null>(null)
@@ -17,11 +21,7 @@ export default function EditRecord() {
 
   useEffect(() => {
     const loadRecord = async () => {
-      const records = await fetchRecords()
-
-      const foundRecord = records.find(
-        r => r.id === Number(id)
-      )
+      const foundRecord = await fetchRecord(Number(id))
 
       setRecord(foundRecord ?? null)
       setLoading(false)
@@ -33,7 +33,7 @@ export default function EditRecord() {
   if (loading) {
     return (
       <Container>
-        <Text>Ładowanie...</Text>
+        <Text style={styles.statusText}>Ładowanie...</Text>
       </Container>
     )
   }
@@ -41,7 +41,7 @@ export default function EditRecord() {
   if (!record) {
     return (
       <Container>
-        <Text>Nie znaleziono rekordu.</Text>
+        <Text style={styles.statusText}>Nie znaleziono rekordu.</Text>
       </Container>
     )
   }
@@ -60,17 +60,19 @@ export default function EditRecord() {
 
   return (
     <Container>
-      <AddRecordForm record={record} />
+      <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
+      <AddRecordForm key={record.id} record={record} />
 
       <Pressable
         style={styles.deleteButton}
         onPress={handleDelete}
       >
-        <Ionicons name="trash-outline" size={20} color="#d32f2f" />
+        <Ionicons name="trash-outline" size={20} color={colors.danger} />
         <Text style={styles.deleteText}>
           Usuń rekord
         </Text>
       </Pressable>
+      </ScrollView>
 
         <Modal
             visible={deleteModalVisible}
@@ -85,7 +87,7 @@ export default function EditRecord() {
                   <Ionicons
                     name="trash-outline"
                     size={28}
-                    color="#d32f2f"
+                    color={colors.danger}
                   />
                 </View>
 
@@ -115,7 +117,7 @@ export default function EditRecord() {
                     <Ionicons
                       name="trash-outline"
                       size={17}
-                      color="#fff"
+                      color={colors.text.onPrimary}
                     />
 
                     <Text style={styles.confirmDeleteText}>
@@ -132,14 +134,15 @@ export default function EditRecord() {
 
 }
 
-  const styles = StyleSheet.create({
+  const createStyles = (colors: AppColors) => StyleSheet.create({
+    statusText: { color: colors.text.muted },
     deleteButton: {
       marginTop: 12,
       marginBottom: 20,
       alignSelf: "center",
 
       borderWidth: 1,
-      borderColor: "#d32f2f",
+      borderColor: colors.danger,
       borderRadius: 8,
 
       paddingVertical: 8,
@@ -152,14 +155,14 @@ export default function EditRecord() {
     },
 
     deleteText: {
-      color: "#d32f2f",
+      color: colors.danger,
       fontSize: 12,
       fontWeight: "600",
     },
 
     modalOverlay: {
       flex: 1,
-      backgroundColor: "rgba(0, 0, 0, 0.45)",
+      backgroundColor: colors.background.overlay,
       alignItems: "center",
       justifyContent: "center",
       padding: 24,
@@ -168,7 +171,7 @@ export default function EditRecord() {
     modalContainer: {
       width: "100%",
       maxWidth: 360,
-      backgroundColor: "#fff",
+      backgroundColor: colors.background.card,
       borderRadius: 20,
       padding: 24,
       alignItems: "center",
@@ -178,7 +181,7 @@ export default function EditRecord() {
       width: 56,
       height: 56,
       borderRadius: 28,
-      backgroundColor: "#fdecec",
+      backgroundColor: colors.background.dangerSoft,
       alignItems: "center",
       justifyContent: "center",
       marginBottom: 14,
@@ -187,13 +190,13 @@ export default function EditRecord() {
     modalTitle: {
       fontSize: 19,
       fontWeight: "700",
-      color: "#111",
+      color: colors.text.main,
       marginBottom: 8,
     },
 
     modalDescription: {
       textAlign: "center",
-      color: "#666",
+      color: colors.text.muted,
       fontSize: 13,
       lineHeight: 19,
       marginBottom: 22,
@@ -208,7 +211,7 @@ export default function EditRecord() {
     cancelButton: {
       flex: 1,
       borderWidth: 1,
-      borderColor: "#ddd",
+      borderColor: colors.border.card,
       borderRadius: 10,
       paddingVertical: 11,
       alignItems: "center",
@@ -216,14 +219,14 @@ export default function EditRecord() {
     },
 
     cancelButtonText: {
-      color: "#555",
+      color: colors.text.main,
       fontSize: 13,
       fontWeight: "600",
     },
 
     confirmDeleteButton: {
       flex: 1,
-      backgroundColor: "#d32f2f",
+      backgroundColor: colors.danger,
       borderRadius: 10,
       paddingVertical: 11,
       flexDirection: "row",
@@ -233,7 +236,7 @@ export default function EditRecord() {
     },
 
     confirmDeleteText: {
-      color: "#fff",
+      color: colors.text.onPrimary,
       fontSize: 13,
       fontWeight: "600",
     },

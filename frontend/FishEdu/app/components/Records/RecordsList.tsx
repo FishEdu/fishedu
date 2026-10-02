@@ -1,3 +1,5 @@
+import { AppColors } from "@/app/constants/theme"
+import { useTheme } from "@/app/hooks/useTheme/useTheme"
 import { CatchRecordGetResponse } from "@/app/api/records"
 import { StyleSheet, Text, View } from "react-native"
 import RecordCard from "./RecordCard"
@@ -8,6 +10,8 @@ type LocalProps = {
 }
 
 export default function RecordsList({ records, emptyText }: LocalProps) {
+  const { colors } = useTheme()
+  const styles = createStyles(colors)
   if(records.length === 0)
     return <Text style={styles.emptyText}>{emptyText}</Text>
 
@@ -20,12 +24,12 @@ export default function RecordsList({ records, emptyText }: LocalProps) {
   )
 }
 
-const styles = StyleSheet.create({
+const createStyles = (colors: AppColors) => StyleSheet.create({
   container: {
     gap: 16,
   },
   emptyText: {
-    color: "hsl(0, 0%, 35%)",
+    color: colors.text.muted,
     fontSize: 16,
   }
 })

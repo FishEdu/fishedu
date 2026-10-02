@@ -1,3 +1,5 @@
+import { AppColors } from "@/app/constants/theme"
+import { useTheme } from "@/app/hooks/useTheme/useTheme"
 import Ionicons from "@expo/vector-icons/Ionicons"
 import InputGroup from "../FormInputs/InputGroup"
 import { StyleSheet } from "react-native"
@@ -8,6 +10,8 @@ type LocalProps = {
 }
 
 export default function RecordSearchInput({ placeholder, onChangeText }: LocalProps) {
+  const { colors } = useTheme()
+  const styles = createStyles(colors)
   return (
     <InputGroup
       styles={{
@@ -19,14 +23,14 @@ export default function RecordSearchInput({ placeholder, onChangeText }: LocalPr
         placeholder,
         onChangeText,
       }}
-      icon={<Ionicons name="search" size={20} color="hsl(0, 0%, 25%)" />}
+      icon={<Ionicons name="search" size={20} color={colors.text.muted} />}
     />
   )
 }
 
-const styles = StyleSheet.create({
+const createStyles = (colors: AppColors) => StyleSheet.create({
   container: {
-    backgroundColor: "white",
+    backgroundColor: colors.background.card,
     borderRadius: 4,
     marginBottom: 16,
   },
@@ -38,6 +42,7 @@ const styles = StyleSheet.create({
     paddingInline: 10,
   },
   input: {
+    color: colors.text.main,
     flex: 1,
     fontSize: 14,
   }

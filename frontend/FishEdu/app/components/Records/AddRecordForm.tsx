@@ -1,5 +1,8 @@
+import { AppColors } from "@/app/constants/theme"
+import { useTheme } from "@/app/hooks/useTheme/useTheme"
 import { useEffect, useState } from "react"
-import {Pressable, ScrollView, StyleSheet, Text, View, } from "react-native"
+import {ActivityIndicator, Image, Pressable, ScrollView, StyleSheet, Text, View, } from "react-native"
+import * as ImagePicker from "expo-image-picker"
 import { router } from "expo-router"
 import Ionicons from "@expo/vector-icons/Ionicons"
 import InputGroup from "../FormInputs/InputGroup"
@@ -10,6 +13,7 @@ import { CatchRecordGetResponse } from "@/app/api/records"
 import { getTranslation } from "@/app/utils/translation/getTranslation"
 import { LanguageCode } from "@/app/(tabs)/settings"
 import AsyncStorage from "@react-native-async-storage/async-storage"
+import { resolveRecordPhotoUrl, getSelectedRecordPhotoUri } from "@/app/utils/fetch/records/recordPhoto"
 
 
 type FormData = {
@@ -20,6 +24,7 @@ type FormData = {
   fork_length: string
   weight: string
   description: string
+  image_url: string | null
 }
 
 type Props = {
@@ -27,18 +32,25 @@ type Props = {
 }
 
 export default function AddRecordForm({ record }: Props) {
-  const [formData, setFormData] = useState<FormData>({
-    fish_id: 0,
-    fish_name: "",
-    fishing_spot: "",
-    total_length: "",
-    fork_length: "",
-    weight: "",
-    description: "",
-  })
+  const { colors } = useTheme()
+  const styles = createStyles(colors)
+  const inputStyles = createInputStyles(colors)
+  const fishInputStyles = createFishInputStyles(colors)
+  const measureInputStyles = createMeasureInputStyles(colors)
+  const [formData, setFormData] = useState<FormData>(() => ({
+    fish_id: record?.fish_id ?? 0,
+    fish_name: record?.fish_name ?? "",
+    fishing_spot: record?.fishing_spot ?? "",
+    total_length: record?.total_length?.toString() ?? "",
+    fork_length: record?.fork_length?.toString() ?? "",
+    weight: record?.weight?.toString() ?? "",
+    description: record?.description ?? "",
+    image_url: record?.image_url ?? null,
+  }))
 
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
+  const [photoLoading, setPhotoLoading] = useState(false)
   const [showFishList, setShowFishList] = useState(false)
 
 const [language, setLanguage] = useState<LanguageCode>(
@@ -57,22 +69,6 @@ useEffect(() => {
   loadLanguage()
 }, [])
 
-useEffect(() => {
-  if (record) {
-    console.log("EDIT RECORD:", record)
-
-    setFormData({
-      fish_id: record.fish_id ?? 0,
-      fish_name: record.fish_name ?? "",
-      fishing_spot: record.fishing_spot,
-      total_length: record.total_length?.toString() ?? "",
-      fork_length: record.fork_length?.toString() ?? "",
-      weight: record.weight?.toString() ?? "",
-      description: record.description ?? "",
-    })
-  }
-}, [record])
-
   const { data: fishes } = useFetchFish(formData.fish_name)
 
   const updateField = (field: keyof FormData, value: string) => {
@@ -82,7 +78,33 @@ useEffect(() => {
     }))
   }
 
+  const selectPhoto = async () => {
+    if (loading || photoLoading) return
+    setPhotoLoading(true)
+    try {
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ["images"],
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 0.7,
+      })
+      if (result.canceled) return
+      const uri = await getSelectedRecordPhotoUri(result.assets[0])
+      updateField("image_url", uri)
+      setError("")
+    } catch (photoError) {
+      const key = photoError instanceof Error && photoError.message === "photo-too-large"
+        ? "records.photoTooLarge"
+        : photoError instanceof Error && photoError.message === "photo-unsupported"
+          ? "records.photoUnsupported" : "records.photoError"
+      setError(getTranslation(key, language))
+    } finally {
+      setPhotoLoading(false)
+    }
+  }
+
   const handleSubmit = async () => {
+    if (loading || photoLoading) return
     if (
       !formData.fish_name.trim() ||
       !formData.fishing_spot.trim()
@@ -95,6 +117,7 @@ useEffect(() => {
     setError("")
 
     const data = {
+      user_id: record?.user_id,
       fish_id: formData.fish_id,
       fish_name: formData.fish_name.trim(),
       fishing_spot: formData.fishing_spot.trim(),
@@ -106,32 +129,40 @@ useEffect(() => {
         Number(formData.weight.replace(",", ".")) || undefined,
       description:
         formData.description.trim() || undefined,
+      image_url: formData.image_url,
     }
 
-    const result = record
-      ? await updateRecord(record.id, data)
-      : await createRecord(data)
+    try {
+      const result = record
+        ? await updateRecord(record.id, data)
+        : await createRecord(data)
 
-    setLoading(false)
+      if (!result) {
+        setError(getTranslation("records.saveError", language))
+        return
+      }
 
-    if (!result) {
-      setError(getTranslation("records.saveError", language))
-      return
+      if (!record) {
+        setFormData({
+          fish_id: 0,
+          fish_name: "",
+          fishing_spot: "",
+          total_length: "",
+          fork_length: "",
+          weight: "",
+          description: "",
+          image_url: null,
+        })
+      }
+
+      router.replace("/(tabs)/records")
+    } catch (saveError) {
+      const key = saveError instanceof Error && saveError.message === "photo-upload-error"
+        ? "records.photoUploadError" : "records.saveError"
+      setError(getTranslation(key, language))
+    } finally {
+      setLoading(false)
     }
-
-    if (!record) {
-      setFormData({
-        fish_id: 0,
-        fish_name: "",
-        fishing_spot: "",
-        total_length: "",
-        fork_length: "",
-        weight: "",
-        description: "",
-      })
-    }
-
-    router.replace("/(tabs)/records")
   }
 
   return (
@@ -139,22 +170,46 @@ useEffect(() => {
 
       {/* IMAGE */}
 
-      <View style={styles.imageInput}>
-        <View style={styles.imageIconContainer}>
-          <Ionicons
-            name="camera-outline"
-            size={30}
-            color="#777"
-          />
-        </View>
-
-        <Text style={styles.imageTitle}>
-          {getTranslation("records.addPhoto", language)}
-        </Text>
-
-        <Text style={styles.imageSubtitle}>
-          {getTranslation("records.optional", language)}
-        </Text>
+      <View style={styles.imageSection}>
+        <Pressable
+          style={styles.imageInput}
+          onPress={() => void selectPhoto()}
+          disabled={loading || photoLoading}
+          accessibilityRole="button"
+          accessibilityLabel={getTranslation(formData.image_url ? "records.changePhoto" : "records.addPhoto", language)}
+        >
+          {photoLoading ? (
+            <ActivityIndicator color={colors.primary} />
+          ) : formData.image_url ? (
+            <Image
+              source={{ uri: resolveRecordPhotoUrl(formData.image_url) }}
+              style={styles.photoPreview}
+            />
+          ) : (
+            <>
+              <View style={styles.imageIconContainer}>
+                <Ionicons name="camera-outline" size={30} color={colors.text.muted} />
+              </View>
+              <Text style={styles.imageTitle}>
+                {getTranslation("records.addPhoto", language)}
+              </Text>
+              <Text style={styles.imageSubtitle}>
+                {getTranslation("records.optional", language)}
+              </Text>
+            </>
+          )}
+        </Pressable>
+        {formData.image_url && (
+          <Pressable
+            style={styles.removePhotoButton}
+            disabled={loading || photoLoading}
+            onPress={() => setFormData(prev => ({ ...prev, image_url: null }))}
+            accessibilityRole="button"
+            accessibilityLabel={getTranslation("records.removePhoto", language)}
+          >
+            <Ionicons name="close" size={20} color={colors.text.onPrimary} />
+          </Pressable>
+        )}
       </View>
 
 
@@ -165,7 +220,7 @@ useEffect(() => {
           <Ionicons
             name="fish-outline"
             size={18}
-            color="hsla(200, 75%, 52%, 0.96)"
+            color={colors.primary}
           />
 
           <Text style={styles.sectionTitle}>
@@ -179,7 +234,7 @@ useEffect(() => {
             <Ionicons
               name="search-outline"
               size={18}
-              color="#888"
+              color={colors.text.muted}
             />
 
             <InputGroup
@@ -213,7 +268,7 @@ useEffect(() => {
                 <Ionicons
                   name="close-circle"
                   size={18}
-                  color="#aaa"
+                  color={colors.text.muted}
                 />
               </Pressable>
             )}
@@ -265,8 +320,8 @@ useEffect(() => {
                               size={18}
                               color={
                                 selected
-                                  ? "hsla(200, 75%, 52%, 0.96)"
-                                  : "#777"
+                                  ? colors.primary
+                                  : colors.text.muted
                               }
                             />
                           </View>
@@ -287,7 +342,7 @@ useEffect(() => {
                           <Ionicons
                             name="checkmark-circle"
                             size={20}
-                            color="hsla(200, 75%, 52%, 0.96)"
+                            color={colors.primary}
                           />
                         )}
                       </Pressable>
@@ -308,7 +363,7 @@ useEffect(() => {
           <Ionicons
             name="location-outline"
             size={18}
-            color="hsla(200, 75%, 52%, 0.96)"
+            color={colors.primary}
           />
 
           <Text style={styles.sectionTitle}>
@@ -334,7 +389,7 @@ useEffect(() => {
           <Ionicons
             name="resize-outline"
             size={18}
-            color="hsla(200, 75%, 52%, 0.96)"
+            color={colors.primary}
           />
 
           <Text style={styles.sectionTitle}>
@@ -418,7 +473,7 @@ useEffect(() => {
           <Ionicons
             name="document-text-outline"
             size={18}
-            color="hsla(200, 75%, 52%, 0.96)"
+            color={colors.primary}
           />
 
           <Text style={styles.sectionTitle}>
@@ -455,7 +510,7 @@ useEffect(() => {
           <Ionicons
             name="alert-circle-outline"
             size={18}
-            color="#d32f2f"
+            color={colors.danger}
           />
 
           <Text style={styles.error}>
@@ -476,7 +531,7 @@ useEffect(() => {
           loading &&
             styles.submitButtonDisabled,
         ]}
-        disabled={loading}
+        disabled={loading || photoLoading}
       >
         <Ionicons
           name={
@@ -485,7 +540,7 @@ useEffect(() => {
               : "add-circle-outline"
           }
           size={19}
-          color="#fff"
+          color={colors.text.onPrimary}
         />
 
         <Text style={styles.submitText}>
@@ -504,13 +559,13 @@ useEffect(() => {
 
 /* INPUT STYLES */
 
-const inputStyles = StyleSheet.create({
+const createInputStyles = (colors: AppColors) => StyleSheet.create({
   containerStyles: {
     marginBottom: 8,
   },
 
   inputWrapper: {
-    backgroundColor: "#f5f5f5",
+    backgroundColor: colors.background.app,
     borderRadius: 10,
     paddingVertical: 11,
     paddingHorizontal: 12,
@@ -518,12 +573,12 @@ const inputStyles = StyleSheet.create({
 
   inputStyles: {
     fontSize: 13,
-    color: "#222",
+    color: colors.text.main,
   },
 })
 
 
-const fishInputStyles = StyleSheet.create({
+const createFishInputStyles = (colors: AppColors) => StyleSheet.create({
   containerStyles: {
     flex: 1,
     marginBottom: 0,
@@ -537,12 +592,12 @@ const fishInputStyles = StyleSheet.create({
 
   inputStyles: {
     fontSize: 13,
-    color: "#222",
+    color: colors.text.main,
   },
 })
 
 
-const measureInputStyles = StyleSheet.create({
+const createMeasureInputStyles = (colors: AppColors) => StyleSheet.create({
   containerStyles: {
     width: "100%",
     marginBottom: 0,
@@ -551,7 +606,7 @@ const measureInputStyles = StyleSheet.create({
   inputWrapper: {
     width: "100%",
     height: 50,
-    backgroundColor: "#f5f5f5",
+    backgroundColor: colors.background.app,
     borderRadius: 10,
     paddingVertical: 0,
     paddingHorizontal: 8,
@@ -562,7 +617,7 @@ const measureInputStyles = StyleSheet.create({
     width: "100%",
     height: 50,
     fontSize: 14,
-    color: "#222",
+    color: colors.text.main,
     textAlign: "center",
     padding: 0,
     margin: 0,
@@ -572,10 +627,10 @@ const measureInputStyles = StyleSheet.create({
 
 /* MAIN STYLES */
 
-const styles = StyleSheet.create({
+const createStyles = (colors: AppColors) => StyleSheet.create({
 
   container: {
-    backgroundColor: "#fff",
+    backgroundColor: colors.background.card,
     borderRadius: 18,
     padding: 14,
     gap: 4,
@@ -584,22 +639,45 @@ const styles = StyleSheet.create({
 
   /* IMAGE */
 
+  imageSection: {
+    position: "relative",
+  },
+
+  photoPreview: {
+    width: "100%",
+    height: "100%",
+    resizeMode: "cover",
+  },
+
+  removePhotoButton: {
+    position: "absolute",
+    top: 8,
+    right: 8,
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: colors.background.photoOverlay,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
   imageInput: {
-    height: 150,
-    backgroundColor: "#f3f3f3",
+    height: 240,
+    backgroundColor: colors.background.app,
     borderRadius: 14,
     alignItems: "center",
     justifyContent: "center",
     marginBottom: 10,
     borderWidth: 1,
-    borderColor: "#e5e5e5",
+    borderColor: colors.border.card,
+    overflow: "hidden",
   },
 
   imageIconContainer: {
     width: 52,
     height: 52,
     borderRadius: 26,
-    backgroundColor: "#fff",
+    backgroundColor: colors.background.card,
     alignItems: "center",
     justifyContent: "center",
     marginBottom: 8,
@@ -608,12 +686,12 @@ const styles = StyleSheet.create({
   imageTitle: {
     fontSize: 13,
     fontWeight: "600",
-    color: "#555",
+    color: colors.text.muted,
   },
 
   imageSubtitle: {
     fontSize: 10,
-    color: "#999",
+    color: colors.text.muted,
     marginTop: 2,
   },
 
@@ -634,7 +712,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 12,
     fontWeight: "700",
-    color: "#555",
+    color: colors.text.muted,
   },
 
 
@@ -653,7 +731,7 @@ const styles = StyleSheet.create({
 
   fishInputContainer: {
     minHeight: 50,
-    backgroundColor: "#f5f5f5",
+    backgroundColor: colors.background.app,
     borderRadius: 10,
     paddingHorizontal: 12,
     flexDirection: "row",
@@ -667,12 +745,12 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
 
-    backgroundColor: "#fff",
+    backgroundColor: colors.background.card,
     borderRadius: 12,
 
     padding: 6,
 
-    shadowColor: "#000",
+    shadowColor: colors.background.photoOverlay,
     shadowOpacity: 0.14,
     shadowRadius: 12,
     shadowOffset: {
@@ -686,7 +764,7 @@ const styles = StyleSheet.create({
 
   resultsTitle: {
     fontSize: 10,
-    color: "#999",
+    color: colors.text.muted,
     fontWeight: "600",
     paddingHorizontal: 9,
     paddingVertical: 7,
@@ -706,7 +784,7 @@ const styles = StyleSheet.create({
   },
 
   selectedFishResult: {
-    backgroundColor: "#f0f2ff",
+    backgroundColor: colors.background.primarySoft,
   },
 
   fishResultLeft: {
@@ -719,18 +797,18 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: 9,
-    backgroundColor: "#f2f2f2",
+    backgroundColor: colors.background.app,
     alignItems: "center",
     justifyContent: "center",
   },
 
   fishResultText: {
     fontSize: 13,
-    color: "#333",
+    color: colors.text.main,
   },
 
   selectedFishText: {
-    color: "hsla(200, 75%, 52%, 0.96)",
+    color: colors.primary,
     fontWeight: "600",
   },
 
@@ -750,7 +828,7 @@ const styles = StyleSheet.create({
 
   measureLabel: {
     fontSize: 10,
-    color: "#888",
+    color: colors.text.muted,
     marginBottom: 4,
     textAlign: "center",
     fontWeight: "600",
@@ -760,7 +838,7 @@ const styles = StyleSheet.create({
   /* DESCRIPTION */
 
   descriptionWrapper: {
-    backgroundColor: "#f5f5f5",
+    backgroundColor: colors.background.app,
     borderRadius: 10,
     minHeight: 95,
     paddingVertical: 11,
@@ -774,7 +852,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 7,
-    backgroundColor: "#fff1f1",
+    backgroundColor: colors.background.dangerSoft,
     borderRadius: 9,
     padding: 10,
     marginTop: 5,
@@ -782,7 +860,7 @@ const styles = StyleSheet.create({
 
   error: {
     flex: 1,
-    color: "#d32f2f",
+    color: colors.danger,
     fontSize: 12,
     fontWeight: "500",
   },
@@ -794,7 +872,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     minHeight: 48,
     borderRadius: 13,
-    backgroundColor: "hsla(200, 75%, 52%, 0.96)",
+    backgroundColor: colors.primary,
 
     flexDirection: "row",
     alignItems: "center",
@@ -811,7 +889,7 @@ const styles = StyleSheet.create({
   },
 
   submitText: {
-    color: "#fff",
+    color: colors.text.onPrimary,
     fontSize: 13,
     fontWeight: "700",
   },

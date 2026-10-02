@@ -4,6 +4,7 @@ export const translations = {
     'common.yes': 'tak',
     'common.no': 'nie',
     'common.changeLanguage': 'Zmień język',
+    'settings.darkMode': 'Tryb ciemny',
 
     'home.welcome': 'Witaj, użytkowniku!',
     'home.button.begginerGuide': 'Niezbędnik początkującego',
@@ -53,6 +54,12 @@ export const translations = {
     'records.showLess': 'Zwiń',
 
     'records.addPhoto': 'Dodaj zdjęcie',
+    'records.changePhoto': 'Zmień zdjęcie',
+    'records.removePhoto': 'Usuń zdjęcie',
+    'records.photoError': 'Nie udało się wybrać zdjęcia. Sprawdź dostęp do galerii.',
+    'records.photoTooLarge': 'Zdjęcie może mieć maksymalnie 5 MB.',
+    'records.photoUnsupported': 'Wybierz zdjęcie JPEG, PNG lub WebP.',
+    'records.photoUploadError': 'Nie udało się wysłać zdjęcia na serwer. Spróbuj ponownie.',
     'records.optional': 'Opcjonalnie',
 
     'records.searchFish': 'Wyszukaj rybę...',
@@ -81,6 +88,7 @@ export const translations = {
     'common.yes': 'yes',
     'common.no': 'no',
     'common.changeLanguage': 'Change language',
+    'settings.darkMode': 'Dark mode',
 
     'home.welcome': 'Welcome, user!',
     'home.button.begginerGuide': 'Beginner\'s Essentials',
@@ -130,6 +138,12 @@ export const translations = {
     'records.showLess': 'Collapse',
 
     'records.addPhoto': 'Add photo',
+    'records.changePhoto': 'Change photo',
+    'records.removePhoto': 'Remove photo',
+    'records.photoError': 'Could not select the photo. Check access to your photo library.',
+    'records.photoTooLarge': 'The photo must be no larger than 5 MB.',
+    'records.photoUnsupported': 'Choose a JPEG, PNG or WebP photo.',
+    'records.photoUploadError': 'Could not upload the photo to the server. Please try again.',
     'records.optional': 'Optional',
 
     'records.searchFish': 'Search fish...',

@@ -1,3 +1,5 @@
+import { AppColors } from "@/app/constants/theme"
+import { useTheme } from "@/app/hooks/useTheme/useTheme"
 import { CatchRecordGetResponse } from "@/app/api/records"
 import { fetchFish } from "@/app/utils/fetch/fish/fetchFish"
 import { useEffect, useState } from "react"
@@ -6,6 +8,7 @@ import Ionicons from "@expo/vector-icons/Ionicons"
 import { router } from "expo-router"
 import { getTranslation } from "@/app/utils/translation/getTranslation"
 import { useLanguage } from "@/app/hooks/useLanguage/useLanguage"
+import { resolveRecordPhotoUrl } from "@/app/utils/fetch/records/recordPhoto"
 
 type LocalProps = {
   record: CatchRecordGetResponse
@@ -16,6 +19,8 @@ export default function RecordCard({ record }: LocalProps) {
   const [descriptionLong, setDescriptionLong] = useState(false)
 
   const { languageCode } = useLanguage()
+  const { colors } = useTheme()
+  const styles = createStyles(colors)
   const [translatedFishName, setTranslatedFishName] = useState(
   record.fish_name ?? "-"
 )
@@ -71,7 +76,9 @@ useEffect(() => {
   return (
     <View style={styles.container}>
       <Image
-        source={require("../../../assets/images/fish.jpg")}
+        source={record.image_url
+          ? { uri: resolveRecordPhotoUrl(record.image_url) }
+          : require("../../../assets/images/fish.jpg")}
         alt="Fish record image"
         style={styles.image}
       />
@@ -193,20 +200,20 @@ useEffect(() => {
         <Ionicons
           name="pencil-outline"
           size={20}
-          color="hsla(200, 75%, 52%, 0.96)"
+          color={colors.primary}
         />
       </Pressable>
     </View>
   )
 }
 
-const styles = StyleSheet.create({
+const createStyles = (colors: AppColors) => StyleSheet.create({
   container: {
-    backgroundColor: "#fff",
+    backgroundColor: colors.background.card,
     borderRadius: 18,
     padding: 12,
 
-    shadowColor: "#000",
+    shadowColor: colors.background.photoOverlay,
     shadowOpacity: 0.12,
     shadowRadius: 10,
     shadowOffset: {
@@ -219,14 +226,14 @@ const styles = StyleSheet.create({
 
   image: {
     width: "100%",
-    height: 140,
+    height: 240,
     borderRadius: 12,
     marginBottom: 6,
   },
 
   date: {
     textAlign: "center",
-    color: "#999",
+    color: colors.text.muted,
     fontSize: 11,
     marginBottom: 12,
   },
@@ -238,13 +245,13 @@ const styles = StyleSheet.create({
 
   label: {
     width: 85,
-    color: "#777",
+    color: colors.text.muted,
     fontSize: 11,
   },
 
   value: {
     flex: 1,
-    color: "#111",
+    color: colors.text.main,
     fontSize: 12,
     fontWeight: "600",
   },
@@ -261,14 +268,14 @@ const styles = StyleSheet.create({
   },
 
   description: {
-    color: "#333",
+    color: colors.text.main,
     fontSize: 12,
     lineHeight: 16,
   },
 
   expandText: {
     marginTop: 4,
-    color: "hsla(200, 75%, 52%, 0.96)",
+    color: colors.primary,
     fontSize: 11,
     fontWeight: "600",
   },
@@ -288,7 +295,7 @@ const styles = StyleSheet.create({
     height: 36,
 
     borderRadius: 18,
-    backgroundColor: "#eef2ff",
+    backgroundColor: colors.background.primarySoft,
 
     alignItems: "center",
     justifyContent: "center",

@@ -1,3 +1,5 @@
+import { AppColors } from "@/app/constants/theme"
+import { useTheme } from "@/app/hooks/useTheme/useTheme"
 import { StyleSheet, View } from "react-native"
 import { Picker } from "@react-native-picker/picker"
 import { getTranslation } from "@/app/utils/translation/getTranslation"
@@ -23,6 +25,8 @@ export default function FishingSpotPicker({
   onChange,
   disabled = false,
 }: Props) {
+  const { colors } = useTheme()
+  const styles = createStyles(colors)
   const [language, setLanguage] = useState<LanguageCode>(
     LanguageCode.PL
   )
@@ -47,8 +51,11 @@ export default function FishingSpotPicker({
         selectedValue={value}
         onValueChange={(itemValue) => onChange(itemValue)}
         enabled={!disabled}
+        style={{ color: colors.text.main, backgroundColor: colors.background.app }}
+        dropdownIconColor={colors.text.muted}
       >
         <Picker.Item
+          style={{ color: colors.text.main, backgroundColor: colors.background.app }}
           label={getTranslation(
             "records.selectFishingSpot",
             language
@@ -59,6 +66,7 @@ export default function FishingSpotPicker({
         {fishingSpots.map((spot) => (
           <Picker.Item
             key={spot.value}
+            style={{ color: colors.text.main, backgroundColor: colors.background.app }}
             label={getTranslation(
               `records.fishingSpot.${spot.key}` as any,
               language
@@ -71,9 +79,9 @@ export default function FishingSpotPicker({
   )
 }
 
-const styles = StyleSheet.create({
+const createStyles = (colors: AppColors) => StyleSheet.create({
   container: {
-    backgroundColor: "hsl(0,0%,96%)",
+    backgroundColor: colors.background.app,
     borderRadius: 6,
     marginBottom: 8,
     overflow: "hidden",

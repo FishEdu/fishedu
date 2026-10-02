@@ -10,7 +10,7 @@ export type CatchRecordGetResponse = {
   fork_length?: number,
   weight?: number,
   description?: string,
-  image_url?: string,
+  image_url?: string | null,
   created_at: string
 }
 
@@ -23,5 +23,5 @@ export type CatchRecordCreateRequest = {
   fork_length?: number,
   weight?: number,
   description?: string,
-  image_url?: string
+  image_url?: string | null
 }
