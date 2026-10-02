@@ -1,16 +1,17 @@
 import { FishGetResponse } from "@/app/api/fish"
+import { AppColors } from "@/app/constants/theme"
 import { useLanguage } from "@/app/hooks/useLanguage/useLanguage"
+import { useTheme } from "@/app/hooks/useTheme/useTheme"
 import { getTranslation } from "@/app/utils/translation/getTranslation"
+import Ionicons from "@expo/vector-icons/Ionicons"
 import { router } from "expo-router"
-import { Image, Pressable, StyleSheet, View } from "react-native"
-import FishInfoGroup from "./FishInfoGroup"
+import { Image, Pressable, StyleSheet, Text, View } from "react-native"
 
 type LocalProps = {
   fish: FishGetResponse
   imageUrl?: string
   name: string
   isEndangered: boolean
-  feedingPlaces: string
 }
 
 export default function FishListElement({
@@ -20,6 +21,8 @@ export default function FishListElement({
   imageUrl,
 }: LocalProps) {
   const { languageCode } = useLanguage()
+  const { colors } = useTheme()
+  const styles = createStyles(colors)
 
   const handlePress = () => {
     const fishDetailsHref = {
@@ -41,7 +44,6 @@ export default function FishListElement({
         pressed && styles.containerPressed,
       ]}
     >
-      {/* ZDJĘCIE */}
       <Image
         source={
           imageUrl
@@ -51,53 +53,52 @@ export default function FishListElement({
         style={styles.image}
       />
 
-      {/* INFORMACJE */}
       <View style={styles.textContainer}>
-        <FishInfoGroup
-          title={getTranslation("fishSearch.name", languageCode)}
-          text={name}
-          containerStyles={styles.info}
-        />
-
-        <FishInfoGroup
-          title={getTranslation("fishSearch.endangered", languageCode)}
-          text={
-            isEndangered
-              ? getTranslation("common.yes", languageCode)
-              : getTranslation("common.no", languageCode)
-          }
-          containerStyles={styles.info}
-        />
+        <View style={styles.nameContainer}>
+          <Text numberOfLines={1} style={styles.name}>{name}</Text>
+        </View>
+        {isEndangered && (
+          <View style={styles.status}>
+              <Ionicons
+                name="alert-circle-outline"
+                size={15}
+                color={colors.danger}
+              />
+              <Text style={styles.statusText}>
+                {getTranslation("fishSearch.endangered", languageCode)}
+              </Text>
+          </View>
+        )}
       </View>
     </Pressable>
   )
 }
 
-const styles = StyleSheet.create({
+const createStyles = (colors: AppColors) => StyleSheet.create({
   container: {
     width: "100%",
-    minHeight: 90,
-
+    minHeight: 96,
     flexDirection: "row",
     alignItems: "center",
 
-    backgroundColor: "#FFFFFF",
-
-    borderRadius: 20,
+    backgroundColor: colors.background.card,
+    borderColor: colors.border.card,
+    borderRadius: 8,
+    borderWidth: 1,
     overflow: "hidden",
 
-    padding: 8,
+    padding: 7,
     gap: 14,
 
     // delikatny efekt karty
-    shadowColor: "#000",
+    shadowColor: colors.text.main,
     shadowOffset: {
       width: 0,
       height: 2,
     },
-    shadowOpacity: 0.08,
-    shadowRadius: 5,
-    elevation: 2,
+    shadowOpacity: 0.04,
+    shadowRadius: 4,
+    elevation: 1,
   },
 
   containerPressed: {
@@ -106,24 +107,22 @@ const styles = StyleSheet.create({
   },
 
   image: {
-    width: 100,
-    height: 74,
+    width: 110,
+    height: 82,
 
-    borderRadius: 14,
+    borderRadius: 6,
 
     resizeMode: "cover",
   },
 
   textContainer: {
     flex: 1,
-
-    flexDirection: "row",
-    alignItems: "center",
-
-    gap: 10,
+    alignSelf: "stretch",
+    minHeight: 82,
+    paddingRight: 4,
   },
-
-  info: {
-    flex: 1,
-  },
+  nameContainer: { flex: 1, justifyContent: "center" },
+  name: { color: colors.text.main, fontSize: 21, fontWeight: "700", lineHeight: 26 },
+  status: { position: "absolute", right: 4, bottom: 2, alignItems: "center", flexDirection: "row", gap: 4 },
+  statusText: { color: colors.text.muted, fontSize: 12, fontWeight: "500" },
 })

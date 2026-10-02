@@ -1,4 +1,6 @@
 import Container from "@/app/components/ui/Container";
+import { AppColors } from "@/app/constants/theme";
+import { useTheme } from "@/app/hooks/useTheme/useTheme";
 import { useLanguage } from "@/app/hooks/useLanguage/useLanguage";
 import { getTranslation } from "@/app/utils/translation/getTranslation";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -13,6 +15,8 @@ type localSearchParams = {
 
 export default function RecipeScreen() {
   const { language } = useLanguage()
+  const { colors } = useTheme()
+  const styles = createStyles(colors)
   const { name, content } = useLocalSearchParams<localSearchParams>()
   
   const prepareContent = (content: string) => {
@@ -24,9 +28,9 @@ export default function RecipeScreen() {
       <Container>
         <> 
           <Pressable onPress={() => router.back()} style={styles.backButton}>
-            <Ionicons name="chevron-back" size={24} color="hsl(0, 0%, 100%)" />
+            <Ionicons name="chevron-back" size={20} color={colors.primary} />
             <Text style={styles.backButtonText}>
-              { getTranslation('common.back', language)}
+              {getTranslation('common.back', language)}
             </Text>
           </Pressable>
           <View>
@@ -48,32 +52,32 @@ export default function RecipeScreen() {
   )
 }
 
-const styles = StyleSheet.create({
+const createStyles = (colors: AppColors) => StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: "hsl(180, 5%, 96%)",
+    backgroundColor: colors.background.app,
   },
   backButton: {
     alignItems: "center",
     alignSelf: "flex-start",
-    backgroundColor: "hsl(226, 75%, 59%)",
-    borderRadius: 24,
     flexDirection: "row",
-    gap: 4,
-    paddingBlock: 10,
-    paddingInline: 20,
+    gap: 2,
+    paddingBlock: 8,
+    paddingEnd: 8,
   },
   backButtonText: {
-    color: "hsl(0, 0%, 100%)",
-    fontSize: 18,
-    fontWeight: 500,
+    color: colors.primary,
+    fontSize: 16,
+    fontWeight: "600",
   },
   name: {
+    color: colors.text.main,
     fontSize: 32,
     fontWeight: 600,
     marginBlock: 16
   },
   content: {
+    color: colors.text.main,
     fontSize: 16
   }
 })

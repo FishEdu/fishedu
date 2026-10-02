@@ -1,5 +1,7 @@
 import { FishGetResponse } from "@/app/api/fish";
+import { AppColors } from "@/app/constants/theme";
 import { useLanguage } from "@/app/hooks/useLanguage/useLanguage";
+import { useTheme } from "@/app/hooks/useTheme/useTheme";
 import { getTranslation } from "@/app/utils/translation/getTranslation";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -49,6 +51,8 @@ function DetailSection({
   children,
   icon,
 }: DetailSectionProps) {
+  const { colors } = useTheme();
+  const styles = createStyles(colors);
   const [isOpen, setIsOpen] = useState(false);
 
   const content = Array.isArray(children)
@@ -65,7 +69,7 @@ function DetailSection({
           <Ionicons
             name={icon}
             size={28}
-            color="hsl(210, 35%, 35%)"
+            color={colors.primary}
           />
         </View>
 
@@ -76,7 +80,7 @@ function DetailSection({
         <Ionicons
           name={isOpen ? "chevron-up" : "chevron-down"}
           size={24}
-          color="hsl(0, 0%, 45%)"
+          color={colors.text.muted}
         />
       </Pressable>
 
@@ -99,6 +103,8 @@ function DetailSection({
 export default function FishDetails() {
   const params = useLocalSearchParams<FishParams>();
   const { languageCode } = useLanguage();
+  const { colors } = useTheme();
+  const styles = createStyles(colors);
 
   const fish = useMemo(
     () => parseFishParam(params.fish),
@@ -168,22 +174,17 @@ export default function FishDetails() {
     >
       <Stack.Screen options={{ headerShown: false }} />
 
-      {/* PRZYCISK POWROTU */}
       <Pressable
         onPress={() => router.back()}
         style={styles.backButton}
       >
         <Ionicons
           name="chevron-back"
-          size={24}
-          color="hsl(0, 0%, 100%)"
+          size={20}
+          color={colors.primary}
         />
-
         <Text style={styles.backButtonText}>
-          {getTranslation(
-            "fishDetails.back",
-            languageCode
-          )}
+          {getTranslation("common.back", languageCode)}
         </Text>
       </Pressable>
 
@@ -241,7 +242,7 @@ export default function FishDetails() {
                     : "star-outline"
                 }
                 size={34}
-                color="hsl(50, 96%, 49%)"
+                color={colors.favorite}
               />
             </Pressable>
           </View>
@@ -350,10 +351,10 @@ export default function FishDetails() {
   );
 }
 
-const styles = StyleSheet.create({
+const createStyles = (colors: AppColors) => StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: "hsl(180, 5%, 96%)",
+    backgroundColor: colors.background.app,
   },
 
   content: {
@@ -367,25 +368,23 @@ const styles = StyleSheet.create({
   backButton: {
     alignItems: "center",
     alignSelf: "flex-start",
-    backgroundColor: "hsl(226, 75%, 59%)",
-    borderRadius: 20,
     flexDirection: "row",
     gap: 2,
-    paddingBlock: 7,
-    paddingInline: 14,
+    paddingTop: 34,
+    paddingEnd: 8,
   },
 
   backButtonText: {
-    color: "hsl(0, 0%, 100%)",
-    fontSize: 16,
-    fontWeight: "500",
+    color: colors.primary,
+    fontSize: 18,
+    fontWeight: "600",
   },
 
   /* ZDJĘCIE */
 
   heroImageContainer: {
     borderRadius: 16,
-    height: 200,
+    height: 280,
     marginTop: 8,
     overflow: "hidden",
     position: "relative",
@@ -397,12 +396,9 @@ const styles = StyleSheet.create({
     width: "100%",
   },
 
-  /*
-   * Delikatne przyciemnienie dolnej części zdjęcia.
-   * Dzięki temu biały napis "Pstrąg" jest dobrze widoczny.
-   */
+
   imageOverlay: {
-    backgroundColor: "rgba(0, 0, 0, 0.18)",
+    backgroundColor: colors.background.overlay,
     bottom: 0,
     height: 60,
     left: 0,
@@ -413,7 +409,7 @@ const styles = StyleSheet.create({
 
   fishName: {
     bottom: 10,
-    color: "hsl(0, 0%, 100%)",
+    color: colors.text.onPrimary,
     fontSize: 36,
     fontWeight: "700",
     left: 20,
@@ -429,7 +425,7 @@ const styles = StyleSheet.create({
 
   favoriteButton: {
     alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.25)",
+    backgroundColor: colors.background.overlay,
     borderRadius: 24,
     height: 48,
     justifyContent: "center",
@@ -442,7 +438,7 @@ const styles = StyleSheet.create({
   /* GŁÓWNA KARTA */
 
   mainCard: {
-    backgroundColor: "hsl(0, 0%, 100%)",
+    backgroundColor: colors.background.card,
     borderRadius: 16,
     gap: 6,
     padding: 18,
@@ -454,13 +450,13 @@ const styles = StyleSheet.create({
   },
 
   infoTitle: {
-    color: "hsl(0, 0%, 10%)",
+    color: colors.text.main,
     fontSize: 18,
     fontWeight: "700",
   },
 
   description: {
-    color: "hsl(0, 0%, 18%)",
+    color: colors.text.main,
     fontSize: 16,
     lineHeight: 21,
   },
@@ -468,7 +464,7 @@ const styles = StyleSheet.create({
   /* SEKCJE ROZWIJANE */
 
   sectionCard: {
-    backgroundColor: "hsl(0, 0%, 100%)",
+    backgroundColor: colors.background.card,
     borderRadius: 16,
     padding: 16,
   },
@@ -481,7 +477,7 @@ const styles = StyleSheet.create({
 
   sectionIconContainer: {
     alignItems: "center",
-    backgroundColor: "hsl(205, 55%, 94%)",
+    backgroundColor: colors.background.primarySoft,
     borderRadius: 28,
     height: 42,
     justifyContent: "center",
@@ -489,6 +485,7 @@ const styles = StyleSheet.create({
   },
 
   sectionTitle: {
+    color: colors.text.main,
     flex: 1,
     fontSize: 22,
     fontWeight: "700",
@@ -501,12 +498,13 @@ const styles = StyleSheet.create({
   },
 
   sectionText: {
-    color: "hsl(0, 0%, 22%)",
+    color: colors.text.main,
     fontSize: 15,
     lineHeight: 20,
   },
 
   emptyText: {
+    color: colors.text.muted,
     fontSize: 16,
   },
 });

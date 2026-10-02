@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { View, Text, Modal, StyleSheet, Pressable } from "react-native";
+import { AppColors } from "@/app/constants/theme";
+import { useTheme } from "@/app/hooks/useTheme/useTheme";
 import InputGroup from "./InputGroup";
 
 interface CustomDatePickerProps {
@@ -33,6 +35,8 @@ export default function DatePicker({
   value,
   onChange,
 }: CustomDatePickerProps) {
+  const { colors } = useTheme()
+  const styles = createStyles(colors)
   const [open, setOpen] = useState(false);
 
   const date = value ? new Date(value) : new Date()
@@ -75,7 +79,7 @@ export default function DatePicker({
                 
                 styles={{
                   containerStyles: {},
-                  titleStyles: {},
+                  titleStyles: styles.inputLabel,
                   inputStyles: styles.textInput,
                   inputWrapper: {},
                 }}
@@ -95,7 +99,7 @@ export default function DatePicker({
                 name="Month"
                 styles={{
                   containerStyles: {},
-                  titleStyles: {},
+                  titleStyles: styles.inputLabel,
                   inputStyles: styles.textInput,
                   inputWrapper: {},
                 }}
@@ -115,7 +119,7 @@ export default function DatePicker({
                 name="Year"
                 styles={{
                   containerStyles: {},
-                  titleStyles: {},
+                  titleStyles: styles.inputLabel,
                   inputStyles: styles.textInput,
                   inputWrapper: {},
                 }}
@@ -132,7 +136,7 @@ export default function DatePicker({
               </InputGroup>
             </View>
             <Pressable onPress={handleOnPress} style={styles.closeButton}>
-              <Text style={styles.closeButton}>Close</Text>
+              <Text style={styles.closeButtonText}>Close</Text>
             </Pressable>
           </View>
         </View>
@@ -141,7 +145,7 @@ export default function DatePicker({
   );
 }
 
-const styles = StyleSheet.create({
+const createStyles = (colors: AppColors) => StyleSheet.create({
   inputContainer: {
     display: "flex",
     flexDirection: "row",
@@ -150,25 +154,28 @@ const styles = StyleSheet.create({
   input: {
     padding: 12,
     borderRadius: 8,
-    backgroundColor: "white"
+    backgroundColor: colors.background.card
   },
   modalContainer: {
     flex: 1,
     justifyContent: "center",
-    backgroundColor: "rgba(0,0,0,0.4)"
+    backgroundColor: colors.background.overlay
   },
   modalBox: {
-    backgroundColor: "white",
+    backgroundColor: colors.background.card,
     margin: 24,
     padding: 24,
     borderRadius: 8
   },
   title: {
+    color: colors.text.main,
     fontSize: 18,
     marginBottom: 20,
     textAlign: "center"
   },
   textInput: {
+    borderColor: colors.border.subtle,
+    color: colors.text.main,
     borderWidth: 1,
     borderRadius: 6,
     padding: 10,
@@ -180,9 +187,10 @@ const styles = StyleSheet.create({
     alignSelf: "center"
   },
   closeButtonText: {
-    color: "hsl(226, 75%, 59%)",
+    color: colors.primary,
     fontWeight: 600
   },
+  inputLabel: { color: colors.text.main },
   inputs: {
     display: "flex",
     flexDirection: "column",

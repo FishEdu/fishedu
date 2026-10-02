@@ -1,11 +1,15 @@
 import { JSX } from "react";
 import { StyleSheet, View } from "react-native";
+import { AppColors } from "@/app/constants/theme";
+import { useTheme } from "@/app/hooks/useTheme/useTheme";
 
 type localProps = {
   children: JSX.Element
 }
 
 function Container({ children }: localProps) {
+  const { colors } = useTheme();
+  const styles = createStyles(colors);
   return ( 
     <View 
       style={styles.container}
@@ -15,9 +19,10 @@ function Container({ children }: localProps) {
   )
 }
 
-const styles = StyleSheet.create({
+const createStyles = (colors: AppColors) => StyleSheet.create({
   container: {
     paddingInline: 16,
+    backgroundColor: colors.background.app,
     display: "flex",
     marginTop: 16,
     flex: 1

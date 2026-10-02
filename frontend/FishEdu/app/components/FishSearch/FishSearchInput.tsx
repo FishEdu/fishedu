@@ -1,5 +1,7 @@
 import { FishGetResponse } from "@/app/api/fish";
+import { AppColors } from "@/app/constants/theme";
 import { useLanguage } from "@/app/hooks/useLanguage/useLanguage";
+import { useTheme } from "@/app/hooks/useTheme/useTheme";
 import { debounce } from "@/app/utils/debounce";
 import { fetchFish } from "@/app/utils/fetch/fish/fetchFish";
 import { getTranslation } from "@/app/utils/translation/getTranslation";
@@ -18,6 +20,8 @@ type LocalProps  = {
 
 export default function FishSearchInput ({ lastFishQuery, setFish, setLastFishQuery }: LocalProps) {
   const { languageCode } = useLanguage()
+  const { colors } = useTheme()
+  const styles = createStyles(colors)
   
   return (
     <InputGroup
@@ -29,6 +33,7 @@ export default function FishSearchInput ({ lastFishQuery, setFish, setLastFishQu
       }}
       inputProps={{
         placeholder: getTranslation('fishSearch.searchFish', languageCode),
+        placeholderTextColor: colors.text.muted,
         onChangeText: debounce((fishQuery: string) => {
           fishQuery = fishQuery.trim().toLowerCase()
 
@@ -42,30 +47,34 @@ export default function FishSearchInput ({ lastFishQuery, setFish, setLastFishQu
             })
         }, 500)
       }}
-      icon={<Ionicons name='search' size={24} />}
+      icon={<Ionicons name='search' size={21} color={colors.text.main} />}
     />
   )
 }
 
-const styles = StyleSheet.create({
+const createStyles = (colors: AppColors) => StyleSheet.create({
   input: {
-    fontSize: 20,
+    color: colors.text.main,
+    fontSize: 16,
     width: '100%',
     overflow: 'hidden'
   },
   container: {
-    backgroundColor: 'white',
-    borderRadius: 24,
-    marginBottom: 24,
+    backgroundColor: colors.background.card,
+    borderColor: colors.border.card,
+    borderRadius: 10,
+    borderWidth: 1,
+    elevation: 1,
+    marginBottom: 2,
     overflow: 'hidden'
   },
   inputWrapper: {
-    backgroundColor: 'white',
+    backgroundColor: colors.background.card,
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    paddingBlock: 12,
-    paddingInline: 8,
-    borderRadius: 24,
+    paddingBlock: 9,
+    paddingInline: 12,
+    borderRadius: 10,
   }
 })

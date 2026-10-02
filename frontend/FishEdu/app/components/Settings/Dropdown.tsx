@@ -4,6 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { LanguageCode, LanguageLabels } from '@/app/(tabs)/settings';
 import { useLanguage } from '@/app/hooks/useLanguage/useLanguage';
 import { getTranslation } from '@/app/utils/translation/getTranslation';
+import { useTheme } from '@/app/hooks/useTheme/useTheme';
 
 
 type localProps = {
@@ -19,6 +20,7 @@ export default function BaseDropdownMenu({
 }: localProps) {
   const [isExpanded, setIsExpanded] = useState(false)
   const { setLanguage, languageCode } = useLanguage()
+  const { colors } = useTheme()
   
   return (
     <Host matchContents>
@@ -29,8 +31,8 @@ export default function BaseDropdownMenu({
               () => setIsExpanded(true)
             }
             colors={{
-              containerColor: 'hsl(226, 75%, 59%)',
-              contentColor: 'white'
+              containerColor: colors.primary,
+              contentColor: colors.text.onPrimary
             }}
           >
             <Text>

@@ -1,18 +1,20 @@
 import { Text, View, Pressable } from "react-native";
+import { useTheme } from "@/app/hooks/useTheme/useTheme";
 import InputGroup from "@/app/components/FormInputs/InputGroup";
-import { registerFormStyles } from "./styles";
+import { createRegisterFormStyles } from "./styles";
 import { useDatePicker } from "@components/FormInputs/DatePicker";
 import { useRegisterForm } from "./useRegisterForm";
 
 export default function RegisterForm() { 
   const { formData, errors, setFormData, handleSubmit } = useRegisterForm()
   const { DatePickerElement } = useDatePicker()
+  const { colors } = useTheme()
 
   const updateField = (field: keyof FormData, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }))
   }
 
-  const styles = registerFormStyles
+  const styles = createRegisterFormStyles(colors)
 
   const inputs = [
     { name: "Login", field: "login", value: formData.login },
@@ -41,7 +43,7 @@ export default function RegisterForm() {
               }}
             />
             {errors[input.field] && (
-              <Text style={{ color: "red" }}>{errors[input.field]}</Text>
+              <Text style={{ color: colors.danger }}>{errors[input.field]}</Text>
             )}
           </View>
         ))
@@ -51,7 +53,7 @@ export default function RegisterForm() {
         <Text style={styles.titleStyles}>Birthday</Text>
         { DatePickerElement }
         {errors.birthday && (
-          <Text style={{ color: "red" }}>{errors.birthday}</Text>
+          <Text style={{ color: colors.danger }}>{errors.birthday}</Text>
         )}
       </View>
 
