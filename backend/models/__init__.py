@@ -11,3 +11,12 @@ from .DietsPlTranslations import DietPlTranslations
 from .Recipe import Recipe
 from .RecipesEnTranslations import RecipesEnTranslations
 from .RecipesPlTranslations import RecipesPlTranslations
+from .EducationMaterial import EducationMaterial
+from .EducationMaterialTranslation import EducationMaterialTranslation
+from .EducationMaterialLevel import EducationMaterialLevel
+from .FavoriteEducationMaterial import FavoriteEducationMaterial
+from .EducationQuiz import EducationQuiz
+from .EducationQuizQuestion import EducationQuizQuestion
+from .EducationQuizQuestionTranslation import EducationQuizQuestionTranslation
+from .EducationQuizOption import EducationQuizOption
+from .EducationQuizOptionTranslation import EducationQuizOptionTranslation

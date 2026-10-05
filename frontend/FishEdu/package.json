@@ -13,6 +13,7 @@
   "dependencies": {
     "@expo/ui": "~56.0.15",
     "@expo/vector-icons": "^15.0.3",
+    "@kishannareshpal/expo-pdf": "^0.3.2",
     "@react-native-async-storage/async-storage": "2.2.0",
     "@react-navigation/bottom-tabs": "^7.4.0",
     "@react-navigation/elements": "^2.6.3",
@@ -29,6 +30,7 @@
     "expo-status-bar": "~56.0.4",
     "expo-symbols": "~56.0.5",
     "expo-system-ui": "~56.0.5",
+    "expo-video": "~56.1.4",
     "expo-web-browser": "~56.0.5",
     "react": "19.2.3",
     "react-dom": "19.2.3",
