@@ -8,12 +8,14 @@ import { Directory, File, Paths } from "expo-file-system";
 import { router, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import { ActivityIndicator, Pressable, StyleSheet, Text, View } from "react-native";
+import { useEducationMaterialURL } from "@/app/hooks/useEducationMaterialURL/useEducationMaterialURL";
 
 export default function EducationPdfViewer() {
   const { colors } = useTheme();
   const styles = createStyles(colors);
   const { language } = useLanguage();
-  const { title, url } = useLocalSearchParams<{ title: string; url: string }>();
+  const { title } = useLocalSearchParams<{ title: string; }>();
+  const url  = useEducationMaterialURL()
   const [loading, setLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
   const [localUri, setLocalUri] = useState<string | null>(null);
