@@ -13,9 +13,11 @@ import { useEducationMaterialURL } from "@/app/hooks/useEducationMaterialURL/use
 export default function EducationPdfViewer() {
   const { colors } = useTheme();
   const styles = createStyles(colors);
+  
+  const url  = useEducationMaterialURL()
   const { language } = useLanguage();
   const { title } = useLocalSearchParams<{ title: string; }>();
-  const url  = useEducationMaterialURL()
+  
   const [loading, setLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
   const [localUri, setLocalUri] = useState<string | null>(null);
