@@ -8,7 +8,7 @@ export type EducationMaterial = {
   description: string;
   content?: string | null;
   image_url: string | null;
-  file_url: string | null;
+  file_name: string | null;
   duration_minutes: number | null;
   levels: EducationLevel[];
   is_favorite: boolean;

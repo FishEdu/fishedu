@@ -27,7 +27,6 @@ export const useFetchEducationMaterials = ({ language, type, level, search }: Fi
       if (search.trim()) params.set("query", search.trim());
 
       try {
-        console.log(`${getBaseApiUrl()}/education-materials?${params.toString()}`)
         const response = await fetch(
           `${getBaseApiUrl()}/education-materials?${params.toString()}`,
           { signal: controller.signal }
