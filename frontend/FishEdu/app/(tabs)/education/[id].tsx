@@ -43,12 +43,12 @@ export default function EducationMaterialDetails() {
   }, [id, language]);
 
   const openMaterial = () => {
-    if (!material?.file_url) return;
+    if (!material?.file_name) return;
 
     if (material.type === "pdf") {
       const pdfHref = {
         pathname: "/(tabs)/education/pdf",
-        params: { id: String(material.id), title: material.title, url: material.file_url }
+        params: { id: String(material.id), title: material.title, url: material.file_name }
       } as unknown as Parameters<typeof router.push>[0];
       router.push(pdfHref);
       return;
@@ -57,13 +57,13 @@ export default function EducationMaterialDetails() {
     if (material.type === "video") {
       const videoHref = {
         pathname: "/(tabs)/education/video",
-        params: { id: String(material.id), title: material.title, url: material.file_url }
+        params: { id: String(material.id), title: material.title, url: material.file_name }
       } as unknown as Parameters<typeof router.push>[0];
       router.push(videoHref);
       return;
     }
 
-    Linking.openURL(material.file_url);
+    Linking.openURL(material.file_name);
   };
 
   const openQuiz = () => {
@@ -119,7 +119,7 @@ export default function EducationMaterialDetails() {
             <Text style={styles.description}>{material.description}</Text>
           </View>
           {material.content ? <Text style={styles.contentText}>{material.content}</Text> : null}
-          {material.file_url && material.type !== "quiz" ? (
+          {material.file_name && material.type !== "quiz" ? (
             <Pressable accessibilityRole="button" style={styles.openButton} onPress={openMaterial}>
               <Ionicons name="open-outline" size={20} color={colors.text.onPrimary} />
               <Text style={styles.openButtonText}>{getTranslation("education.detail.open", language)}</Text>

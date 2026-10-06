@@ -6,12 +6,16 @@ import { getTranslation } from "@/app/utils/translation/getTranslation";
 import { router, useLocalSearchParams } from "expo-router";
 import { VideoView, useVideoPlayer } from "expo-video";
 import { Pressable, StyleSheet, Text, View } from "react-native";
+import { useVideoURL } from "@/app/hooks/useVideoURL/useVideoURL";
 
 export default function EducationVideoPlayer() {
   const { colors } = useTheme();
   const styles = createStyles(colors);
   const { language } = useLanguage();
-  const { title, url } = useLocalSearchParams<{ title: string; url: string }>();
+  const { title } = useLocalSearchParams<{ title: string; url: string }>();
+  
+  const url = useVideoURL()
+  
   const player = useVideoPlayer(url, videoPlayer => {
     videoPlayer.loop = false;
   });

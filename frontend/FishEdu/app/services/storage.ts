@@ -49,6 +49,6 @@ export function isCacheValid<T>(cacheEntry: CacheEntry<T> | undefined) {
   return cacheEntry  && isDataStale
 }
 
-export function getCacheEntry<T>(cache: Cache<T> | null, localStorageId: string, language: LanguageCode) {
+export function getCacheEntry<T>(cache: Cache<T> | null, localStorageId: string, language: LanguageCode) { 
   return cache?.[localStorageId]?.[language]
 }
