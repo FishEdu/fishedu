@@ -1,6 +1,6 @@
 import { Cache, CacheEntry } from "@/app/types/cache"
 import AsyncStorage from "@react-native-async-storage/async-storage"
-import { LanguageCode } from "../(tabs)/settings"
+import { LanguageCode } from "../constants/language"
 import { STALE_TIME } from "../constants/cache"
 
 const KEY = "APP_CACHE"

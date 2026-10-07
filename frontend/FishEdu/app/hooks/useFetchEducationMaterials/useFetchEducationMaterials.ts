@@ -1,5 +1,5 @@
 import { EducationLevel, EducationMaterial, EducationMaterialType } from "@/app/api/education";
-import { LanguageCode } from "@/app/(tabs)/settings";
+import { LanguageCode } from "@/app/constants/language";
 import { getBaseApiUrl } from "@/app/utils/getBaseApiUrl";
 import { useEffect, useState } from "react";
 

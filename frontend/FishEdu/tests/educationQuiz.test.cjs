@@ -4,6 +4,7 @@ const path = require("node:path")
 const test = require("node:test")
 const vm = require("node:vm")
 const ts = require("typescript")
+const { createModuleLoader, expandNode } = require("./helpers/loadAppModule.cjs")
 
 function loadModule(filename, dependencies = {}, globals = {}) {
   const source = fs.readFileSync(path.join(__dirname, "..", filename), "utf8")
@@ -109,7 +110,7 @@ function createScreen() {
   const material = { id: 42, type: "quiz", title: "Sample quiz", quiz: createQuiz(2) }
   const colors = loadModule("app/constants/theme.ts").lightColors
   const jsx = (type, props) => ({ type, props })
-  const { default: Screen } = loadModule("app/(tabs)/education/quiz.tsx", {
+  const loadScreenModule = createModuleLoader({
     react: {
       useState(initial) {
         const index = cursor++
@@ -138,11 +139,10 @@ function createScreen() {
       return { ok: true, json: async () => material }
     },
   })
+  const { default: Screen } = loadScreenModule("app/(tabs)/education/quiz.tsx")
   const render = () => {
     cursor = 0
-    let node = Screen()
-    if (typeof node.type === "function") node = node.type(node.props)
-    return node
+    return expandNode(Screen())
   }
   render()
   effect()
@@ -187,5 +187,17 @@ test("the quiz screen requires a selected answer before advancing", async () => 
   await new Promise(resolve => setImmediate(resolve))
   pressAction(screen.render(), "education.quiz.next")
   assert.ok(findNodes(screen.render(), node => node.type === "Text" && node.props.children === "education.quiz.selectAnswer").length)
+  assert.equal(screen.requests.length, 1)
+})
+
+test("returning to the previous question preserves the selected answer", async () => {
+  const screen = createScreen()
+  await new Promise(resolve => setImmediate(resolve))
+  findNodes(screen.render(), node => node.props?.accessibilityRole === "radio")[1].props.onPress()
+  pressAction(screen.render(), "education.quiz.next")
+  pressAction(screen.render(), "education.quiz.previous")
+  const options = findNodes(screen.render(), node => node.props?.accessibilityRole === "radio")
+  assert.equal(options[0].props.accessibilityState.checked, false)
+  assert.equal(options[1].props.accessibilityState.checked, true)
   assert.equal(screen.requests.length, 1)
 })

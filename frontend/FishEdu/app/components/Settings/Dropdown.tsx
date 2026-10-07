@@ -1,7 +1,7 @@
 import { Host, DropdownMenu, DropdownMenuItem, Button, Text } from '@expo/ui/jetpack-compose';
 import { useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { LanguageCode, LanguageLabels } from '@/app/(tabs)/settings';
+import { LanguageCode, LanguageLabels } from '@/app/constants/language';
 import { useLanguage } from '@/app/hooks/useLanguage/useLanguage';
 import { getTranslation } from '@/app/utils/translation/getTranslation';
 import { useTheme } from '@/app/hooks/useTheme/useTheme';
