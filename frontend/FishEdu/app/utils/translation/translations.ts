@@ -4,8 +4,16 @@ export const translations = {
     'common.yes': 'tak',
     'common.no': 'nie',
     'common.changeLanguage': 'Zmień język',
-    'settings.darkMode': 'Tryb ciemny',
     'common.back': 'Confnij',
+
+    'tabs.home': 'Strona główna',
+    'tabs.education': 'Edukacja',
+    'tabs.settings': 'Ustawienia',
+    'tabs.fishSearch': 'Ryby',
+    'tabs.records': 'Rekordy',
+    
+    'settings.darkMode': 'Tryb ciemny',
+    
     'home.welcome': 'Witaj, użytkowniku!',
     'home.button.begginerGuide': 'Niezbędnik początkującego',
     'home.button.ecoTips': 'Wędkarskie porady ekologiczne',
@@ -13,12 +21,6 @@ export const translations = {
     'home.button.recipes': 'Przepisy na zanęty i przynęty',
     'home.button.fishProtection': 'Okresy i wymary ochronne',
     'home.button.saved': 'Zapisane',
-
-    'tabs.home': 'Strona Główna',
-    'tabs.education': 'Edukacja',
-    'tabs.settings': 'Ustawienia',
-    'tabs.fishSearch': 'Szukaj ryby',
-    'tabs.records': 'Rekordy',
 
     'fishSearch.name': 'nazwa',
     'fishSearch.environment': 'środowisko',
@@ -80,7 +82,44 @@ export const translations = {
     'education.pdf.downloading': 'Pobieranie dokumentu...',
     'education.pdf.error': 'Nie udało się wczytać dokumentu.',
     'education.video.defaultTitle': 'Film',
-    'education.video.notFound': 'Nie udało się znaleźć filmu.'
+    'education.video.notFound': 'Nie udało się znaleźć filmu.',
+
+    'records.yourRecords': 'Twoje rekordy',
+    'records.recentlyAdded': 'Ostatnio dodane',
+    'records.searchSpot': 'Wyszukaj łowisko',
+    'records.noRecords': 'Nie masz jeszcze rekordów',
+    'records.searchFishInput': 'Wyszukaj rybę',
+
+    'records.fish': 'Gatunek ryby',
+    'records.fishingSpot': 'Łowisko',
+    'records.dimensions': 'Wymiary',
+    'records.weight': 'Waga',
+    'records.description': 'Opis',
+    'records.showMore': 'Pokaż więcej',
+    'records.showLess': 'Zwiń',
+
+    'records.addPhoto': 'Dodaj zdjęcie',
+    'records.optional': 'Opcjonalnie',
+
+    'records.searchFish': 'Wyszukaj rybę...',
+    'records.searchResults': 'Wyniki wyszukiwania',
+
+    'records.measurementsAndWeight': 'Wymiary i waga',
+    'records.descriptionPlaceholder': 'Dodaj opis połowu...',
+
+    'records.completeFishAndSpot': 'Uzupełnij rybę i łowisko',
+    'records.saveError': 'Nie udało się zapisać rekordu',
+
+    'records.saving': 'Zapisywanie...',
+    'records.saveChanges': 'Zapisz zmiany',
+    'records.addRecord': 'Dodaj rekord',
+
+    'records.fishingSpotPlaceholder': 'Wybierz łowisko',
+    'records.fishingSpot.lake': 'Jezioro',
+    'records.fishingSpot.pond': 'Staw',
+    'records.fishingSpot.river': 'Rzeka',
+    'records.fishingSpot.sea': 'Morze',
+    'records.selectFishingSpot': 'Wybierz łowisko',
   },
 
   en: {
@@ -88,8 +127,16 @@ export const translations = {
     'common.yes': 'yes',
     'common.no': 'no',
     'common.changeLanguage': 'Change language',
-    'settings.darkMode': 'Dark mode',
     'common.back': 'Back',
+    
+    'tabs.home': 'Home',
+    'tabs.education': 'Education',
+    'tabs.settings': 'Settings',
+    'tabs.fishSearch': 'Search Fish',
+    'tabs.records': 'Records',
+    
+    'settings.darkMode': 'Dark mode',
+    
     'home.welcome': 'Welcome, user!',
     'home.button.begginerGuide': 'Beginner\'s Essentials',
     'home.button.ecoTips': 'Eco-friendly Fishing Tips',
@@ -98,11 +145,6 @@ export const translations = {
     'home.button.fishProtection': 'Protective Seasons and Size Limits',
     'home.button.saved': 'Saved',
 
-    'tabs.home': 'Home',
-    'tabs.education': 'Education',
-    'tabs.settings': 'Settings',
-    'tabs.fishSearch': 'Search Fish',
-    'tabs.records': 'Records',
 
     'fishSearch.name': 'name',
     'fishSearch.environment': 'environment',
@@ -122,6 +164,7 @@ export const translations = {
     'fishDetails.protectionLength.none': 'none',
     
     'ecoTips.heading': 'FISHING ECO TIPS',
+    
     'recipes.search': 'Search baits and groundbaits...',
     
     'education.search': 'Search...',
@@ -164,6 +207,36 @@ export const translations = {
     'education.pdf.downloading': 'Downloading document...',
     'education.pdf.error': 'Could not load the document.',
     'education.video.defaultTitle': 'Video',
-    'education.video.notFound': 'Could not find the video.'
+    'education.video.notFound': 'Could not find the video.',
+
+    'records.yourRecords': 'Your records',
+    'records.recentlyAdded': 'Recently added',
+    'records.searchSpot': 'Search fishing spot',
+    'records.noRecords': 'You don\'t have any records yet',
+    'records.searchFishInput': 'Search fish',
+    'records.fish': 'Fish species',
+    'records.fishingSpot': 'Fishing spot',
+    'records.dimensions': 'Dimensions',
+    'records.weight': 'Weight',
+    'records.description': 'Description',
+    'records.showMore': 'Show more',
+    'records.showLess': 'Collapse',
+    'records.addPhoto': 'Add photo',
+    'records.optional': 'Optional',
+    'records.searchFish': 'Search fish...',
+    'records.searchResults': 'Search results',
+    'records.measurementsAndWeight': 'Dimensions and weight',
+    'records.descriptionPlaceholder': 'Add a description of the catch...',
+    'records.completeFishAndSpot': 'Select a fish and fishing spot',
+    'records.saveError': 'Failed to save the record',
+    'records.saving': 'Saving...',
+    'records.saveChanges': 'Save changes',
+    'records.addRecord': 'Add record',
+    'records.fishingSpotPlaceholder': 'Select fishing spot',
+    'records.fishingSpot.lake': 'Lake',
+    'records.fishingSpot.pond': 'Pond',
+    'records.fishingSpot.river': 'River',
+    'records.fishingSpot.sea': 'Sea',
+    'records.selectFishingSpot': 'Select fishing spot',
   }
 } as const
