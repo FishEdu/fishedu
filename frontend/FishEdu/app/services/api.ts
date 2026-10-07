@@ -1,8 +1,8 @@
 export async function fetchData<T>(
   endpoint: string,
-  language: string
+  language: string | null
 ): Promise<T[]> {
-  const response = await fetch(
+   const response = await fetch(
     `${endpoint}?language=${language}`
   )
 

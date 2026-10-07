@@ -69,8 +69,3 @@ const styles = StyleSheet.create({
     borderRadius: 24,
   }
 })
-
-  // containerStyles?: StyleProp<ViewStyle>,
-  // titleStyles?: StyleProp<TextStyle>,
-  // inputStyles?: StyleProp<TextStyle>,
-  // inputWrapper?: StyleProp<ViewStyle>
