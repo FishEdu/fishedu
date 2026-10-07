@@ -13,15 +13,19 @@ export const translations = {
     'home.button.recipes': 'Przepisy na zanęty i przynęty',
     'home.button.fishProtection': 'Okresy i wymary ochronne',
     'home.button.saved': 'Zapisane',
+
     'tabs.home': 'Strona Główna',
     'tabs.education': 'Edukacja',
     'tabs.settings': 'Ustawienia',
     'tabs.fishSearch': 'Szukaj ryby',
+    'tabs.records': 'Rekordy',
+
     'fishSearch.name': 'nazwa',
     'fishSearch.environment': 'środowisko',
     'fishSearch.endangered': 'zagrożona',
     'fishSearch.searchFish': 'Wyszukaj rybę...',
     'fishSearch.fishNotFound': 'Nie znaleziono ryb',
+
     'fishDetails.back': 'cofnij',
     'fishDetails.favorite': 'ulubiona ryba',
     'fishDetails.noFishData': 'Nie udało się wczytać danych ryby',
@@ -78,6 +82,7 @@ export const translations = {
     'education.video.defaultTitle': 'Film',
     'education.video.notFound': 'Nie udało się znaleźć filmu.'
   },
+
   en: {
     'common.loading': 'Loading...',
     'common.yes': 'yes',
@@ -86,21 +91,25 @@ export const translations = {
     'settings.darkMode': 'Dark mode',
     'common.back': 'Back',
     'home.welcome': 'Welcome, user!',
-    'home.button.begginerGuide': 'Beginner’s Essentials',
-    'home.button.ecoTips': 'Eco‑friendly Fishing Tips',
+    'home.button.begginerGuide': 'Beginner\'s Essentials',
+    'home.button.ecoTips': 'Eco-friendly Fishing Tips',
     'home.button.fishingMethods': 'Fishing Methods',
     'home.button.recipes': 'Bait and Groundbait Recipes',
     'home.button.fishProtection': 'Protective Seasons and Size Limits',
     'home.button.saved': 'Saved',
+
     'tabs.home': 'Home',
     'tabs.education': 'Education',
     'tabs.settings': 'Settings',
     'tabs.fishSearch': 'Search Fish',
+    'tabs.records': 'Records',
+
     'fishSearch.name': 'name',
     'fishSearch.environment': 'environment',
     'fishSearch.endangered': 'endangered',
     'fishSearch.searchFish': 'search fish...',
     'fishSearch.fishNotFound': 'No fish found',
+
     'fishDetails.back': 'back',
     'fishDetails.favorite': 'favorite fish',
     'fishDetails.noFishData': 'Could not load fish data',

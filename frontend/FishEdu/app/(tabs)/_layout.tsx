@@ -45,6 +45,17 @@ export default function TabsLayout() {
       />
 
       <Tabs.Screen
+        name="records/index"
+        options={{
+          headerShown: false,
+          title: getTranslation('tabs.records', languageCode),
+          tabBarIcon: ({ size, color }) => (
+            <Ionicons name="document-text-outline" size={size} color={color} />
+          ),
+        }}
+      />
+
+      <Tabs.Screen
         name="education"
         options={{
           title: getTranslation('tabs.education', languageCode),
@@ -59,6 +70,14 @@ export default function TabsLayout() {
           title: getTranslation('tabs.settings', languageCode),
           tabBarIcon: ({ size, color }) => 
             <Ionicons name="settings" size={size} color={color}></Ionicons>
+        }}
+      />
+
+      <Tabs.Screen
+        name="records/add"
+        options={{
+          href: null,
+          title: "Nowy post",
         }}
       />
     </Tabs>
