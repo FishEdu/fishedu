@@ -45,20 +45,25 @@ def find_translation(translations, language: str):
 
 
 def serialize_quiz(quiz: EducationQuiz | None, language: str):
-    if not quiz:
+    if not quiz or not quiz.questions:
         return None
 
     questions = []
     for question in sorted(quiz.questions, key=lambda item: item.position):
         translation = find_translation(question.translations, language)
         if not translation:
-            continue
+            return None
 
         options = []
         for option in sorted(question.options, key=lambda item: item.position):
             option_translation = find_translation(option.translations, language)
-            if option_translation:
-                options.append({"id": option.id, "content": option_translation.content})
+            if not option_translation:
+                return None
+            options.append({
+                "id": option.id,
+                "content": option_translation.content,
+                "is_correct": option.is_correct,
+            })
 
         questions.append({
             "id": question.id,

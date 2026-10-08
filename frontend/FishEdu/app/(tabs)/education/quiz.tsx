@@ -1,35 +1,32 @@
-import { EducationMaterial } from "@/app/api/education";
+import { EducationMaterial, EducationQuizResult } from "@/app/api/education";
+import type { LanguageCode } from "@/app/(tabs)/settings";
 import Container from "@/app/components/ui/Container";
 import { AppColors } from "@/app/constants/theme";
 import { useTheme } from "@/app/hooks/useTheme/useTheme";
 import { useLanguage } from "@/app/hooks/useLanguage/useLanguage";
 import { getBaseApiUrl } from "@/app/utils/getBaseApiUrl";
 import { getTranslation } from "@/app/utils/translation/getTranslation";
+import { calculateQuizResult } from "@/app/utils/education/calculateQuizResult";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { router, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import { ActivityIndicator, Pressable, StyleSheet, Text, View } from "react-native";
 
-type QuizResult = {
-  correct_answers: number;
-  total_questions: number;
-  score: number;
-  passed: boolean;
-};
-
 export default function EducationQuiz() {
-  const { colors } = useTheme();
-  const styles = createStyles(colors);
   const { language } = useLanguage();
   const { id } = useLocalSearchParams<{ id: string }>();
+  return <EducationQuizSession key={`${id}:${language}`} id={id} language={language} />;
+}
+
+function EducationQuizSession({ id, language }: { id: string; language: LanguageCode }) {
+  const { colors } = useTheme();
+  const styles = createStyles(colors);
   const [material, setMaterial] = useState<EducationMaterial | null>(null);
   const [loading, setLoading] = useState(true);
   const [questionIndex, setQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<number, number>>({});
   const [answerError, setAnswerError] = useState(false);
-  const [submitError, setSubmitError] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
-  const [result, setResult] = useState<QuizResult | null>(null);
+  const [result, setResult] = useState<EducationQuizResult | null>(null);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -40,15 +37,21 @@ export default function EducationQuiz() {
           `${getBaseApiUrl()}/education-materials/${id}?language=${language}`,
           { signal: controller.signal }
         );
+
         if (!response.ok) throw new Error("Could not fetch quiz");
 
         const loadedMaterial = await response.json() as EducationMaterial;
-        if (loadedMaterial.type !== "quiz" || !loadedMaterial.quiz) {
-          throw new Error("Material is not a quiz");
+        
+        if (loadedMaterial.type !== "quiz") {
+          throw new Error("Material does not contain a complete quiz");
         }
-        setMaterial(loadedMaterial);
+
+        if (!controller.signal.aborted) {
+          setMaterial(loadedMaterial);
+        } 
+
       } catch (error) {
-        if ((error as Error).name !== "AbortError") setMaterial(null);
+        if (!controller.signal.aborted && (error as Error).name !== "AbortError") setMaterial(null);
       } finally {
         if (!controller.signal.aborted) setLoading(false);
       }
@@ -58,44 +61,23 @@ export default function EducationQuiz() {
     return () => controller.abort();
   }, [id, language]);
 
-  const submitQuiz = async (completedAnswers: Record<number, number>) => {
-    if (!material?.quiz) return;
-
-    setSubmitting(true);
-    setSubmitError(false);
-    try {
-      const response = await fetch(`${getBaseApiUrl()}/education-materials/${material.id}/quiz/submit`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          answers: Object.entries(completedAnswers).map(([questionId, optionId]) => ({
-            question_id: Number(questionId),
-            option_id: optionId,
-          })),
-        }),
-      });
-      if (!response.ok) throw new Error("Could not submit quiz");
-      setResult(await response.json() as QuizResult);
-    } catch {
-      setSubmitError(true);
-    } finally {
-      setSubmitting(false);
-    }
-  };
-
   const continueQuiz = () => {
     if (!material?.quiz) return;
 
     const currentQuestion = material.quiz.questions[questionIndex];
     const selectedOption = answers[currentQuestion.id];
-    if (!selectedOption) {
+
+    // console.log(`Continue: ${currentQuestion}`)
+    // console.log(`Continue: ${selectedOption}`)
+    if (!currentQuestion.options.some(option => option.id === selectedOption)) {
       setAnswerError(true);
       return;
     }
 
     setAnswerError(false);
     if (questionIndex === material.quiz.questions.length - 1) {
-      void submitQuiz(answers);
+      // console.log(calculateQuizResult(material.quiz, answers))
+      setResult(calculateQuizResult(material.quiz, answers));
       return;
     }
     setQuestionIndex(current => current + 1);
@@ -105,7 +87,6 @@ export default function EducationQuiz() {
     setQuestionIndex(0);
     setAnswers({});
     setAnswerError(false);
-    setSubmitError(false);
     setResult(null);
   };
 
@@ -146,6 +127,10 @@ export default function EducationQuiz() {
   const selectedOption = answers[currentQuestion.id];
   const progress = ((questionIndex + 1) / material.quiz.questions.length) * 100;
 
+  // console.log(currentQuestion)
+  // console.log(selectedOption)
+  // console.log(progress)
+
   return (
     <View style={styles.screen}>
       <Container>
@@ -183,7 +168,6 @@ export default function EducationQuiz() {
               ))}
             </View>
             {answerError ? <Text style={styles.errorText}>{getTranslation("education.quiz.selectAnswer", language)}</Text> : null}
-            {submitError ? <Text style={styles.errorText}>{getTranslation("education.quiz.submitError", language)}</Text> : null}
           </View>
           <View style={styles.actions}>
             {questionIndex > 0 ? (
@@ -193,12 +177,11 @@ export default function EducationQuiz() {
             ) : <View style={styles.actionSpacer} />}
             <Pressable
               accessibilityRole="button"
-              disabled={submitting}
               onPress={continueQuiz}
-              style={[styles.primaryButton, submitting && styles.primaryButtonDisabled]}
+              style={styles.primaryButton}
             >
               <Text style={styles.primaryButtonText}>{getTranslation(questionIndex === material.quiz.questions.length - 1 ? "education.quiz.finish" : "education.quiz.next", language)}</Text>
-              {!submitting ? <Ionicons name="arrow-forward" size={18} color={colors.text.onPrimary} /> : <ActivityIndicator color={colors.text.onPrimary} />}
+              <Ionicons name="arrow-forward" size={18} color={colors.text.onPrimary} />
             </Pressable>
           </View>
         </View>
@@ -236,7 +219,6 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
   secondaryButton: { alignItems: "center", borderColor: colors.primary, borderRadius: 8, borderWidth: 1, flex: 1, justifyContent: "center", minHeight: 50, paddingHorizontal: 16 },
   secondaryButtonText: { color: colors.primary, fontSize: 16, fontWeight: "600" },
   primaryButton: { alignItems: "center", backgroundColor: colors.primary, borderRadius: 8, flex: 1, flexDirection: "row", gap: 8, justifyContent: "center", minHeight: 50, paddingHorizontal: 16 },
-  primaryButtonDisabled: { opacity: 0.65 },
   primaryButtonText: { color: colors.text.onPrimary, fontSize: 16, fontWeight: "600" },
   resultCard: { alignItems: "center", alignSelf: "stretch", backgroundColor: colors.background.card, borderColor: colors.border.card, borderRadius: 8, borderWidth: 1, gap: 12, justifyContent: "center", marginTop: 36, padding: 28 },
   resultTitle: { color: colors.text.main, fontSize: 22, fontWeight: "700" },

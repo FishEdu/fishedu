@@ -1,5 +1,19 @@
-export type EducationMaterialType = "video" | "pdf" | "course" | "quiz" | "guide";
-export type EducationLevel = "beginner" | "advanced";
+export type EducationQuiz = {
+  id: number;
+  passing_score: number;
+  questions: {
+    id: number;
+    content: string;
+    options: { id: number; content: string; is_correct: boolean }[];
+  }[];
+};
+
+export type EducationQuizResult = {
+  correct_answers: number;
+  total_questions: number;
+  score: number;
+  passed: boolean;
+};
 
 export type EducationMaterial = {
   id: number;
@@ -12,13 +26,7 @@ export type EducationMaterial = {
   duration_minutes: number | null;
   levels: EducationLevel[];
   is_favorite: boolean;
-  quiz?: {
-    id: number;
-    passing_score: number;
-    questions: {
-      id: number;
-      content: string;
-      options: { id: number; content: string }[];
-    }[];
-  } | null;
+  quiz?: EducationQuiz | null;
 };
+export type EducationMaterialType = "video" | "pdf" | "course" | "quiz" | "guide";
+export type EducationLevel = "beginner" | "advanced";

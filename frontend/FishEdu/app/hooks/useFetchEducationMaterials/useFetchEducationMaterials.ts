@@ -10,37 +10,43 @@ type Filters = {
   search: string;
 };
 
+type FetchState = {
+  url: string | null;
+  data: EducationMaterial[];
+  loading: boolean;
+  error: boolean;
+};
+
 export const useFetchEducationMaterials = ({ language, type, level, search }: Filters) => {
-  const [data, setData] = useState<EducationMaterial[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
+  const params = new URLSearchParams({ language });
+  params.set("level", level);
+  params.set("material_type", type);
+  if (search.trim()) params.set("query", search.trim());
+  
+  const url = `${getBaseApiUrl()}/education-materials?${params.toString()}`;
+  const [state, setState] = useState<FetchState>({
+    url: null,
+    data: [],
+    loading: true,
+    error: false,
+  });
 
   useEffect(() => {
     const controller = new AbortController();
     const delay = setTimeout(async () => {
-      setLoading(true);
-      setError(false);
-
-      const params = new URLSearchParams({ language });
-      params.set("level", level);
-      params.set("material_type", type);
-      if (search.trim()) params.set("query", search.trim());
+      setState({ url, data: [], loading: true, error: false });
 
       try {
-        const response = await fetch(
-          `${getBaseApiUrl()}/education-materials?${params.toString()}`,
-          { signal: controller.signal }
-        );
+        const response = await fetch(url, { signal: controller.signal });
         if (!response.ok) throw new Error("Could not fetch education materials");
-        
-        setData(await response.json());
-      } catch (fetchError) {
-        if ((fetchError as Error).name !== "AbortError") {
-          setData([]);
-          setError(true);
+        const data = await response.json() as EducationMaterial[];
+        if (!controller.signal.aborted) {
+          setState({ url, data, loading: false, error: false });
         }
-      } finally {
-        if (!controller.signal.aborted) setLoading(false);
+      } catch (fetchError) {
+        if (!controller.signal.aborted && (fetchError as Error).name !== "AbortError") {
+          setState({ url, data: [], loading: false, error: true });
+        }
       }
     }, 250);
 
@@ -48,7 +54,12 @@ export const useFetchEducationMaterials = ({ language, type, level, search }: Fi
       controller.abort();
       clearTimeout(delay);
     };
-  }, [language, type, level, search]);
+  }, [url]);
 
-  return { data, loading, error };
+  const isCurrentRequest = state.url === url;
+  return {
+    data: isCurrentRequest ? state.data : [],
+    loading: !isCurrentRequest || state.loading,
+    error: isCurrentRequest && state.error,
+  };
 };

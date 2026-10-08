@@ -4,6 +4,7 @@ export const translations = {
     'common.yes': 'tak',
     'common.no': 'nie',
     'common.changeLanguage': 'Zmień język',
+    'settings.darkMode': 'Tryb ciemny',
     'common.back': 'Confnij',
 
     'tabs.home': 'Strona główna',
@@ -21,7 +22,10 @@ export const translations = {
     'home.button.recipes': 'Przepisy na zanęty i przynęty',
     'home.button.fishProtection': 'Okresy i wymary ochronne',
     'home.button.saved': 'Zapisane',
-
+    'tabs.home': 'Strona Główna',
+    'tabs.education': 'Edukacja',
+    'tabs.settings': 'Ustawienia',
+    'tabs.fishSearch': 'Szukaj ryby',
     'fishSearch.name': 'nazwa',
     'fishSearch.environment': 'środowisko',
     'fishSearch.endangered': 'zagrożona',
@@ -127,6 +131,7 @@ export const translations = {
     'common.yes': 'yes',
     'common.no': 'no',
     'common.changeLanguage': 'Change language',
+    'settings.darkMode': 'Dark mode',
     'common.back': 'Back',
     
     'tabs.home': 'Home',
