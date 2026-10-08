@@ -1,5 +1,5 @@
 import { EducationLevel, EducationMaterial, EducationMaterialType } from "@/app/api/education";
-import { LanguageCode } from "@/app/constants/language";
+import { LanguageCode } from "@/app/(tabs)/settings";
 import { getBaseApiUrl } from "@/app/utils/getBaseApiUrl";
 import { useEffect, useState } from "react";
 
@@ -19,9 +19,10 @@ type FetchState = {
 
 export const useFetchEducationMaterials = ({ language, type, level, search }: Filters) => {
   const params = new URLSearchParams({ language });
-  if (level !== "all") params.set("level", level);
-  if (type !== "all") params.set("type", type);
+  params.set("level", level);
+  params.set("material_type", type);
   if (search.trim()) params.set("query", search.trim());
+  
   const url = `${getBaseApiUrl()}/education-materials?${params.toString()}`;
   const [state, setState] = useState<FetchState>({
     url: null,

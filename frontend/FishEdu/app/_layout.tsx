@@ -1,8 +1,8 @@
 import { Stack, DefaultTheme, ThemeProvider as NavigationThemeProvider } from "expo-router";
-import { LanguageProvider } from "./hooks/useLanguage/LangaugeProvider";
 import { ThemeProvider } from "./hooks/useTheme/ThemeProvider";
 import { useTheme } from "./hooks/useTheme/useTheme";
 import { StatusBar } from "expo-status-bar";
+import { LanguageProvider } from "./hooks/useLanguage/LanguageProvider";
 
 function Navigation() {
   const { colors, mode } = useTheme();

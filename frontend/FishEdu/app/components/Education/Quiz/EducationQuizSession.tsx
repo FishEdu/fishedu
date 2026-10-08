@@ -11,7 +11,6 @@ import QuizActions from "./QuizActions";
 import QuizResult from "./QuizResult";
 import { useFetchEducationMaterial } from "@/app/hooks/useFetchEducationMaterial/useFetchEducationMaterial";
 import { useEducationQuiz } from "@/app/hooks/useEducationQuiz/useEducationQuiz";
-import { canGradeQuiz } from "@/app/utils/education/calculateQuizResult";
 import { router } from "expo-router";
 import { StyleSheet, Text, View } from "react-native";
 
@@ -21,7 +20,7 @@ export default function EducationQuizSession({ id, language }: Props) {
   const { colors } = useTheme();
   const styles = createStyles(colors);
   const { material, loading } = useFetchEducationMaterial(id, language);
-  const quiz = material?.type === "quiz" && canGradeQuiz(material.quiz) ? material.quiz : null;
+  const quiz = material?.type === "quiz" ? material.quiz : null;
   const session = useEducationQuiz(quiz);
   const backLabel = getTranslation("education.quiz.back", language);
 
