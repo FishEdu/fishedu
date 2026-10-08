@@ -6,6 +6,8 @@ from fastapi.staticfiles import StaticFiles
 from routes.users import router as user_router
 from routes.fish import router as fish_router
 from routes.eco_tips import router as eco_tips_router
+from routes.catch_records import router as catch_records_router
+from routes.record_photos import router as record_photos_router
 from routes.recipes import router as recipes_router
 from routes.education_materials import router as education_materials_router
 
@@ -18,5 +20,8 @@ app.mount("/media", StaticFiles(directory=str(media_root)), name="media")
 app.include_router(user_router)
 app.include_router(fish_router)
 app.include_router(eco_tips_router)
+app.include_router(catch_records_router)
+app.include_router(record_photos_router)
+
 app.include_router(recipes_router)
 app.include_router(education_materials_router)

@@ -6,7 +6,7 @@ import { useTheme } from "@/app/hooks/useTheme/useTheme";
 import { useLanguage } from "@/app/hooks/useLanguage/useLanguage";
 import { getBaseApiUrl } from "@/app/utils/getBaseApiUrl";
 import { getTranslation } from "@/app/utils/translation/getTranslation";
-import { calculateQuizResult, canGradeQuiz } from "@/app/utils/education/calculateQuizResult";
+import { calculateQuizResult } from "@/app/utils/education/calculateQuizResult";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { router, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
@@ -37,13 +37,19 @@ function EducationQuizSession({ id, language }: { id: string; language: Language
           `${getBaseApiUrl()}/education-materials/${id}?language=${language}`,
           { signal: controller.signal }
         );
+
         if (!response.ok) throw new Error("Could not fetch quiz");
 
         const loadedMaterial = await response.json() as EducationMaterial;
-        if (loadedMaterial.type !== "quiz" || !canGradeQuiz(loadedMaterial.quiz)) {
+        
+        if (loadedMaterial.type !== "quiz") {
           throw new Error("Material does not contain a complete quiz");
         }
-        if (!controller.signal.aborted) setMaterial(loadedMaterial);
+
+        if (!controller.signal.aborted) {
+          setMaterial(loadedMaterial);
+        } 
+
       } catch (error) {
         if (!controller.signal.aborted && (error as Error).name !== "AbortError") setMaterial(null);
       } finally {
@@ -60,6 +66,9 @@ function EducationQuizSession({ id, language }: { id: string; language: Language
 
     const currentQuestion = material.quiz.questions[questionIndex];
     const selectedOption = answers[currentQuestion.id];
+
+    // console.log(`Continue: ${currentQuestion}`)
+    // console.log(`Continue: ${selectedOption}`)
     if (!currentQuestion.options.some(option => option.id === selectedOption)) {
       setAnswerError(true);
       return;
@@ -67,6 +76,7 @@ function EducationQuizSession({ id, language }: { id: string; language: Language
 
     setAnswerError(false);
     if (questionIndex === material.quiz.questions.length - 1) {
+      // console.log(calculateQuizResult(material.quiz, answers))
       setResult(calculateQuizResult(material.quiz, answers));
       return;
     }
@@ -116,6 +126,10 @@ function EducationQuizSession({ id, language }: { id: string; language: Language
   const currentQuestion = material.quiz.questions[questionIndex];
   const selectedOption = answers[currentQuestion.id];
   const progress = ((questionIndex + 1) / material.quiz.questions.length) * 100;
+
+  // console.log(currentQuestion)
+  // console.log(selectedOption)
+  // console.log(progress)
 
   return (
     <View style={styles.screen}>

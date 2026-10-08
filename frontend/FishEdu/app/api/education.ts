@@ -1,6 +1,3 @@
-export type EducationMaterialType = "video" | "pdf" | "course" | "quiz" | "guide";
-export type EducationLevel = "beginner" | "advanced";
-
 export type EducationQuiz = {
   id: number;
   passing_score: number;
@@ -31,3 +28,5 @@ export type EducationMaterial = {
   is_favorite: boolean;
   quiz?: EducationQuiz | null;
 };
+export type EducationMaterialType = "video" | "pdf" | "course" | "quiz" | "guide";
+export type EducationLevel = "beginner" | "advanced";
