@@ -1,7 +1,7 @@
 import { useEffect, useState, ReactNode } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { LanguageContext } from './LanguageContext';
-import { LanguageCode } from '@/app/(tabs)/settings';
+import { LanguageCode } from '@/app/constants/language';
 
 export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   const [language, setLanguageState] = useState<LanguageCode>(LanguageCode.EN);
