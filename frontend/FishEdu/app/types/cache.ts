@@ -1,4 +1,4 @@
-import { LanguageCode } from "../(tabs)/settings"
+import { LanguageCode } from "../constants/language"
 
 export type CacheEntry<T> = {
   value: T[]

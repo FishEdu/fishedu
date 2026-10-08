@@ -1,9 +1,10 @@
+import { getBaseURL } from "./getBaseURL"
+
 export const getBaseApiUrl: () => string = () => {
   // On local machine check your ip address
-  const address = 'http://192.168.101.16'
-  const port = '8000'
   const apiPrefix = 'api/v1'
-  const url = `${address}:${port}/${apiPrefix}`
+  const base_url = getBaseURL()
+  const url = `${base_url}/${apiPrefix}`
   
   return url
 }

@@ -155,17 +155,16 @@ export default function FishDetails() {
 
     setIsFavorite(nextFavoriteIds.includes(fishId));
   };
-
-  const protectionLength = fish
-    ? `${fish.min_protection_length} - ${
-        fish.max_protection_length
-          ? fish.max_protection_length
-          : getTranslation(
-              "fishDetails.protectionLength.none",
-              languageCode
-            )
-      }`
-    : "";
+  
+  const minProtectionLength = `${getTranslation("fishDetails.minProtectionLength", languageCode)}${fish?.minProtectionLength != null
+    ? `${fish.minProtectionLength} cm`
+    : getTranslation("fishDetails.protectionLength.none", languageCode)
+  }`;
+    
+  const maxProtectionLength = `${getTranslation("fishDetails.maxProtectionLength", languageCode)}${fish?.maxProtectionLength != null
+    ? `${fish.maxProtectionLength} cm`
+    : getTranslation("fishDetails.protectionLength.none", languageCode)
+  }`;
 
   return (
     <ScrollView
@@ -254,7 +253,7 @@ export default function FishDetails() {
             <View style={styles.infoBlock}>
               <Text style={styles.infoTitle}>
                 {getTranslation(
-                  "fish.description",
+                  "common.description",
                   languageCode
                 )}
               </Text>
@@ -266,17 +265,18 @@ export default function FishDetails() {
 
             {/* WYSTĘPOWANIE */}
             <View style={styles.infoBlock}>
-              <Text style={styles.infoTitle}>
+               <Text style={styles.infoTitle}>
                 {getTranslation(
                   "fishDetails.occurrence",
                   languageCode
                 )}
               </Text>
+              
 
               <Text style={styles.description}>
-                {fish.feeding_places}
+                {fish.feedingPlaces}
               </Text>
-            </View>
+            </View> 
 
             {/* WYGLĄD */}
             <View style={styles.infoBlock}>
@@ -324,16 +324,13 @@ export default function FishDetails() {
             icon="shield-checkmark-outline"
           >
             {[
-              `${getTranslation(
-                "fishDetails.protectionLength",
-                languageCode
-              )}: ${protectionLength}`,
-
+              minProtectionLength,
+              maxProtectionLength,
               `${getTranslation(
                 "fishSearch.endangered",
                 languageCode
               )}: ${
-                fish.is_endangered
+                fish.isEndangered
                   ? getTranslation(
                       "common.yes",
                       languageCode
@@ -445,8 +442,8 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
   },
 
   infoBlock: {
-    gap: 4,
-    marginTop: 6,
+    gap: 8,
+    marginTop: 8,
   },
 
   infoTitle: {
@@ -493,8 +490,8 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
 
   sectionContent: {
     gap: 10,
-    marginLeft: 66,
-    marginTop: 14,
+    marginLeft: 57,
+    marginTop: 16,
   },
 
   sectionText: {

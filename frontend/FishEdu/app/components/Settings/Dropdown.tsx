@@ -1,7 +1,7 @@
 import { Host, DropdownMenu, DropdownMenuItem, Button, Text } from '@expo/ui/jetpack-compose';
 import { useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { LanguageCode, LanguageLabels } from '@/app/(tabs)/settings';
+import { LanguageCode, LanguageLabels } from '@/app/constants/language';
 import { useLanguage } from '@/app/hooks/useLanguage/useLanguage';
 import { getTranslation } from '@/app/utils/translation/getTranslation';
 import { useTheme } from '@/app/hooks/useTheme/useTheme';
@@ -20,10 +20,10 @@ export default function BaseDropdownMenu({
 }: localProps) {
   const [isExpanded, setIsExpanded] = useState(false)
   const { setLanguage, languageCode } = useLanguage()
-  const { colors } = useTheme()
+  const { colors, mode } = useTheme()
   
   return (
-    <Host matchContents>
+    <Host matchContents colorScheme={mode}>
       <DropdownMenu expanded={isExpanded} onDismissRequest={() => setIsExpanded(false)}>
         <DropdownMenu.Trigger>
           <Button 

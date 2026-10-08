@@ -1,6 +1,6 @@
 import { Cache, CacheEntry } from "@/app/types/cache"
 import AsyncStorage from "@react-native-async-storage/async-storage"
-import { LanguageCode } from "../(tabs)/settings"
+import { LanguageCode } from "../constants/language"
 import { STALE_TIME } from "../constants/cache"
 
 const KEY = "APP_CACHE"
@@ -49,6 +49,6 @@ export function isCacheValid<T>(cacheEntry: CacheEntry<T> | undefined) {
   return cacheEntry  && isDataStale
 }
 
-export function getCacheEntry<T>(cache: Cache<T> | null, localStorageId: string, language: LanguageCode) {
+export function getCacheEntry<T>(cache: Cache<T> | null, localStorageId: string, language: LanguageCode) { 
   return cache?.[localStorageId]?.[language]
 }

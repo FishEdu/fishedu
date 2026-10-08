@@ -1,10 +1,10 @@
-import { JSX } from "react";
+import { JSX, ReactNode } from "react";
 import { StyleSheet, View } from "react-native";
 import { AppColors } from "@/app/constants/theme";
 import { useTheme } from "@/app/hooks/useTheme/useTheme";
 
 type localProps = {
-  children: JSX.Element
+  children: ReactNode
 }
 
 function Container({ children }: localProps) {

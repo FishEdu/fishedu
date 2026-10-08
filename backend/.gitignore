@@ -1,6 +1,7 @@
 # Venv
 .venv/
 .venv/*
+.venv-fishedu/
 
 # Env
 .env
@@ -9,3 +10,6 @@
 **/__pycache__/
 **/*.pyc
 **/*.pyo
+
+# User-uploaded record photos
+uploads/

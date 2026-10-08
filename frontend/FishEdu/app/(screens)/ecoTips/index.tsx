@@ -32,7 +32,7 @@ export default function EcoTips() {
 
   return (
     <Container>
-      <View style={{ flex: 1 }}>
+      <View style={{ flex: 1, paddingBottom: 64 }}>
         <Text style={styles.heading}>
           { getTranslation('ecoTips.heading', language) }
         </Text>

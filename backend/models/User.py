@@ -4,6 +4,8 @@ from sqlalchemy import Column, Date, DateTime, Integer, String
 
 from database import Base
 
+from sqlalchemy.orm import relationship
+
 class User(Base):
     __tablename__ = "users"
 
@@ -22,4 +24,9 @@ class User(Base):
     modified_at = Column(
         DateTime,
         default=lambda: datetime.now(timezone.utc)
+    )
+
+    records = relationship(
+        "CatchRecord",
+        back_populates="user",
     )
