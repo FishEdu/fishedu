@@ -1,4 +1,6 @@
 import { debounce } from "@/app/utils/debounce";
+import { AppColors } from "@/app/constants/theme";
+import { useTheme } from "@/app/hooks/useTheme/useTheme";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { StyleSheet } from "react-native";
 import InputGroup from "../FormInputs/InputGroup";
@@ -25,6 +27,8 @@ export default function Search<T>({
   setItems,
   fetchFn,
 }: LocalProps<T>) {  
+  const { colors } = useTheme()
+  const styles = createStyles(colors)
   return (
     <InputGroup
        styles={{
@@ -54,25 +58,26 @@ export default function Search<T>({
         }, 500)
       }}
 
-      icon={<Ionicons name='search' size={24} />}
+      icon={<Ionicons name='search' size={24} color={colors.text.main} />}
     />
   )
 }
 
-const styles = StyleSheet.create({
+const createStyles = (colors: AppColors) => StyleSheet.create({
   input: {
+    color: colors.text.main,
     fontSize: 20,
     width: '100%',
     overflow: 'hidden'
   },
   container: {
-    backgroundColor: 'white',
+    backgroundColor: colors.background.card,
     borderRadius: 24,
     marginBottom: 24,
     overflow: 'hidden'
   },
   inputWrapper: {
-    backgroundColor: 'white',
+    backgroundColor: colors.background.card,
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',

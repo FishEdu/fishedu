@@ -3,9 +3,9 @@ import { useTheme } from "@/app/hooks/useTheme/useTheme"
 import { StyleSheet, View } from "react-native"
 import { Picker } from "@react-native-picker/picker"
 import { getTranslation } from "@/app/utils/translation/getTranslation"
-import { LanguageCode } from "@/app/(tabs)/settings"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { useEffect, useState } from "react"
+import { LanguageCode } from "@/app/constants/language"
 
 type Props = {
   value: string

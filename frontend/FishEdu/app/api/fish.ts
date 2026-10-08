@@ -1,12 +1,12 @@
 export type FishGetResponse = {
   id: number,
-  min_protection_length: number,
-  max_protection_length: number,
-  is_endangered: boolean,
+  minProtectionLength: number,
+  maxProtectionLength: number,
+  isEndangered: boolean,
   name: string,
   description: string,
   appearance: string,
-  feeding_places: string,
+  feedingPlaces: string,
   preferences: string,
   handling: string
 }

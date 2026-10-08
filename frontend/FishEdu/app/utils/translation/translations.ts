@@ -6,6 +6,7 @@ export const translations = {
     'common.changeLanguage': 'Zmień język',
     'settings.darkMode': 'Tryb ciemny',
     'common.back': 'Confnij',
+    'common.description': 'Opis',
 
     'tabs.home': 'Strona główna',
     'tabs.education': 'Edukacja',
@@ -13,7 +14,6 @@ export const translations = {
     'tabs.fishSearch': 'Ryby',
     'tabs.records': 'Rekordy',
     
-    'settings.darkMode': 'Tryb ciemny',
     
     'home.welcome': 'Witaj, użytkowniku!',
     'home.button.begginerGuide': 'Niezbędnik początkującego',
@@ -22,15 +22,16 @@ export const translations = {
     'home.button.recipes': 'Przepisy na zanęty i przynęty',
     'home.button.fishProtection': 'Okresy i wymary ochronne',
     'home.button.saved': 'Zapisane',
-    'tabs.home': 'Strona Główna',
-    'tabs.education': 'Edukacja',
-    'tabs.settings': 'Ustawienia',
-    'tabs.fishSearch': 'Szukaj ryby',
+    
     'fishSearch.name': 'nazwa',
     'fishSearch.environment': 'środowisko',
     'fishSearch.endangered': 'zagrożona',
     'fishSearch.searchFish': 'Wyszukaj rybę...',
     'fishSearch.fishNotFound': 'Nie znaleziono ryb',
+    'fishSearch.results': 'Ryby',
+    'fishSearch.filter.all': 'Wszystkie',
+    'fishSearch.filter.endangered': 'Zagrożone',
+    'fishSearch.filter.notEndangered': 'Niezagrożone',
 
     'fishDetails.back': 'cofnij',
     'fishDetails.favorite': 'ulubiona ryba',
@@ -40,7 +41,8 @@ export const translations = {
     'fishDetails.preferences': 'preferencje',
     'fishDetails.handling': 'obchodzenie się',
     'fishDetails.protectionInPoland': 'ochrona w Polsce',
-    'fishDetails.protectionLength': 'wymiar ochronny (min - maks, w cm)',
+    'fishDetails.minProtectionLength': 'Minimalny wymiar ochronny: ',
+    'fishDetails.maxProtectionLength': 'Maksymalny wymiar ochronny:   ',
     'fishDetails.protectionLength.none': 'brak',
     
     'ecoTips.heading': 'WĘDKARSKIE PORADY EKOLOGICZNE',
@@ -88,7 +90,7 @@ export const translations = {
     'education.video.defaultTitle': 'Film',
     'education.video.notFound': 'Nie udało się znaleźć filmu.',
 
-    'records.yourRecords': 'Twoje rekordy',
+       'records.yourRecords': 'Twoje rekordy',
     'records.recentlyAdded': 'Ostatnio dodane',
     'records.searchSpot': 'Wyszukaj łowisko',
     'records.noRecords': 'Nie masz jeszcze rekordów',
@@ -124,6 +126,14 @@ export const translations = {
     'records.fishingSpot.river': 'Rzeka',
     'records.fishingSpot.sea': 'Morze',
     'records.selectFishingSpot': 'Wybierz łowisko',
+
+    'records.photoTooLarge': 'Zdjęcie jest zbyt duże',
+    'records.photoUnsupported': 'Format zdjęcia nieobsługiwany',
+    'records.photoError': 'Wystąpił błąd ze zdjęciem',
+
+    'records.photoUploadError': 'Wystąpił błąd podczas dodawanie zdjęcia',
+    'records.changePhoto': 'Zmień zdjęcie',
+    'records.removePhoto': 'Usuń zdjęcie'
   },
 
   en: {
@@ -133,15 +143,14 @@ export const translations = {
     'common.changeLanguage': 'Change language',
     'settings.darkMode': 'Dark mode',
     'common.back': 'Back',
+    'common.description': 'Description',
     
     'tabs.home': 'Home',
     'tabs.education': 'Education',
     'tabs.settings': 'Settings',
     'tabs.fishSearch': 'Search Fish',
     'tabs.records': 'Records',
-    
-    'settings.darkMode': 'Dark mode',
-    
+        
     'home.welcome': 'Welcome, user!',
     'home.button.begginerGuide': 'Beginner\'s Essentials',
     'home.button.ecoTips': 'Eco-friendly Fishing Tips',
@@ -156,6 +165,10 @@ export const translations = {
     'fishSearch.endangered': 'endangered',
     'fishSearch.searchFish': 'search fish...',
     'fishSearch.fishNotFound': 'No fish found',
+    'fishSearch.results': 'Fish',
+    'fishSearch.filter.all': 'All',
+    'fishSearch.filter.endangered': 'Endangered',
+    'fishSearch.filter.notEndangered': 'Not endangered',
 
     'fishDetails.back': 'back',
     'fishDetails.favorite': 'favorite fish',
@@ -165,7 +178,8 @@ export const translations = {
     'fishDetails.preferences': 'preferences',
     'fishDetails.handling': 'handling',
     'fishDetails.protectionInPoland': 'protection in Poland',
-    'fishDetails.protectionLength': 'protection length (min - max, in cm)',
+    'fishDetails.minProtectionLength': 'min protection length: ',
+    'fishDetails.maxProtectionLength': 'min protection length: ',
     'fishDetails.protectionLength.none': 'none',
     
     'ecoTips.heading': 'FISHING ECO TIPS',
@@ -243,5 +257,11 @@ export const translations = {
     'records.fishingSpot.river': 'River',
     'records.fishingSpot.sea': 'Sea',
     'records.selectFishingSpot': 'Select fishing spot',
+    'records.photoTooLarge': 'The photo is too large', 
+    'records.photoUnsupported': 'Unsupported photo format', 
+    'records.photoError': 'An error occurred with the photo',
+    'records.photoUploadError': 'An error occurred while adding the photo', 
+    'records.changePhoto': 'Change photo', 
+    'records.removePhoto': 'Remove photo'
   }
 } as const

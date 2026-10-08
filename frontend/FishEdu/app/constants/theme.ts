@@ -8,11 +8,16 @@ export type AppColors = {
     dangerSoft: string;
     secondarySoft: string;
     overlay: string;
-    photoOverlay: string;
-    media: string;
   };
-  border: { card: string; subtle: string };
-  text: { main: string; muted: string; onPrimary: string };
+  border: {
+    card: string;
+    subtle: string;
+  };
+  text: {
+    main: string;
+    muted: string;
+    onPrimary: string;
+  };
   primary: string;
   secondary: string;
   danger: string;
@@ -27,13 +32,11 @@ export type AppColors = {
 export const lightColors: AppColors = {
   background: {
     app: "#f0f4f8",
-    media: "#1a365d",
     card: "#ffffff",
     primarySoft: "#e7f4fb",
     dangerSoft: "#fdecea",
     secondarySoft: "#e6f7f5",
     overlay: "rgba(26, 54, 93, 0.28)",
-    photoOverlay: "rgba(0, 0, 0, 0.65)",
   },
   border: { card: "#e4e9f0", subtle: "#d9e2ec" },
   text: { main: "#1a365d", muted: "#627d98", onPrimary: "#ffffff" },
@@ -44,20 +47,18 @@ export const lightColors: AppColors = {
   badges: {
     all: { background: "#f0f4f8", text: "#486581", border: "#d9e2ec" },
     beginner: { background: "#e6f4ea", text: "#2e7d32", border: "#c2e7ca" },
-    advanced: { background: "#e4ddff", text: "#6941c6", border: "#b9a4ed" },
+    advanced: { background: "#f0f0fa", text: "#5a67d8", border: "#d6d6f5" },
   },
 };
 
 export const darkColors: AppColors = {
   background: {
     app: "#10202d",
-    media: "#080f15",
     card: "#172d3d",
     primarySoft: "#153d58",
     dangerSoft: "#472826",
     secondarySoft: "#173d3a",
     overlay: "rgba(0, 0, 0, 0.42)",
-    photoOverlay: "rgba(0, 0, 0, 0.65)",
   },
   border: { card: "#29485c", subtle: "#3b5a6e" },
   text: { main: "#edf6fb", muted: "#b1c4d2", onPrimary: "#ffffff" },
@@ -68,6 +69,6 @@ export const darkColors: AppColors = {
   badges: {
     all: { background: "#1c3547", text: "#c4d7e4", border: "#3b5a6e" },
     beginner: { background: "#1c3c32", text: "#9cdeb1", border: "#356751" },
-    advanced: { background: "#3a2857", text: "#e0c8ff", border: "#7953a8" },
+    advanced: { background: "#2c304f", text: "#bdc4ff", border: "#555d91" },
   },
 };

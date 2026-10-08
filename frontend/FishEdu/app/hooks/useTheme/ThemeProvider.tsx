@@ -1,42 +1,27 @@
-import { ReactNode, useEffect, useRef, useState } from "react";
-import { Appearance } from "react-native";
+import { ThemeMode, darkColors, lightColors } from "@/app/constants/theme";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { darkColors, lightColors, ThemeMode } from "@/app/constants/theme";
+import { ReactNode, useEffect, useState } from "react";
 import { ThemeContext } from "./ThemeContext";
 
-export const ThemeProvider = ({ children }: { children: ReactNode }) => {
+const THEME_MODE_KEY = "themeMode";
+
+export function ThemeProvider({ children }: { children: ReactNode }) {
   const [mode, setModeState] = useState<ThemeMode>("light");
-  const changedByUser = useRef(false);
 
   useEffect(() => {
-    let active = true;
-    AsyncStorage.getItem("themeMode")
-      .then(savedMode => {
-        if (active && !changedByUser.current && (savedMode === "light" || savedMode === "dark")) {
-          setModeState(savedMode);
-        }
-      })
-      .catch(error => console.error("Failed to load theme", error));
-    return () => { active = false; };
+    AsyncStorage.getItem(THEME_MODE_KEY).then(value => {
+      if (value === "light" || value === "dark") setModeState(value);
+    });
   }, []);
 
-  useEffect(() => {
-    Appearance.setColorScheme(mode);
-  }, [mode]);
-
   const setMode = async (nextMode: ThemeMode) => {
-    changedByUser.current = true;
     setModeState(nextMode);
-    try {
-      await AsyncStorage.setItem("themeMode", nextMode);
-    } catch (error) {
-      console.error("Failed to save theme", error);
-    }
+    await AsyncStorage.setItem(THEME_MODE_KEY, nextMode);
   };
 
   return (
-    <ThemeContext.Provider value={{ mode, colors: mode === "dark" ? darkColors : lightColors, setMode }}>
+    <ThemeContext.Provider value={{ colors: mode === "dark" ? darkColors : lightColors, mode, setMode }}>
       {children}
     </ThemeContext.Provider>
   );
-};
+}

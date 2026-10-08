@@ -14,7 +14,6 @@ export default function QuizResult({ result, onRetry }: Props) {
   const styles = createStyles(colors);
   return (
     <View style={styles.resultCard}>
-
       <Ionicons name={result.passed ? "checkmark-circle" : "refresh-circle"} size={56} color={result.passed ? colors.secondary : colors.primary} />
       <Text style={styles.resultTitle}>{getTranslation("education.quiz.result", language)}</Text>
       <Text style={styles.score}>{result.score}%</Text>
@@ -24,15 +23,25 @@ export default function QuizResult({ result, onRetry }: Props) {
         <Text style={styles.primaryButtonText}>{getTranslation("education.quiz.retry", language)}</Text>
       </Pressable>
     </View>
-
   );
 }
 
 const createStyles = (colors: AppColors) => StyleSheet.create({
-  resultCard: { alignItems: "center", alignSelf: "stretch", backgroundColor: colors.background.card, borderColor: colors.border.card, borderRadius: 8, borderWidth: 1, gap: 12, justifyContent: "center", marginTop: 36, padding: 28 },
+  resultCard: { 
+    alignItems: "center", 
+    alignSelf: "stretch", 
+    backgroundColor: colors.background.card,
+    padding: 24,
+    borderColor: colors.border.card, 
+    borderRadius: 8, 
+    borderWidth: 1, 
+    gap: 12, 
+    justifyContent: "center", 
+    marginTop: 36, 
+  },
   resultTitle: { color: colors.text.main, fontSize: 22, fontWeight: "700" },
   score: { color: colors.primary, fontSize: 42, fontWeight: "700" },
   resultText: { color: colors.text.muted, fontSize: 16 },
-  primaryButton: { alignItems: "center", backgroundColor: colors.primary, borderRadius: 8, flex: 1, flexDirection: "row", gap: 8, justifyContent: "center", minHeight: 50, paddingHorizontal: 16 },
+  primaryButton: { alignItems: "center", backgroundColor: colors.primary, borderRadius: 8, flexDirection: "row", gap: 8, justifyContent: "center", minHeight: 50, paddingHorizontal: 16 },
   primaryButtonText: { color: colors.text.onPrimary, fontSize: 16, fontWeight: "600" },
 });

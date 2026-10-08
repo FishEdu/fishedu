@@ -1,8 +1,10 @@
-import { createContext } from "react";
 import { AppColors, ThemeMode } from "@/app/constants/theme";
+import { createContext } from "react";
 
-export const ThemeContext = createContext<{
-  mode: ThemeMode;
+export type ThemeContextType = {
   colors: AppColors;
+  mode: ThemeMode;
   setMode: (mode: ThemeMode) => Promise<void>;
-} | undefined>(undefined);
+};
+
+export const ThemeContext = createContext<ThemeContextType | null>(null);

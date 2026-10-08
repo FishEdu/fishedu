@@ -11,9 +11,9 @@ import {createRecord, updateRecord, } from "@/app/utils/fetch/records/fetchRecor
 import { useFetchFish } from "@/app/hooks/useFetchFish/useFetchFish"
 import { CatchRecordGetResponse } from "@/app/api/records"
 import { getTranslation } from "@/app/utils/translation/getTranslation"
-import { LanguageCode } from "@/app/(tabs)/settings"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { resolveRecordPhotoUrl, getSelectedRecordPhotoUri } from "@/app/utils/fetch/records/recordPhoto"
+import { LanguageCode } from "@/app/constants/language"
 
 
 type FormData = {
@@ -656,7 +656,7 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: 16,
-    backgroundColor: colors.background.photoOverlay,
+    backgroundColor: colors.background.overlay,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -750,7 +750,7 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
 
     padding: 6,
 
-    shadowColor: colors.background.photoOverlay,
+    shadowColor: colors.background.overlay,
     shadowOpacity: 0.14,
     shadowRadius: 12,
     shadowOffset: {

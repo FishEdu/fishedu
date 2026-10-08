@@ -10,6 +10,8 @@ type LocalSearchParams = { id: string; name: string; content: string };
 
 export default function RecipeScreen() {
   const { language } = useLanguage();
+  const { colors } = useTheme()
+  const styles = createStyles(colors)
   const { name, content } = useLocalSearchParams<LocalSearchParams>();
   return (
     <ScrollView style={styles.screen}>
@@ -23,9 +25,9 @@ export default function RecipeScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const createStyles = (colors: AppColors) => StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: "hsl(180, 5%, 96%)",
+    backgroundColor: colors.background.app,
   },
 });
