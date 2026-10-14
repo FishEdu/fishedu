@@ -9,7 +9,5 @@ export const useFetchRecipes = () => {
 
   const { data: recipes } = useFetchQuery<RecipesGetResponse>({ endpoint, localStorageId, language })
 
-  console.log(recipes)
-
   return recipes
 }

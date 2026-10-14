@@ -1,8 +1,12 @@
 import { RecipesGetResponse } from "@/app/api/recipes"
+import { AppColors } from "@/app/constants/theme"
+import { useTheme } from "@/app/hooks/useTheme/useTheme"
 import { router } from "expo-router"
 import { Pressable, StyleSheet, Text, View } from "react-native"
 
 export default function RecipesListElement({ id, content, name }: RecipesGetResponse) {
+  const { colors } = useTheme()
+  const styles = createStyles(colors)
   const handlePress = () => {
     const recipeDetailsHref = {
       pathname: "/(screens)/recipes/[id]",
@@ -33,9 +37,9 @@ export default function RecipesListElement({ id, content, name }: RecipesGetResp
   )
 }
 
-const styles = StyleSheet.create({
+const createStyles = (colors: AppColors) => StyleSheet.create({
    container: {
-    backgroundColor: 'hsl(0, 0%, 100%)',
+    backgroundColor: colors.background.card,
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
@@ -50,6 +54,7 @@ const styles = StyleSheet.create({
     opacity: 0.75,
   },
   name: {
+    color: colors.text.main,
     fontSize: 18
   }
 })

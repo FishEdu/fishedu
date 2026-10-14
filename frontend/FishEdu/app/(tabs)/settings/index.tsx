@@ -1,58 +1,31 @@
-import BaseDropdownMenu from "@/app/components/Settings/Dropdown";
 import Container from "@/app/components/ui/Container";
+import LanguageSetting from "@/app/components/Settings/LanguageSetting";
+import ThemeSetting from "@/app/components/Settings/ThemeSetting";
+import { AppColors } from "@/app/constants/theme";
+import { useTheme } from "@/app/hooks/useTheme/useTheme";
 import { StyleSheet, View } from "react-native";
 
-
-export enum LanguageCode {
-  PL = 'pl',
-  EN = 'en',
-}
-
-export const LanguageLabels: Record<LanguageCode, string> = {
-  [LanguageCode.PL]: 'Polski',
-  [LanguageCode.EN]: 'English',
-}
-
 export default function Settings() {
+  const { colors } = useTheme();
+  const styles = createStyles(colors);
   return (
     <Container>
-      <View
-        style={styles.container}
-      >
-        <View style={styles.optionContainer}>
-          <BaseDropdownMenu
-            buttonText='Choose language'
-            menuItems={
-              LanguageLabels
-            }
-          />
-        </View>
+      <View style={styles.container}>
+        <LanguageSetting />
+        <ThemeSetting />
       </View>
     </Container>
-  )
+  );
 }
 
-const styles = StyleSheet.create({
+const createStyles = (colors: AppColors) => StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: colors.background.app,
     minHeight: '100%',
-    paddingBlock: 16,
+    paddingTop: 70,
+    paddingBottom: 16,
     paddingInline: 8,
-    alignItems: 'flex-end'
+    gap: 20,
   },
-  title: {
-    fontSize: 24,
-    fontWeight: '600'
-  },
-  button: {
-    backgroundColor: 'white',
-    fontSize: 32,
-    marginLeft: 'auto'
-  },
-  optionContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: 4
-  }
-})
+});

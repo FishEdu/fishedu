@@ -8,7 +8,7 @@ type localProps = {
 
 export default function RecipesList({ recipes }: localProps) {
   return (
-    <FlatList 
+    <FlatList
       contentContainerStyle={styles.list}
       data={recipes}
       renderItem={
@@ -28,6 +28,7 @@ export default function RecipesList({ recipes }: localProps) {
 const styles = StyleSheet.create({
   list: {
     display: 'flex',
-    gap: 16
+    gap: 16,
+    paddingBottom: 64
   }
 })

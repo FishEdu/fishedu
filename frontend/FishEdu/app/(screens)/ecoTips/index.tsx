@@ -1,5 +1,7 @@
 import Container from "@/app/components/ui/Container";
 import EcoTipsList from "@/app/components/EcoTips/EcoTipsList";
+import { AppColors } from "@/app/constants/theme";
+import { useTheme } from "@/app/hooks/useTheme/useTheme";
 import { useFetchEcoTips } from "@/app/hooks/useFetchEcoTips/useFetchEcoTips";
 import { useLanguage } from "@/app/hooks/useLanguage/useLanguage";
 import { getTranslation } from "@/app/utils/translation/getTranslation";
@@ -9,6 +11,8 @@ import { StyleSheet, Text, View } from "react-native";
 
 export default function EcoTips() {
   const { data: ecoTips } = useFetchEcoTips()
+  const { colors } = useTheme()
+  const styles = createStyles(colors)
   const [ isLoading, setIsLoading ] = useState<boolean>(false)
   const { language } = useLanguage()
   const previousLanguage = useRef(language)
@@ -28,13 +32,13 @@ export default function EcoTips() {
 
   return (
     <Container>
-      <View style={{ flex: 1 }}>
+      <View style={{ flex: 1, paddingBottom: 64 }}>
         <Text style={styles.heading}>
           { getTranslation('ecoTips.heading', language) }
         </Text>
         {
           isLoading ? (
-            <Text>{ getTranslation('common.loading', language) }</Text>
+            <Text style={styles.feedback}>{ getTranslation('common.loading', language) }</Text>
           ) :
           (
             <EcoTipsList
@@ -47,10 +51,12 @@ export default function EcoTips() {
   )
 }
 
-const styles = StyleSheet.create({
+const createStyles = (colors: AppColors) => StyleSheet.create({
   heading: {
+    color: colors.text.main,
     fontWeight: 800,
     fontSize: 40,
     marginBlock: 20
-  } 
+  },
+  feedback: { color: colors.text.muted },
 })

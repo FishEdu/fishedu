@@ -1,4 +1,4 @@
-import { LanguageCode } from "@/app/(tabs)/settings"
+import { LanguageCode } from "@/app/constants/language"
 import { FishGetResponse } from "@/app/api/fish"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { fetchApi } from "../fetchApi"

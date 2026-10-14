@@ -1,4 +1,4 @@
-import { LanguageCode } from '@/app/(tabs)/settings';
+import { LanguageCode } from '@/app/constants/language';
 import { createContext } from 'react';
 
 export type LanguageContextType = {

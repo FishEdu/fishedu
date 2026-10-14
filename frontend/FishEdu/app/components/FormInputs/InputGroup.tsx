@@ -1,5 +1,6 @@
 import { ReactNode } from "react"
 import { View, Text, TextInput, StyleProp, ViewStyle, TextInputProps, TextStyle } from "react-native"
+import { useTheme } from "@/app/hooks/useTheme/useTheme"
 
 type inputStyles = {
   containerStyles?: StyleProp<ViewStyle>,
@@ -21,10 +22,11 @@ export default function InputGroup({
    inputProps = {},
    icon = null
   }: localProps) {
+    const { colors } = useTheme()
     return (
       <View style={styles?.containerStyles ?? {}}>
         {name && (
-          <Text style={styles?.titleStyles ?? {}}>
+          <Text style={[{ color: colors.text.main }, styles?.titleStyles]}>
             {name}
           </Text>
         )}
@@ -33,8 +35,10 @@ export default function InputGroup({
           { icon ? icon : undefined }
           
           <TextInput 
+            placeholderTextColor={colors.text.muted}
+            selectionColor={colors.primary}
             {...inputProps} 
-            style={[styles?.inputStyles, inputProps?.style]} 
+            style={[{ color: colors.text.main }, styles?.inputStyles, inputProps?.style]}
           />
         </View>
       </View>

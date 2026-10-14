@@ -9,14 +9,14 @@ type fishListProps = {
 export default function FishList({ fish }: fishListProps) {
   return (
     <FlatList
+      style={styles.listView}
       contentContainerStyle={styles.list}
       data={fish}
       renderItem={({item}) => 
         <FishListElement
           fish={item}
           name={item.name} 
-          isEndangered={item.is_endangered}
-          feedingPlaces={item.feeding_places}
+          isEndangered={item.isEndangered}
           imageUrl={''}
         />
       }
@@ -26,8 +26,9 @@ export default function FishList({ fish }: fishListProps) {
 }
 
 const styles = StyleSheet.create({
+  listView: { flex: 1 },
   list: {
-    display: 'flex',
-    gap: 16
+    gap: 10,
+    paddingBottom: 28,
   }
 })

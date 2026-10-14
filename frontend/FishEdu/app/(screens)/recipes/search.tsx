@@ -5,8 +5,6 @@ import { useFetchRecipes } from "@/app/hooks/useFetchRecipes/useFetchRecipes";
 
 export default function RecipesSearch() {
   const recipes = useFetchRecipes()
-
-  console.log(recipes)
   
   return (
     <Container>

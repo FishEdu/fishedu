@@ -1,4 +1,6 @@
 import { View, Text, StyleSheet, ViewStyle } from "react-native"
+import { AppColors } from "@/app/constants/theme"
+import { useTheme } from "@/app/hooks/useTheme/useTheme"
 
 type localProps = {
   title: string,
@@ -7,6 +9,8 @@ type localProps = {
 }
 
 export default function FishInfoGroup({ title, text, containerStyles }: localProps) {
+  const { colors } = useTheme()
+  const styles = createStyles(colors)
   return (
     <View style={[ styles.container, containerStyles ]}>
       <Text style={styles.title}>
@@ -19,7 +23,7 @@ export default function FishInfoGroup({ title, text, containerStyles }: localPro
   )
 }
 
-const styles = StyleSheet.create({
+const createStyles = (colors: AppColors) => StyleSheet.create({
   container: {
     display: 'flex',
     flexDirection: 'column',
@@ -28,9 +32,10 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 14,
-    color: 'hsl(0, 0%, 40%)'
+    color: colors.text.muted
   },
   text: {
+    color: colors.text.main,
     fontSize: 18,
     fontWeight: 600,
     wordWrap: 'break-word'

@@ -1,33 +1,35 @@
 import { StyleSheet } from "react-native";
+import { AppColors } from "@/app/constants/theme";
 
-export const registerFormStyles = StyleSheet.create({
+export const createRegisterFormStyles = (colors: AppColors) => StyleSheet.create({
   inputContainerStyles: {
     paddingBlock: 16,
     fontSize: 20
   },
   titleStyles: {
+    color: colors.text.main,
     fontSize: 32,
     fontWeight: "600",
     paddingBottom: 8
   },
   inputStyles: {
-    color: "hsl(0, 0%, 35%)",
+    color: colors.text.main,
   },
   inputWrapper: {
-    backgroundColor: "white",
+    backgroundColor: colors.background.card,
     paddingBlock: 8,
     paddingInline: 12,
     borderRadius: 12
   },
   submitBtn: {
     marginBlock: 16,
-    backgroundColor: "hsl(226, 75%, 59%)",
+    backgroundColor: colors.primary,
     padding: 16,
     borderRadius: 12,
     alignItems: "center"
   },
   submitText: {
-    color: "white",
+    color: colors.text.onPrimary,
     fontSize: 24,
     fontWeight: "600"
   }
