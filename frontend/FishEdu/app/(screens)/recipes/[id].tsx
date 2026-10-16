@@ -5,6 +5,8 @@ import { useLanguage } from "@/app/hooks/useLanguage/useLanguage";
 import { getTranslation } from "@/app/utils/translation/getTranslation";
 import { router, useLocalSearchParams } from "expo-router";
 import { ScrollView, StyleSheet } from "react-native";
+import { AppColors } from "@/app/constants/theme";
+import { useTheme } from "@/app/hooks/useTheme/useTheme";
 
 type LocalSearchParams = { id: string; name: string; content: string };
 
