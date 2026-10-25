@@ -25,7 +25,7 @@ export default function QuizActions({ questionIndex, totalQuestions, onPrevious,
         style={styles.primaryButton}
       >
         <Text style={styles.primaryButtonText}>{getTranslation(questionIndex === totalQuestions - 1 ? "education.quiz.finish" : "education.quiz.next", language)}</Text>
-        <Ionicons name="arrow-forward" size={18} color={colors.text.onPrimary} />
+        <Ionicons name="chevron-forward" size={18} color={colors.text.onPrimary} />
       </Pressable>
     </View>
 

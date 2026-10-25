@@ -16,7 +16,7 @@ export default function EducationMaterialActions({ material }: { material: Educa
 
     if (material.type === "pdf") {
       const pdfHref = {
-        pathname: "/(tabs)/education/pdf",
+        pathname: "/material/pdf",
         params: { id: String(material.id), title: material.title, url: material.file_name }
       } as unknown as Parameters<typeof router.push>[0];
       router.push(pdfHref);
@@ -25,7 +25,7 @@ export default function EducationMaterialActions({ material }: { material: Educa
 
     if (material.type === "video") {
       const videoHref = {
-        pathname: "/(tabs)/education/video",
+        pathname: "/material/video",
         params: { id: String(material.id), title: material.title, url: material.file_name }
       } as unknown as Parameters<typeof router.push>[0];
       router.push(videoHref);
@@ -38,7 +38,7 @@ export default function EducationMaterialActions({ material }: { material: Educa
   const openQuiz = () => {
     if (!material?.quiz) return;
     const quizHref = {
-      pathname: "/(tabs)/education/quiz",
+      pathname: "/material/quiz",
       params: { id: String(material.id) }
     } as unknown as Parameters<typeof router.push>[0];
     router.push(quizHref);
