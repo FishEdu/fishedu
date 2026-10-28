@@ -10,12 +10,16 @@ import EducationMaterialHeader from "@/app/components/Education/EducationMateria
 import EducationMaterialActions from "@/app/components/Education/EducationMaterialActions";
 import { useFetchEducationMaterial } from "@/app/hooks/useFetchEducationMaterial/useFetchEducationMaterial";
 import { router, useLocalSearchParams } from "expo-router";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 
 export default function EducationMaterialDetails() {
   const { colors } = useTheme();
   const { language } = useLanguage();
-  const { id } = useLocalSearchParams<{ id: string }>();
+  const { id, from } = useLocalSearchParams<{
+  id: string;
+  from?: string;
+}>();
   const { material, loading } = useFetchEducationMaterial(id, language);
   const styles = createStyles(colors);
 
@@ -23,23 +27,39 @@ export default function EducationMaterialDetails() {
   if (!material) return <EducationFeedback message={getTranslation("education.detail.unavailable", language)} />;
 
   return (
-    <ScrollView style={styles.screen} contentContainerStyle={styles.content}>
-      <Container>
-        <View style={styles.page}>
-          <BackButton label={getTranslation("education.detail.back", language)} onPress={() => router.back()} />
-          <EducationMaterialImage uri={material.image_url} />
-          <EducationMaterialHeader material={material} />
-          {material.content ? <Text style={styles.contentText}>{material.content}</Text> : null}
-          <EducationMaterialActions material={material} />
-        </View>
-      </Container>
-    </ScrollView>
+    <SafeAreaView style={styles.screen} edges={["top"]}>
+      <ScrollView
+        style={styles.screen}
+        contentContainerStyle={styles.content}
+      >
+        <Container>
+          <View style={styles.page}>
+            <BackButton
+              label={getTranslation("education.detail.back", language)}
+              onPress={() => router.back()}
+            />
+
+            <EducationMaterialImage uri={material.image_url} />
+
+            <EducationMaterialHeader material={material} />
+
+            {material.content ? (
+              <Text style={styles.contentText}>
+                {material.content}
+              </Text>
+            ) : null}
+
+            <EducationMaterialActions material={material} />
+          </View>
+        </Container>
+      </ScrollView>
+    </SafeAreaView>
   );
-}
+  }
 
 const createStyles = (colors: AppColors) => StyleSheet.create({
   screen: { backgroundColor: colors.background.app, flex: 1 },
   content: { flexGrow: 1 },
-  page: { gap: 20, paddingBlock: 12, paddingBottom: 28 },
+  page: { gap: 20, paddingBlock: 24, paddingBottom: 28 },
   contentText: { color: colors.text.main, fontSize: 16, lineHeight: 25 },
 });

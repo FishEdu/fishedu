@@ -26,7 +26,7 @@ export default function FishListElement({
 
   const handlePress = () => {
     const fishDetailsHref = {
-      pathname: "/(tabs)/fish/[id]",
+      pathname: "/fish/[id]",
       params: {
         id: String(fish.id),
         fish: JSON.stringify(fish),

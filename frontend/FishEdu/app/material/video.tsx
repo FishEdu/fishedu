@@ -1,3 +1,4 @@
+
 import { AppColors } from "@/app/constants/theme";
 import { useTheme } from "@/app/hooks/useTheme/useTheme";
 import { useLanguage } from "@/app/hooks/useLanguage/useLanguage";
@@ -7,7 +8,8 @@ import EducationMediaHeader from "@/app/components/Education/EducationMediaHeade
 import { useVideoURL } from "@/app/hooks/useVideoURL/useVideoURL";
 import { goBackToEducationMaterial } from "@/app/utils/education/goBackToEducationMaterial";
 import { useLocalSearchParams } from "expo-router";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function EducationVideoPlayer() {
   const { colors } = useTheme();
@@ -17,13 +19,27 @@ export default function EducationVideoPlayer() {
   const styles = createStyles(colors);
 
   return (
-    <View style={styles.screen}>
-      <EducationMediaHeader title={title || getTranslation("education.video.defaultTitle", language)} onBack={goBackToEducationMaterial} />
+    <SafeAreaView
+      style={styles.screen}
+      edges={["top"]}
+    >
+      <EducationMediaHeader
+        title={
+          title ||
+          getTranslation("education.video.defaultTitle", language)
+        }
+        onBack={goBackToEducationMaterial}
+      />
+
       <EducationVideoView url={url} />
-    </View>
+    </SafeAreaView>
   );
 }
 
-const createStyles = (colors: AppColors) => StyleSheet.create({
-  screen: { backgroundColor: colors.background.app, flex: 1 },
-});
+const createStyles = (colors: AppColors) =>
+  StyleSheet.create({
+    screen: {
+      flex: 1,
+      backgroundColor: colors.background.app,
+    },
+  });

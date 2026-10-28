@@ -5,7 +5,7 @@ export const translations = {
     'common.no': 'nie',
     'common.changeLanguage': 'Zmień język',
     'settings.darkMode': 'Tryb ciemny',
-    'common.back': 'Confnij',
+    'common.back': 'Cofnij',
     'common.description': 'Opis',
 
     'tabs.home': 'Strona główna',
@@ -133,7 +133,23 @@ export const translations = {
 
     'records.photoUploadError': 'Wystąpił błąd podczas dodawanie zdjęcia',
     'records.changePhoto': 'Zmień zdjęcie',
-    'records.removePhoto': 'Usuń zdjęcie'
+    'records.removePhoto': 'Usuń zdjęcie',
+
+    'favorites.syncError': 'Błąd synchronizacji z serwerem',
+    'favorites.retry': "Dotknij, aby spróbować ponownie",
+    'favorites.emptyTitle': "Brak zapisanych materiałów",
+    'favorites.emptyDescription': "Dodaj materiały oraz ryby do ulubionych, aby je tutaj zobaczyć",
+    'favorites.offlineInfo': "Nie masz połączenia z internetem. Niektóre materiały mogą być niedostępne.",
+    'favorites.labels.quiz': "Quiz",
+    'favorites.labels.video': "Film",
+    'favorites.labels.pdf': "Poradnik PDF",
+    'favorites.labels.info': "Informacje",
+    'favorites.labels.course': "Kurs",
+    'favorites.fish': "Ryba",
+    'favorites.title': "Ulubione",
+    'favorites.materialFallback': "Materiał",
+    'favorites.labels.other': "Inne",
+    'favorites.labels.guide': "Poradnik",
   },
 
   en: {
@@ -262,6 +278,22 @@ export const translations = {
     'records.photoError': 'An error occurred with the photo',
     'records.photoUploadError': 'An error occurred while adding the photo', 
     'records.changePhoto': 'Change photo', 
-    'records.removePhoto': 'Remove photo'
+    'records.removePhoto': 'Remove photo',
+
+    'favorites.syncError': 'Error syncing with server',
+    'favorites.retry': "Tap to retry",
+    'favorites.emptyTitle': "No saved materials",
+    'favorites.emptyDescription': "Add materials and fish to favorites to see them here",
+    'favorites.offlineInfo': "You are offline. Some materials may be unavailable.",
+    'favorites.labels.quiz': "Quiz",
+    'favorites.labels.video': "Video",
+    'favorites.labels.pdf': "PDF guide",
+    'favorites.labels.info': "Information",
+    'favorites.labels.course': "Course",
+    'favorites.fish': "Fish",
+    'favorites.title': "Favorites",
+    'favorites.materialFallback': "Material",
+    'favorites.labels.other': "Other",
+    'favorites.labels.guide': "Guide",
   }
 } as const

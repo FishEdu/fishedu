@@ -1,12 +1,15 @@
+
 import { FishGetResponse } from "@/app/api/fish";
 import { AppColors } from "@/app/constants/theme";
 import { useLanguage } from "@/app/hooks/useLanguage/useLanguage";
 import { useTheme } from "@/app/hooks/useTheme/useTheme";
+import { useFavorites } from "@/app/hooks/useFavorites/useFavorites";
 import { getTranslation } from "@/app/utils/translation/getTranslation";
+
 import Ionicons from "@expo/vector-icons/Ionicons";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router, Stack, useLocalSearchParams } from "expo-router";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
+
 import {
   Image,
   Pressable,
@@ -15,8 +18,6 @@ import {
   Text,
   View,
 } from "react-native";
-
-const FAVORITE_FISH_IDS_KEY = "favoriteFishIds";
 
 type FishParams = {
   id: string;
@@ -46,6 +47,7 @@ const parseFishParam = (param?: string | string[]) => {
   }
 };
 
+// SEKCJA ROZWIJANA
 function DetailSection({
   title,
   children,
@@ -62,7 +64,7 @@ function DetailSection({
   return (
     <View style={styles.sectionCard}>
       <Pressable
-        onPress={() => setIsOpen((current) => !current)}
+        onPress={() => setIsOpen(current => !current)}
         style={styles.sectionHeader}
       >
         <View style={styles.sectionIconContainer}>
@@ -100,8 +102,10 @@ function DetailSection({
   );
 }
 
+// SZCZEGÓŁY RYBY
 export default function FishDetails() {
   const params = useLocalSearchParams<FishParams>();
+
   const { languageCode } = useLanguage();
   const { colors } = useTheme();
   const styles = createStyles(colors);
@@ -111,60 +115,57 @@ export default function FishDetails() {
     [params.fish]
   );
 
-  const [isFavorite, setIsFavorite] = useState(false);
-
   const fishId = Number(
     normalizeParam(params.id) ?? fish?.id
   );
 
-  useEffect(() => {
-    const loadFavorite = async () => {
-      const rawFavoriteIds = await AsyncStorage.getItem(
-        FAVORITE_FISH_IDS_KEY
-      );
+  // NOWY SYSTEM ULUBIONYCH
+  // Zapis lokalny + synchronizacja z backendem
+  const {
+    favorites,
+    ready,
+    toggleFavorite,
+  } = useFavorites();
 
-      const favoriteIds = rawFavoriteIds
-        ? (JSON.parse(rawFavoriteIds) as number[])
-        : [];
+  const isFavorite = favorites.fish_ids.includes(fishId);
 
-      setIsFavorite(favoriteIds.includes(fishId));
-    };
+  const canToggleFavorite =
+    ready &&
+    Number.isSafeInteger(fishId) &&
+    fishId > 0;
 
-    if (!Number.isNaN(fishId)) {
-      loadFavorite();
-    }
-  }, [fishId]);
+  const handleToggleFavorite = async () => {
+    if (!canToggleFavorite) return;
 
-  const toggleFavorite = async () => {
-    const rawFavoriteIds = await AsyncStorage.getItem(
-      FAVORITE_FISH_IDS_KEY
-    );
-
-    const favoriteIds = rawFavoriteIds
-      ? (JSON.parse(rawFavoriteIds) as number[])
-      : [];
-
-    const nextFavoriteIds = favoriteIds.includes(fishId)
-      ? favoriteIds.filter((id) => id !== fishId)
-      : [...favoriteIds, fishId];
-
-    await AsyncStorage.setItem(
-      FAVORITE_FISH_IDS_KEY,
-      JSON.stringify(nextFavoriteIds)
-    );
-
-    setIsFavorite(nextFavoriteIds.includes(fishId));
+    await toggleFavorite("fish", fishId);
   };
-  
-  const minProtectionLength = `${getTranslation("fishDetails.minProtectionLength", languageCode)}${fish?.minProtectionLength != null
-    ? `${fish.minProtectionLength} cm`
-    : getTranslation("fishDetails.protectionLength.none", languageCode)
-  }`;
-    
-  const maxProtectionLength = `${getTranslation("fishDetails.maxProtectionLength", languageCode)}${fish?.maxProtectionLength != null
-    ? `${fish.maxProtectionLength} cm`
-    : getTranslation("fishDetails.protectionLength.none", languageCode)
-  }`;
+
+  // WYMIARY OCHRONNE
+  const minProtectionLength =
+    `${getTranslation(
+      "fishDetails.minProtectionLength",
+      languageCode
+    )}${
+      fish?.minProtectionLength != null
+        ? `${fish.minProtectionLength} cm`
+        : getTranslation(
+            "fishDetails.protectionLength.none",
+            languageCode
+          )
+    }`;
+
+  const maxProtectionLength =
+    `${getTranslation(
+      "fishDetails.maxProtectionLength",
+      languageCode
+    )}${
+      fish?.maxProtectionLength != null
+        ? `${fish.maxProtectionLength} cm`
+        : getTranslation(
+            "fishDetails.protectionLength.none",
+            languageCode
+          )
+    }`;
 
   return (
     <ScrollView
@@ -173,6 +174,7 @@ export default function FishDetails() {
     >
       <Stack.Screen options={{ headerShown: false }} />
 
+      {/* POWRÓT */}
       <Pressable
         onPress={() => router.back()}
         style={styles.backButton}
@@ -182,6 +184,7 @@ export default function FishDetails() {
           size={20}
           color={colors.primary}
         />
+
         <Text style={styles.backButtonText}>
           {getTranslation("common.back", languageCode)}
         </Text>
@@ -191,7 +194,7 @@ export default function FishDetails() {
         <>
           <View style={styles.heroImageContainer}>
             <Image
-              source={require("../../../assets/images/fish.jpg")}
+              source={require("../../assets/images/fish.jpg")}
               alt="Fish image"
               style={styles.heroImage}
             />
@@ -211,12 +214,12 @@ export default function FishDetails() {
           {/* ZDJĘCIE + NAZWA + ULUBIONE */}
           <View style={styles.heroImageContainer}>
             <Image
-              source={require("../../../assets/images/fish.jpg")}
+              source={require("../../assets/images/fish.jpg")}
               alt="Fish image"
               style={styles.heroImage}
             />
 
-            {/* DELIKATNE PRZYCIEMNIENIE DOLNEJ CZĘŚCI ZDJĘCIA */}
+            {/* PRZYCIEMNIENIE ZDJĘCIA */}
             <View style={styles.imageOverlay} />
 
             {/* NAZWA RYBY */}
@@ -224,11 +227,21 @@ export default function FishDetails() {
               {fish.name}
             </Text>
 
-            {/* GWIAZDKA */}
+            {/* GWIAZDKA - NOWY SYSTEM */}
             <Pressable
-              onPress={toggleFavorite}
-              style={styles.favoriteButton}
+              onPress={() => {
+                void handleToggleFavorite();
+              }}
+              disabled={!canToggleFavorite}
+              style={[
+                styles.favoriteButton,
+                !canToggleFavorite && { opacity: 0.5 },
+              ]}
               accessibilityRole="button"
+              accessibilityState={{
+                selected: isFavorite,
+                disabled: !canToggleFavorite,
+              }}
               accessibilityLabel={getTranslation(
                 "fishDetails.favorite",
                 languageCode
@@ -265,18 +278,17 @@ export default function FishDetails() {
 
             {/* WYSTĘPOWANIE */}
             <View style={styles.infoBlock}>
-               <Text style={styles.infoTitle}>
+              <Text style={styles.infoTitle}>
                 {getTranslation(
                   "fishDetails.occurrence",
                   languageCode
                 )}
               </Text>
-              
 
               <Text style={styles.description}>
                 {fish.feedingPlaces}
               </Text>
-            </View> 
+            </View>
 
             {/* WYGLĄD */}
             <View style={styles.infoBlock}>
@@ -348,160 +360,157 @@ export default function FishDetails() {
   );
 }
 
-const createStyles = (colors: AppColors) => StyleSheet.create({
-  screen: {
-    flex: 1,
-    backgroundColor: colors.background.app,
-  },
-
-  content: {
-    gap: 14,
-    padding: 16,
-    paddingBottom: 32,
-  },
-
-  /* POWRÓT */
-
-  backButton: {
-    alignItems: "center",
-    alignSelf: "flex-start",
-    flexDirection: "row",
-    gap: 2,
-    paddingTop: 34,
-    paddingEnd: 8,
-  },
-
-  backButtonText: {
-    color: colors.primary,
-    fontSize: 18,
-    fontWeight: "600",
-  },
-
-  /* ZDJĘCIE */
-
-  heroImageContainer: {
-    borderRadius: 16,
-    height: 280,
-    marginTop: 8,
-    overflow: "hidden",
-    position: "relative",
-    width: "100%",
-  },
-
-  heroImage: {
-    height: "100%",
-    width: "100%",
-  },
-
-
-  imageOverlay: {
-    backgroundColor: colors.background.overlay,
-    bottom: 0,
-    height: 60,
-    left: 0,
-    position: "absolute",
-    right: 0,
-  },
-
-
-  fishName: {
-    bottom: 10,
-    color: colors.text.onPrimary,
-    fontSize: 36,
-    fontWeight: "700",
-    left: 20,
-    position: "absolute",
-    textShadowColor: "rgba(0, 0, 0, 0.35)",
-    textShadowOffset: {
-      width: 1,
-      height: 2,
+// STYLE - JASNY I CIEMNY MOTYW
+const createStyles = (colors: AppColors) =>
+  StyleSheet.create({
+    screen: {
+      flex: 1,
+      backgroundColor: colors.background.app,
     },
-    textShadowRadius: 4,
-  },
 
+    content: {
+      gap: 14,
+      padding: 16,
+      paddingBottom: 32,
+    },
 
-  favoriteButton: {
-    alignItems: "center",
-    backgroundColor: colors.background.overlay,
-    borderRadius: 24,
-    height: 48,
-    justifyContent: "center",
-    position: "absolute",
-    right: 16,
-    bottom: 12,
-    width: 48,
-  },
+    // POWRÓT
+    backButton: {
+      alignItems: "center",
+      alignSelf: "flex-start",
+      flexDirection: "row",
+      gap: 2,
+      paddingTop: 34,
+      paddingEnd: 8,
+    },
 
-  /* GŁÓWNA KARTA */
+    backButtonText: {
+      color: colors.primary,
+      fontSize: 18,
+      fontWeight: "600",
+    },
 
-  mainCard: {
-    backgroundColor: colors.background.card,
-    borderRadius: 16,
-    gap: 6,
-    padding: 18,
-  },
+    // ZDJĘCIE
+    heroImageContainer: {
+      borderRadius: 16,
+      height: 280,
+      marginTop: 8,
+      overflow: "hidden",
+      position: "relative",
+      width: "100%",
+    },
 
-  infoBlock: {
-    gap: 8,
-    marginTop: 8,
-  },
+    heroImage: {
+      height: "100%",
+      width: "100%",
+    },
 
-  infoTitle: {
-    color: colors.text.main,
-    fontSize: 18,
-    fontWeight: "700",
-  },
+    imageOverlay: {
+      backgroundColor: colors.background.overlay,
+      bottom: 0,
+      height: 60,
+      left: 0,
+      position: "absolute",
+      right: 0,
+    },
 
-  description: {
-    color: colors.text.main,
-    fontSize: 16,
-    lineHeight: 21,
-  },
+    // NAZWA RYBY
+    fishName: {
+      bottom: 10,
+      color: colors.text.onPrimary,
+      fontSize: 36,
+      fontWeight: "700",
+      left: 20,
+      position: "absolute",
+      textShadowColor: "rgba(0, 0, 0, 0.35)",
+      textShadowOffset: {
+        width: 1,
+        height: 2,
+      },
+      textShadowRadius: 4,
+    },
 
-  /* SEKCJE ROZWIJANE */
+    // ULUBIONE
+    favoriteButton: {
+      alignItems: "center",
+      backgroundColor: colors.background.overlay,
+      borderRadius: 24,
+      height: 48,
+      justifyContent: "center",
+      position: "absolute",
+      right: 16,
+      bottom: 12,
+      width: 48,
+    },
 
-  sectionCard: {
-    backgroundColor: colors.background.card,
-    borderRadius: 16,
-    padding: 16,
-  },
+    // GŁÓWNA KARTA
+    mainCard: {
+      backgroundColor: colors.background.card,
+      borderRadius: 16,
+      gap: 6,
+      padding: 18,
+    },
 
-  sectionHeader: {
-    alignItems: "center",
-    flexDirection: "row",
-    gap: 14,
-  },
+    infoBlock: {
+      gap: 8,
+      marginTop: 8,
+    },
 
-  sectionIconContainer: {
-    alignItems: "center",
-    backgroundColor: colors.background.primarySoft,
-    borderRadius: 28,
-    height: 42,
-    justifyContent: "center",
-    width: 42,
-  },
+    infoTitle: {
+      color: colors.text.main,
+      fontSize: 18,
+      fontWeight: "700",
+    },
 
-  sectionTitle: {
-    color: colors.text.main,
-    flex: 1,
-    fontSize: 22,
-    fontWeight: "700",
-  },
+    description: {
+      color: colors.text.main,
+      fontSize: 16,
+      lineHeight: 21,
+    },
 
-  sectionContent: {
-    gap: 10,
-    marginLeft: 57,
-    marginTop: 16,
-  },
+    // SEKCJE ROZWIJANE
+    sectionCard: {
+      backgroundColor: colors.background.card,
+      borderRadius: 16,
+      padding: 16,
+    },
 
-  sectionText: {
-    color: colors.text.main,
-    fontSize: 15,
-    lineHeight: 20,
-  },
+    sectionHeader: {
+      alignItems: "center",
+      flexDirection: "row",
+      gap: 14,
+    },
 
-  emptyText: {
-    color: colors.text.muted,
-    fontSize: 16,
-  },
-});
+    sectionIconContainer: {
+      alignItems: "center",
+      backgroundColor: colors.background.primarySoft,
+      borderRadius: 28,
+      height: 42,
+      justifyContent: "center",
+      width: 42,
+    },
+
+    sectionTitle: {
+      color: colors.text.main,
+      flex: 1,
+      fontSize: 22,
+      fontWeight: "700",
+    },
+
+    sectionContent: {
+      gap: 10,
+      marginLeft: 57,
+      marginTop: 16,
+    },
+
+    sectionText: {
+      color: colors.text.main,
+      fontSize: 15,
+      lineHeight: 20,
+    },
+
+    emptyText: {
+      color: colors.text.muted,
+      fontSize: 16,
+    },
+  });

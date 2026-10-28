@@ -213,7 +213,7 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
     borderRadius: 18,
     padding: 12,
 
-    shadowColor: colors.background.photoOverlay,
+    shadowColor: "#000000",
     shadowOpacity: 0.12,
     shadowRadius: 10,
     shadowOffset: {

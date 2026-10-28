@@ -41,7 +41,7 @@ export default function EducationMaterialList({ data, loading, error, favoriteId
               isFavorite={favoriteIds.includes(item.id)}
               onPress={() => {
                 const detailsHref = {
-                  pathname: "/(tabs)/education/[id]",
+                  pathname: "/material/[id]",
                   params: { id: String(item.id) }
                 } as unknown as Parameters<typeof router.push>[0];
                 router.push(detailsHref);
