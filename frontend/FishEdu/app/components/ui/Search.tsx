@@ -1,22 +1,20 @@
-import { debounce } from "@/app/utils/debounce";
-import { AppColors } from "@/app/constants/theme";
-import { useTheme } from "@/app/hooks/useTheme/useTheme";
-import Ionicons from "@expo/vector-icons/Ionicons";
-import { StyleSheet } from "react-native";
-import InputGroup from "../FormInputs/InputGroup";
+
+import { debounce } from "@/app/utils/debounce"
+import { AppColors } from "@/app/constants/theme"
+import { useTheme } from "@/app/hooks/useTheme/useTheme"
+import Ionicons from "@expo/vector-icons/Ionicons"
+import { StyleSheet } from "react-native"
+import InputGroup from "../FormInputs/InputGroup"
 
 type FetchResult<T> = {
   result: T[]
 }
 
 type LocalProps<T> = {
-  lastQuery: string,
-  placeholder: string,
-  setLastQuery: React.Dispatch<
-    React.SetStateAction<string>>,
-  setItems: React.Dispatch<
-    React.SetStateAction<T[]>
-  >,
+  lastQuery: string
+  placeholder: string
+  setLastQuery: React.Dispatch<React.SetStateAction<string>>
+  setItems: React.Dispatch<React.SetStateAction<T[]>>
   fetchFn: ((query: string) => Promise<FetchResult<T>>) | undefined
 }
 
@@ -26,63 +24,69 @@ export default function Search<T>({
   setLastQuery,
   setItems,
   fetchFn,
-}: LocalProps<T>) {  
+}: LocalProps<T>) {
   const { colors } = useTheme()
   const styles = createStyles(colors)
+
   return (
     <InputGroup
-       styles={{
+      styles={{
         containerStyles: styles.container,
         titleStyles: {},
         inputStyles: styles.input,
         inputWrapper: styles.inputWrapper,
       }}
-
       inputProps={{
-        placeholder: placeholder,
+        placeholder,
         onChangeText: debounce((query: string) => {
           query = query.trim().toLowerCase()
 
-          if(query === lastQuery)
-            return
+          if (query === lastQuery) return
 
-          //TODO: Remove type of undefined after implementing backend
-          if(fetchFn === undefined)
-            return
-          
-          fetchFn(query)
-            .then(({ result }) => { 
-              setItems(result)
-              setLastQuery(query)
-            })
-        }, 500)
+          // Wyszukiwanie serwerowe zostanie podłączone później.
+          if (fetchFn === undefined) return
+
+          fetchFn(query).then(({ result }) => {
+            setItems(result)
+            setLastQuery(query)
+          })
+        }, 500),
       }}
-
-      icon={<Ionicons name='search' size={24} color={colors.text.main} />}
+      icon={
+        <Ionicons
+          name="search-outline"
+          size={22}
+          color={colors.primary}
+        />
+      }
     />
   )
 }
 
-const createStyles = (colors: AppColors) => StyleSheet.create({
-  input: {
-    color: colors.text.main,
-    fontSize: 20,
-    width: '100%',
-    overflow: 'hidden'
-  },
-  container: {
-    backgroundColor: colors.background.card,
-    borderRadius: 24,
-    marginBottom: 24,
-    overflow: 'hidden'
-  },
-  inputWrapper: {
-    backgroundColor: colors.background.card,
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingBlock: 12,
-    paddingInline: 8,
-    borderRadius: 24,
-  }
-})
+const createStyles = (colors: AppColors) =>
+  StyleSheet.create({
+    container: {
+      backgroundColor: colors.background.card,
+      borderRadius: 18,
+      borderWidth: 1,
+      borderColor: colors.border.subtle,
+      marginBottom: 20,
+      overflow: "hidden",
+    },
+    inputWrapper: {
+      backgroundColor: colors.background.card,
+      flexDirection: "row",
+      alignItems: "center",
+      gap: 10,
+      paddingVertical: 14,
+      paddingHorizontal: 16,
+      borderRadius: 18,
+    },
+    input: {
+      flex: 1,
+      color: colors.text.main,
+      fontSize: 16,
+      minWidth: 0,
+      overflow: "hidden",
+    },
+  })
