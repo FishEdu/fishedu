@@ -1,4 +1,3 @@
-import { CatchRecordCreateRequest } from "@/app/api/records"
 import { getBaseApiUrl } from "@/app/utils/getBaseApiUrl"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { File } from "expo-file-system"
@@ -38,9 +37,11 @@ export const getSelectedRecordPhotoUri = async (asset: ImagePickerAsset): Promis
   return asset.uri
 }
 
-export const prepareRecordPhotoForApi = async (
-  record: CatchRecordCreateRequest
-): Promise<CatchRecordCreateRequest> => {
+type PhotoAttachable = { image_url?: string | null }
+
+export const prepareRecordPhotoForApi = async <T extends PhotoAttachable>(
+  record: T
+): Promise<T> => {
   const uri = record.image_url
   if (!uri || uri.startsWith("/") || /^https?:\/\//i.test(uri)) return record
 

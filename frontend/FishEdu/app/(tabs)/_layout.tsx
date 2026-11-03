@@ -1,14 +1,14 @@
 
-import Ionicons from "@expo/vector-icons/Ionicons";
-import { Tabs } from "expo-router";
+import Ionicons from "@expo/vector-icons/Ionicons"
+import { Tabs } from "expo-router"
 
-import { useLanguage } from "../hooks/useLanguage/useLanguage";
-import { useTheme } from "../hooks/useTheme/useTheme";
-import { getTranslation } from "../utils/translation/getTranslation";
+import { useLanguage } from "../hooks/useLanguage/useLanguage"
+import { useTheme } from "../hooks/useTheme/useTheme"
+import { getTranslation } from "../utils/translation/getTranslation"
 
 export default function TabsLayout() {
-  const { languageCode } = useLanguage();
-  const { colors } = useTheme();
+  const { languageCode } = useLanguage()
+  const { colors } = useTheme()
 
   return (
     <Tabs
@@ -32,35 +32,21 @@ export default function TabsLayout() {
       <Tabs.Screen
         name="fish/search"
         options={{
-          title: getTranslation(
-            "tabs.fishSearch",
-            languageCode
-          ),
+          title: getTranslation("tabs.fishSearch", languageCode),
           tabBarIcon: ({ size, color }) => (
-            <Ionicons
-              name="fish"
-              size={size}
-              color={color}
-            />
+            <Ionicons name="fish" size={size} color={color} />
           ),
         }}
       />
 
-      {/* REKORDY */}
+      {/* DZIENNIK POŁOWÓW */}
       <Tabs.Screen
-        name="records/index"
+        name="journal"
         options={{
           headerShown: false,
-          title: getTranslation(
-            "tabs.records",
-            languageCode
-          ),
+          title: getTranslation("tabs.journal", languageCode),
           tabBarIcon: ({ size, color }) => (
-            <Ionicons
-              name="document-text-outline"
-              size={size}
-              color={color}
-            />
+            <Ionicons name="book-outline" size={size} color={color} />
           ),
         }}
       />
@@ -69,16 +55,9 @@ export default function TabsLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: getTranslation(
-            "tabs.home",
-            languageCode
-          ),
+          title: getTranslation("tabs.home", languageCode),
           tabBarIcon: ({ size, color }) => (
-            <Ionicons
-              name="home"
-              size={size}
-              color={color}
-            />
+            <Ionicons name="home" size={size} color={color} />
           ),
         }}
       />
@@ -87,16 +66,9 @@ export default function TabsLayout() {
       <Tabs.Screen
         name="education"
         options={{
-          title: getTranslation(
-            "tabs.education",
-            languageCode
-          ),
+          title: getTranslation("tabs.education", languageCode),
           tabBarIcon: ({ size, color }) => (
-            <Ionicons
-              name="library"
-              size={size}
-              color={color}
-            />
+            <Ionicons name="library" size={size} color={color} />
           ),
         }}
       />
@@ -105,41 +77,31 @@ export default function TabsLayout() {
       <Tabs.Screen
         name="settings"
         options={{
-          title: getTranslation(
-            "tabs.settings",
-            languageCode
-          ),
+          title: getTranslation("tabs.settings", languageCode),
           tabBarIcon: ({ size, color }) => (
-            <Ionicons
-              name="settings"
-              size={size}
-              color={color}
-            />
+            <Ionicons name="settings" size={size} color={color} />
           ),
         }}
       />
 
       {/* UKRYTE EKRANY */}
 
-
+      <Tabs.Screen
+        name="records/index"
+        options={{ href: null }}
+      />
 
       <Tabs.Screen
         name="records/add"
-        options={{
-          href: null,
-          title: "Nowy post",
-        }}
+        options={{ href: null }}
       />
 
       <Tabs.Screen
         name="records/edit/[id]"
-        options={{
-          href: null,
-          title: "Edit post",
-        }}
+        options={{ href: null }}
       />
 
-      {/* ULUBIONE - TYLKO PRZEZ KAFELEK */}
+      {/* ULUBIONE */}
       <Tabs.Screen
         name="favorite/favorites"
         options={{
@@ -148,5 +110,5 @@ export default function TabsLayout() {
         }}
       />
     </Tabs>
-  );
+  )
 }
