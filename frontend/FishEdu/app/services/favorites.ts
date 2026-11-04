@@ -49,8 +49,7 @@ export function subscribeFavorites(
   };
 }
 
-// Zapobiega nakładaniu się synchronizacji i pobierania
-// danych z serwera.
+// Zapobiega nakładaniu się synchronizacji i pobierania danych z serwera.
 function withNetworkLock<T>(
   operation: () => Promise<T>
 ): Promise<T> {
@@ -68,6 +67,17 @@ function detailsKey(language: string) {
   return `favorites.details:v1:${getBaseApiUrl()}:${language}`;
 }
 
+// Sprawdza, czy błąd HTTP ma określony status.
+function isHttpError(
+  error: unknown,
+  status: number
+): boolean {
+  return (
+    error instanceof Error &&
+    error.message.includes(`failed (${status}):`)
+  );
+}
+
 // Obsługa zapytań HTTP.
 async function request(
   base: string,
@@ -76,6 +86,7 @@ async function request(
   token?: string
 ): Promise<any> {
   const controller = new AbortController();
+
   const timeout = setTimeout(
     () => controller.abort(),
     15000
@@ -93,14 +104,13 @@ async function request(
       }
     );
 
+    const text = await response.text();
+
     if (!response.ok) {
       throw new Error(
-        `Favorites request failed (${response.status})`
+        `Favorites ${method} ${path} failed (${response.status}): ${text}`
       );
     }
-
-    // PUT i DELETE mogą zwracać 204 bez treści.
-    const text = await response.text();
 
     return text ? JSON.parse(text) : null;
   } finally {
@@ -115,6 +125,7 @@ async function getSession(base: string): Promise<string> {
   if (!session) {
     session = (async () => {
       const key = `favorites.session:${base}`;
+
       const stored = await AsyncStorage.getItem(key);
 
       if (stored) return stored;
@@ -151,10 +162,98 @@ async function getSession(base: string): Promise<string> {
   }
 }
 
-// Jednorazowy import starych ulubionych do
-// nowego lokalnego magazynu.
+// Odtwarza na nowej sesji ulubione zapisane lokalnie.
+async function restoreLocalFavorites(
+  base: string,
+  token: string
+) {
+  const local = await getOfflineFavorites();
+
+  const items: Array<{
+    kind: FavoriteKind;
+    id: number;
+  }> = [
+    ...local.fish_ids.map(id => ({
+      kind: "fish" as const,
+      id,
+    })),
+    ...local.material_ids.map(id => ({
+      kind: "material" as const,
+      id,
+    })),
+  ];
+
+  for (const item of items) {
+    try {
+      await request(
+        base,
+        `/${item.kind}/${item.id}`,
+        "PUT",
+        token
+      );
+    } catch (error) {
+      // Pomijamy elementy, których nie ma już na serwerze.
+      if (isHttpError(error, 404)) {
+        continue;
+      }
+
+      throw error;
+    }
+  }
+}
+
+// Wykonuje zapytanie z sesją.
+// Jeśli serwer odrzuci token (401), tworzy nową sesję
+// i ponawia zapytanie.
+async function requestWithSession(
+  base: string,
+  path: string,
+  method: string
+): Promise<any> {
+  const token = await getSession(base);
+
+  try {
+    return await request(
+      base,
+      path,
+      method,
+      token
+    );
+  } catch (error) {
+    if (!isHttpError(error, 401)) {
+      throw error;
+    }
+
+    // Usuwamy wyłącznie nieprawidłowy token sesji.
+    const key = `favorites.session:${base}`;
+
+    await AsyncStorage.removeItem(key);
+
+    sessions.delete(base);
+
+    // Tworzymy nową sesję.
+    const newToken = await getSession(base);
+
+    // Odtwarzamy ulubione zapisane lokalnie.
+    await restoreLocalFavorites(
+      base,
+      newToken
+    );
+
+    // Ponawiamy pierwotne zapytanie jeden raz.
+    return request(
+      base,
+      path,
+      method,
+      newToken
+    );
+  }
+}
+
+// Jednorazowy import starych ulubionych do nowego lokalnego magazynu.
 async function importLegacyFavorites() {
   const base = getBaseApiUrl();
+
   let migration = migrations.get(base);
 
   if (!migration) {
@@ -165,8 +264,8 @@ async function importLegacyFavorites() {
         return;
       }
 
-      // Jeśli wcześniejszy mechanizm już przesłał
-      // dane na serwer, nie importujemy ich ponownie.
+      // Jeśli wcześniejszy mechanizm już przesłał dane na serwer,
+      // nie importujemy ich ponownie.
       const alreadyImported =
         await AsyncStorage.getItem(
           `favorites.imported:${base}`
@@ -180,6 +279,7 @@ async function importLegacyFavorites() {
 
         for (const [kind, key] of sources) {
           const raw = await AsyncStorage.getItem(key);
+
           const ids: unknown = raw
             ? JSON.parse(raw)
             : [];
@@ -248,9 +348,11 @@ export async function getCachedFavorites(
   return {
     fish_ids: local.fish_ids,
     material_ids: local.material_ids,
+
     fish: fish.filter(item =>
       local.fish_ids.includes(item.id)
     ),
+
     materials: materials.filter(item =>
       local.material_ids.includes(item.id)
     ),
@@ -258,11 +360,7 @@ export async function getCachedFavorites(
 }
 
 // Wysyłanie oczekujących zmian do serwera.
-// Wywoływane wewnątrz blokady sieciowej.
-async function flushPending(
-  base: string,
-  token: string
-) {
+async function flushPending(base: string) {
   const changes = await getPendingFavoriteChanges();
 
   for (const change of changes) {
@@ -278,19 +376,14 @@ async function flushPending(
     }
 
     try {
-      await request(
+      await requestWithSession(
         base,
         `/${change.kind}/${change.id}`,
-        change.saved ? "PUT" : "DELETE",
-        token
+        change.saved ? "PUT" : "DELETE"
       );
     } catch (error) {
-
-      const notFound =
-        error instanceof Error &&
-        error.message.endsWith("(404)");
-
-      if (!notFound) {
+      // Usunięcie nieistniejącego elementu traktujemy jako wykonane.
+      if (!isHttpError(error, 404)) {
         throw error;
       }
     }
@@ -304,9 +397,8 @@ async function flushPending(
 async function syncPendingChanges() {
   await withNetworkLock(async () => {
     const base = getBaseApiUrl();
-    const token = await getSession(base);
 
-    await flushPending(base, token);
+    await flushPending(base);
   });
 }
 
@@ -324,9 +416,11 @@ async function combineFavorites(
   }
 
   const ids = await mergeServerFavorites(server);
+
   const cached = await getCachedFavorites(language);
 
   const fishMap = new Map<number, FishGetResponse>();
+
   const materialMap =
     new Map<number, EducationMaterial>();
 
@@ -347,12 +441,14 @@ async function combineFavorites(
   const result: Favorites = {
     fish_ids: ids.fish_ids,
     material_ids: ids.material_ids,
+
     fish: ids.fish_ids
       .map(id => fishMap.get(id))
       .filter(
         (item): item is FishGetResponse =>
           item !== undefined
       ),
+
     materials: ids.material_ids
       .map(id => materialMap.get(id))
       .filter(
@@ -380,15 +476,13 @@ export async function fetchFavorites(
 
   return withNetworkLock(async () => {
     const base = getBaseApiUrl();
-    const token = await getSession(base);
 
-    await flushPending(base, token);
+    await flushPending(base);
 
-    const server = (await request(
+    const server = (await requestWithSession(
       base,
       `?language=${encodeURIComponent(language)}`,
-      "GET",
-      token
+      "GET"
     )) as Favorites;
 
     return combineFavorites(server, language);
@@ -407,11 +501,14 @@ export async function setFavorite(
 
   await importLegacyFavorites();
 
-  await saveFavoriteOffline(kind, id, saved);
+  await saveFavoriteOffline(
+    kind,
+    id,
+    saved
+  );
 
   // Odświeżamy widoki już po zapisaniu lokalnym.
   notifyFavorites();
-
 
   // Kolejka zostanie ponowiona później.
   void syncPendingChanges().then(
