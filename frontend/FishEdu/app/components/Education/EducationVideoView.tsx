@@ -20,5 +20,5 @@ export default function EducationVideoView({ url }: { url: string }) {
 }
 
 const createStyles = (colors: AppColors) => StyleSheet.create({
-  video: { aspectRatio: 960 / 544, backgroundColor: colors.background.media, width: "100%" },
+  video: { aspectRatio: 960 / 544, backgroundColor: colors.background.card, width: "100%" },
 });

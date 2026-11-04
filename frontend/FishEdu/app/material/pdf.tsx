@@ -25,5 +25,5 @@ export default function EducationPdfViewer() {
 }
 
 const createStyles = (colors: AppColors) => StyleSheet.create({
-  screen: { backgroundColor: colors.background.app, flex: 1 },
+  screen: { backgroundColor: colors.background.app, flex: 1, paddingTop: 50 },
 });
