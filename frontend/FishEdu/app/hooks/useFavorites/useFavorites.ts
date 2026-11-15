@@ -61,12 +61,7 @@ export function useFavorites() {
             setError(false);
             setLoading(false);
           }
-        } catch (error) {
-          console.error(
-            "[Favorites] Błąd odczytu lokalnych danych:",
-            error
-          );
-
+        } catch {
           if (active && current === generation) {
             setReady(false);
             setError(true);
@@ -84,16 +79,12 @@ export function useFavorites() {
             setReady(true);
             setError(false);
           }
-          } catch (error) {
-            console.error(
-              "[Favorites] Błąd synchronizacji z serwerem:",
-              error
-            );
-
-            if (active && current === generation) {
-              setError(true);
-            }
-          } finally {
+        } catch {
+          if (active && current === generation) {
+            // Pozostawiamy dane lokalne.
+            setError(true);
+          }
+        } finally {
           if (active && current === generation) {
             setLoading(false);
           }
