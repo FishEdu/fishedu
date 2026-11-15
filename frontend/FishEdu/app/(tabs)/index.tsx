@@ -91,20 +91,21 @@ export default function Index() {
             </Pressable>
           </ButtonRow>
 
-          
-          <Pressable
-            style={styles.button}
-            onPress={() => router.push("/(tabs)/favorite/favorites")}
-          >
-            <Ionicons
-              name="star"
-              size={24}
-              color={colors.favorite}
-            />
-            <Text style={styles.buttonText}>
-              {getTranslation('home.button.saved', language)}
-            </Text>
-          </Pressable>
+          <ButtonRow>
+            <Pressable
+              style={[styles.button, styles.widthHalf]}
+              onPress={() => router.push("/(tabs)/favorite/favorites")}
+            >
+              <Ionicons
+                name="star"
+                size={24}
+                color={colors.favorite}
+              />
+              <Text style={styles.buttonText}>
+                {getTranslation('home.button.saved', language)}
+              </Text>
+            </Pressable>
+          </ButtonRow>
         </View>
       </View>
     </Container>

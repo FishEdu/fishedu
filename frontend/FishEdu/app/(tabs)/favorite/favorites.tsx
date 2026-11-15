@@ -392,7 +392,7 @@ export default function FavoritesScreen() {
                                 color={colors.primary}
                               />
 
-                              <Text style={styles.pdfLabel}numberOfLines={1}>
+                              <Text style={styles.pdfLabel}>
                                 
                               {group.kind === "quiz"
                                 ? getTranslation("favorites.labels.quiz", languageCode)
@@ -570,7 +570,7 @@ const createStyles = (colors: AppColors) =>
     },
 
     materialThumbnail: {
-      width: 100,
+      width: 52,
       height: 48,
       alignItems: "center",
       justifyContent: "center",
@@ -587,7 +587,6 @@ const createStyles = (colors: AppColors) =>
       fontSize: 9,
       fontWeight: "700",
       color: colors.text.muted,
-      textAlign: "center",
     },
 
     materialTitle: {
