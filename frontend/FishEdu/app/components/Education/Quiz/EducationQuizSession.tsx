@@ -50,6 +50,6 @@ export default function EducationQuizSession({ id, language }: Props) {
 
 const createStyles = (colors: AppColors) => StyleSheet.create({
   screen: { backgroundColor: colors.background.app, flex: 1 },
-  page: { flex: 1, gap: 20, paddingBlock: 12 },
+  page: { flex: 1, gap: 20, paddingBlock: 40 },
   title: { color: colors.text.main, fontSize: 24, fontWeight: "700", lineHeight: 31 },
 });
