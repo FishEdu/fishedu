@@ -1,2 +1,0 @@
-from .UserRegisterRequest import UserRegisterRequest
-from .UserLoginRequest import UserLoginRequest

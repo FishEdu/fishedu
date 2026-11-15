@@ -52,7 +52,7 @@ export default function TabsLayout() {
         options={{
           headerShown: false,
           title: getTranslation(
-            "tabs.records",
+            "tabs.journal",
             languageCode
           ),
           tabBarIcon: ({ size, color }) => (
@@ -120,24 +120,6 @@ export default function TabsLayout() {
       />
 
       {/* UKRYTE EKRANY */}
-
-
-
-      <Tabs.Screen
-        name="records/add"
-        options={{
-          href: null,
-          title: "Nowy post",
-        }}
-      />
-
-      <Tabs.Screen
-        name="records/edit/[id]"
-        options={{
-          href: null,
-          title: "Edit post",
-        }}
-      />
 
       {/* ULUBIONE - TYLKO PRZEZ KAFELEK */}
       <Tabs.Screen
