@@ -5,6 +5,8 @@ import { useLanguage } from "@/app/hooks/useLanguage/useLanguage";
 import { getTranslation } from "@/app/utils/translation/getTranslation";
 import { router, useLocalSearchParams } from "expo-router";
 import { ScrollView, StyleSheet } from "react-native";
+import { AppColors } from "@/app/constants/theme";
+import { useTheme } from "@/app/hooks/useTheme/useTheme";
 
 type LocalSearchParams = { id: string; name: string; content: string };
 
@@ -14,10 +16,10 @@ export default function RecipeScreen() {
   const styles = createStyles(colors)
   const { name, content } = useLocalSearchParams<LocalSearchParams>();
   return (
-    <ScrollView style={styles.screen}>
+    <ScrollView style={styles.screen}contentContainerStyle={styles.content}>
       <Container>
         <>
-          <BackButton variant="filled" label={getTranslation("common.back", language)} onPress={() => router.back()} />
+          <BackButton variant="text" label={getTranslation("common.back", language)} onPress={() => router.back()} />
           <RecipeContent name={name} content={content} />
         </>
       </Container>
@@ -29,5 +31,8 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
   screen: {
     flex: 1,
     backgroundColor: colors.background.app,
+  },
+  content: {
+    paddingTop: 40,
   },
 });

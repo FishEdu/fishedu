@@ -48,7 +48,7 @@ export default function TabsLayout() {
 
       {/* REKORDY */}
       <Tabs.Screen
-        name="records/index"
+        name="journal"
         options={{
           headerShown: false,
           title: getTranslation(

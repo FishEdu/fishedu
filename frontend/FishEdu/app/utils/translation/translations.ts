@@ -13,6 +13,7 @@ export const translations = {
     'tabs.settings': 'Ustawienia',
     'tabs.fishSearch': 'Ryby',
     'tabs.records': 'Rekordy',
+    'tabs.journal': 'Dziennik',
     
     
     'home.welcome': 'Witaj, użytkowniku!',
@@ -166,6 +167,7 @@ export const translations = {
     'tabs.settings': 'Settings',
     'tabs.fishSearch': 'Search Fish',
     'tabs.records': 'Records',
+    'tabs.journal': 'Journal',
         
     'home.welcome': 'Welcome, user!',
     'home.button.begginerGuide': 'Beginner\'s Essentials',

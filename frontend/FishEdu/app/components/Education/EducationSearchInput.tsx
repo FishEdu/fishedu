@@ -38,7 +38,7 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
     gap: 9,
     minHeight: 48,
     paddingHorizontal: 13,
-    shadowColor: colors.background.photoOverlay,
+    shadowColor: colors.background.overlay,
     shadowOpacity: 0.06,
     shadowRadius: 6
   },

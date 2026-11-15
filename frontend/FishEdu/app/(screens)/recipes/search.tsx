@@ -1,19 +1,53 @@
+
+import { useEffect, useState } from "react";
+import { StyleSheet, View } from "react-native";
+import { router } from "expo-router";
+
+import { RecipesGetResponse } from "@/app/api/recipes";
 import RecipesList from "@/app/components/RecipesSearch/RecipesList";
 import RecipesSearchBar from "@/app/components/RecipesSearch/RecipesSearchBar";
 import Container from "@/app/components/ui/Container";
+import BackButton from "@/app/components/ui/BackButton";
 import { useFetchRecipes } from "@/app/hooks/useFetchRecipes/useFetchRecipes";
 
 export default function RecipesSearch() {
-  const recipes = useFetchRecipes()
-  
+  const recipes = useFetchRecipes();
+
+  const [filteredRecipes, setFilteredRecipes] =
+    useState<RecipesGetResponse[]>([]);
+
+  useEffect(() => {
+    setFilteredRecipes(recipes ?? []);
+  }, [recipes]);
+
   return (
     <Container>
-      <>
-        <RecipesSearchBar />
-        <RecipesList 
-          recipes={recipes}
+      <View style={styles.content}>
+        <View style={styles.backButtonContainer}>
+          <BackButton
+            variant="text"
+            label="Cofnij"
+            onPress={() => router.back()}
+          />
+        </View>
+
+        <RecipesSearchBar
+          allRecipes={recipes ?? []}
+          setRecipes={setFilteredRecipes}
         />
-      </>
+
+        <RecipesList recipes={filteredRecipes} />
+      </View>
     </Container>
-  )
+  );
 }
+
+const styles = StyleSheet.create({
+  content: {
+    paddingTop: 40,
+    flex: 1,
+  },
+  backButtonContainer: {
+    marginBottom: 20,
+  },
+});
