@@ -12,7 +12,7 @@ import { getTranslation } from '@/app/utils/translation/getTranslation'
 
 export function OfflineBanner() {
   // To test the banner switch initial state to false and setDissmissed to false
-  const [ dismissed, setDismissed ] = useState<boolean>(false)
+  const [ dismissed, setDismissed ] = useState<boolean>(true)
   const { language } = useLanguage()
 
   const connection = addNetworkStateListener(({ isConnected }) => {
