@@ -28,9 +28,6 @@ export const fetchFish: (isConnected: boolean | undefined, name?: string) => Pro
   const nameIncluded = !!(name) && name.length !== 0
   const localDataExists = !!(stored?.fish[language])
   const canGetFreshLocalData = localDataExists && !isDataStale
-
-  console.log(name)
-  console.info(nameIncluded)
   
   const canFilterLocalDataByName = canGetFreshLocalData && nameIncluded
   
