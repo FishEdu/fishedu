@@ -69,12 +69,6 @@ export const fetchFish: (isConnected: boolean | undefined, name?: string) => Pro
   stored.lastSaveTime = Date.now()
   await AsyncStorage.setItem('fish', JSON.stringify(stored))
 
-  const f = await AsyncStorage.getItem('fish')
-  if(f) {
-    const f1 = await JSON.parse(f)
-    console.log(f1)
-  }
-
   return { 
     fish,
     isDataStale 
