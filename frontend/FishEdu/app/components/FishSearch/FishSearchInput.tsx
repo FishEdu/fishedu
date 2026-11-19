@@ -8,6 +8,7 @@ import { getTranslation } from "@/app/utils/translation/getTranslation";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { StyleSheet } from "react-native";
 import InputGroup from "../FormInputs/InputGroup";
+import { useNetworkState } from "expo-network";
 
 type LocalProps  = {
   lastFishQuery: string,
@@ -22,6 +23,7 @@ export default function FishSearchInput ({ lastFishQuery, setFish, setLastFishQu
   const { languageCode } = useLanguage()
   const { colors } = useTheme()
   const styles = createStyles(colors)
+  const networkState = useNetworkState()
   
   return (
     <InputGroup
@@ -40,7 +42,7 @@ export default function FishSearchInput ({ lastFishQuery, setFish, setLastFishQu
           if(fishQuery === lastFishQuery)
             return
 
-          fetchFish(fishQuery)
+          fetchFish(networkState.isConnected, fishQuery)
             .then(({ fish }) => { 
               setFish(fish)
               setLastFishQuery(fishQuery)

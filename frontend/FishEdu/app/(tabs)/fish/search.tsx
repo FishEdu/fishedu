@@ -11,6 +11,7 @@ import { useFocusEffect } from "expo-router";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useCallback, useMemo, useRef, useState } from "react";
 import { ActivityIndicator, Pressable, StyleSheet, Text, View } from "react-native";
+import { useNetworkState } from "expo-network";
 
 type EndangeredFilter = "all" | "endangered" | "notEndangered";
 
@@ -31,6 +32,8 @@ export default function FishSearch() {
   const [endangeredFilter, setEndangeredFilter] = useState<EndangeredFilter>("all")
   const previousLanguage = useRef(language)
   const hasLoaded = useRef(false)
+  const networkState = useNetworkState()
+
 
   const filteredFish = useMemo(() => {
     if (endangeredFilter === "all") return fish
@@ -44,7 +47,7 @@ export default function FishSearch() {
         const load = async () => {
           setLoading(true)
 
-          const { fish } = await fetchFish()
+          const { fish } = await fetchFish(networkState.isConnected)
 
           if (!isActive) return
 
@@ -61,7 +64,7 @@ export default function FishSearch() {
         return () => {
           isActive = false
         }
-      }, [language])
+      }, [language, networkState.isConnected])
   )
   
   return (

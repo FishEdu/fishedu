@@ -15,13 +15,11 @@ export function OfflineBanner() {
   const [ dismissed, setDismissed ] = useState<boolean>(true)
   const { language } = useLanguage()
 
-  const connection = addNetworkStateListener(({ isConnected }) => {
-    console.info(`The device is connected to the internet: ${isConnected}`)
+  addNetworkStateListener(({ isConnected }) => {
     setDismissed(isConnected ?? true)
   })
   
   const handleDismiss = () => {
-    connection.remove()
     setDismissed(true)
   } 
 
