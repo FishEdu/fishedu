@@ -13,18 +13,29 @@ export type FetchFishReturn = {
   isDataStale: boolean
 }
 
-export const fetchFish: (name?: string) => Promise<FetchFishReturn> = async (name) => {
+export const fetchFish: (isConnected: boolean | undefined, name?: string) => Promise<FetchFishReturn> = async (isConnected, name) => {
   const language = await AsyncStorage.getItem('language') as LanguageCode
-
-  const raw = await AsyncStorage.getItem('fish')  
-  const stored: FishLocalStorage = raw ? await JSON.parse(raw) : { fish: {}, lastSaveTime: 0 }
+  
+  const raw = await AsyncStorage.getItem('fish')
+  const stored: FishLocalStorage = raw ? 
+    await JSON.parse(raw) : 
+    { fish: {}, lastSaveTime: 0 }
 
   const minute = 60 * 1000
   const staleTimeInMinutes = 5 * minute
   const isDataStale = (Date.now() - stored.lastSaveTime) > staleTimeInMinutes
 
-  if(stored?.fish[language] && !isDataStale && name && name !== '') {
-    const fish = stored.fish[language]
+  const nameIncluded = !!(name) && name.length !== 0
+  const localDataExists = !!(stored?.fish[language])
+  const canGetFreshLocalData = localDataExists && !isDataStale
+  
+  const canFilterLocalDataByName = canGetFreshLocalData && nameIncluded
+  
+  if(canFilterLocalDataByName) {
+    console.log('Filtered data by cache')
+    
+    const fish = stored.fish[language] ?? []
+    
     const filteredFish = fish
       .filter(
         (fish) => fish.name.toLowerCase().includes(name)
@@ -36,18 +47,20 @@ export const fetchFish: (name?: string) => Promise<FetchFishReturn> = async (nam
     }
   }
 
-  if(stored?.fish[language] && !isDataStale) {
+  if(isConnected === false || canGetFreshLocalData) {
     console.log('Hit from cache')
+    
     const fish = stored.fish[language]
+    
     return {
       fish, 
       isDataStale 
     }
   }
   
-  const endpoint = name === '' || !name 
-    ? `fish?language=${language}`
-    : `fish/search/${name}?language=${language}`
+  const endpoint = nameIncluded
+    ? `fish/search/${name}?language=${language}` 
+    : `fish?language=${language}`
 
   console.log('Hit from API')
   const fish = await fetchApi(endpoint)

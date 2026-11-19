@@ -196,6 +196,9 @@ export const translations = {
     'favorites.materialFallback': "Materiał",
     'favorites.labels.other': "Inne",
     'favorites.labels.guide': "Poradnik",
+
+    'offlineBanner.noConnection': 'Brak połączenia z siecią',
+    'offlineBanner.description': 'Aby w pełni korzystać z aplikacji i mieć najświeższe dane proszę połączyć się z siecią.'
   },
 
   en: {
@@ -387,5 +390,8 @@ export const translations = {
     'favorites.materialFallback': "Material",
     'favorites.labels.other': "Other",
     'favorites.labels.guide': "Guide",
+
+    'offlineBanner.noConnection': 'No internet connection',
+    'offlineBanner.description': 'To use the app to its fullest and get the latest information, please connect to the internet.'
   }
 } as const

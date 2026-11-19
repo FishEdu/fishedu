@@ -9,6 +9,7 @@ import { ThemeProvider } from "./hooks/useTheme/ThemeProvider";
 import { useTheme } from "./hooks/useTheme/useTheme";
 import { StatusBar } from "expo-status-bar";
 import { LanguageProvider } from "./hooks/useLanguage/LanguageProvider";
+import { OfflineBanner } from "./components/ui/OfflineBanner";
 
 function Navigation() {
   const { colors, mode } = useTheme();
@@ -32,6 +33,8 @@ function Navigation() {
       <StatusBar
         style={mode === "dark" ? "light" : "dark"}
       />
+
+      <OfflineBanner />
 
       <Stack
         screenOptions={{
