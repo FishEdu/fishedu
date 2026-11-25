@@ -50,7 +50,8 @@
       "expo-status-bar",
       "expo-web-browser",
       "expo-video",
-      "@react-native-community/datetimepicker"
+      "@react-native-community/datetimepicker",
+      "expo-sqlite"
     ],
     "experiments": {
       "typedRoutes": true,

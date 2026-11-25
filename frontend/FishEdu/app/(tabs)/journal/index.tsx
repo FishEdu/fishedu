@@ -1,12 +1,14 @@
-
-import { FishingJournal, JournalSearchMode } from "@/app/api/journal"
+import {
+  getLocalJournals,
+  type FishingJournal,
+  type JournalSearchMode,
+} from "@/app/services/journal/localJournalService"
 import JournalCard from "@/app/components/Journal/JournalCard"
 import JournalSearchBar from "@/app/components/Journal/JournalSearchBar"
 import Container from "@/app/components/ui/Container"
 import { AppColors } from "@/app/constants/theme"
 import { useTheme } from "@/app/hooks/useTheme/useTheme"
 import { useLanguage } from "@/app/hooks/useLanguage/useLanguage"
-import { fetchJournals } from "@/app/utils/fetch/journal/fetchJournals"
 import { getTranslation } from "@/app/utils/translation/getTranslation"
 import Ionicons from "@expo/vector-icons/Ionicons"
 import { router, useFocusEffect } from "expo-router"
@@ -41,10 +43,19 @@ export default function JournalIndex() {
 
   const locale = languageCode === "en" ? "en-GB" : "pl-PL"
 
+  // Pobieranie wpisów z lokalnej bazy SQLite
   const loadJournals = useCallback(async () => {
     setLoading(true)
-    setJournals(await fetchJournals({ query, mode }))
-    setLoading(false)
+
+    try {
+      const result = await getLocalJournals(query, mode)
+      setJournals(result)
+    } catch (error) {
+      console.error("Błąd pobierania lokalnego Dziennika:", error)
+      setJournals([])
+    } finally {
+      setLoading(false)
+    }
   }, [mode, query])
 
   useFocusEffect(
