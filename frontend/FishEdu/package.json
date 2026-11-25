@@ -20,7 +20,7 @@
     "@react-native-picker/picker": "2.11.4",
     "expo": "~56.0.16",
     "expo-constants": "~56.0.16",
-    "expo-dev-client": "~56.0.23",
+    "expo-dev-client": "~56.0.28",
     "expo-file-system": "~56.0.8",
     "expo-font": "~56.0.5",
     "expo-haptics": "~56.0.3",
@@ -47,11 +47,11 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
+    "@react-native-community/cli": "latest",
     "@types/react": "~19.2.14",
     "eslint": "^9.25.0",
     "eslint-config-expo": "~56.0.4",
-    "typescript": "~6.0.3",
-    "@react-native-community/cli": "latest"
+    "typescript": "~6.0.3"
   },
   "private": true
 }
