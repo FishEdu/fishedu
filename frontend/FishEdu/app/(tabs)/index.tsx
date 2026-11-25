@@ -138,7 +138,7 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
   },
   page: {
     flex: 1,
-    paddingTop: 70
+    paddingBottom: 32
   },
   buttonsContainer: {
     flexDirection: 'row',
@@ -174,7 +174,7 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
     flexBasis: 0,
 
     //We are adding the padding * 2 so the card's height won't remove the padding
-    height: 75 + buttonPaddingBlock * 2,
+    height: 100 + buttonPaddingBlock * 2,
   },
 
   buttonText: {

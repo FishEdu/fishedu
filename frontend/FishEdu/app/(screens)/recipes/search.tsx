@@ -21,7 +21,9 @@ export default function RecipesSearch() {
   }, [recipes]);
 
   return (
-    <Container>
+    <Container
+      useScrollView={false}
+    >
       <View style={styles.content}>
         <View style={styles.backButtonContainer}>
           <BackButton
@@ -44,7 +46,6 @@ export default function RecipesSearch() {
 
 const styles = StyleSheet.create({
   content: {
-    paddingTop: 40,
     flex: 1,
   },
   backButtonContainer: {

@@ -32,6 +32,7 @@ export default function TabsLayout() {
       <Tabs.Screen
         name="fish/search"
         options={{
+          headerShown: false,
           title: getTranslation(
             "tabs.fishSearch",
             languageCode
@@ -69,6 +70,7 @@ export default function TabsLayout() {
       <Tabs.Screen
         name="index"
         options={{
+          headerShown: false,
           title: getTranslation(
             "tabs.home",
             languageCode
@@ -87,6 +89,7 @@ export default function TabsLayout() {
       <Tabs.Screen
         name="education"
         options={{
+          headerShown: false,
           title: getTranslation(
             "tabs.education",
             languageCode
@@ -105,6 +108,7 @@ export default function TabsLayout() {
       <Tabs.Screen
         name="settings"
         options={{
+          headerShown: false,
           title: getTranslation(
             "tabs.settings",
             languageCode

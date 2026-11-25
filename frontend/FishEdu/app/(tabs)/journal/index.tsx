@@ -19,7 +19,6 @@ import {
   Text,
   View,
 } from "react-native"
-import { SafeAreaView } from "react-native-safe-area-context"
 
 export default function JournalIndex() {
   const { colors } = useTheme()
@@ -173,7 +172,6 @@ export default function JournalIndex() {
       : "Nie masz jeszcze wypraw zapisanych w tym miesiącu."
 
   return (
-    <SafeAreaView edges={["top"]} style={styles.safeArea}>
       <Container>
         <View style={styles.page}>
           <View style={styles.header}>
@@ -405,7 +403,6 @@ export default function JournalIndex() {
           </Pressable>
         </View>
       </Container>
-    </SafeAreaView>
   )
 }
 

@@ -120,18 +120,15 @@ export default function EditJournal() {
 
 const createStyles = (colors: AppColors) =>
   StyleSheet.create({
-
     page: {
       flex: 1,
       gap: 14,
-      paddingTop: 36,
     },
 
     back: {
       alignItems: "center",
       alignSelf: "flex-start",
       flexDirection: "row",
-      paddingVertical: 5,
     },
 
     backText: {

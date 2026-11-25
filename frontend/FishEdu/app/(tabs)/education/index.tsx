@@ -23,20 +23,22 @@ export default function Education() {
   const { favoriteIds } = useEducationFavorites();
 
   return (
-    <View style={styles.screen}>
-      <Container>
-        <View style={styles.page}>
-          <EducationSearchInput value={search} onChangeText={setSearch} />
-          <EducationTypeTabs value={type} onChange={setType} />
-          <EducationLevelFilters value={level} onChange={setLevel} />
-          <EducationMaterialList data={data} loading={loading} error={error} favoriteIds={favoriteIds} />
-        </View>
-      </Container>
-    </View>
+    <Container
+      useScrollView={false}
+    >
+      <View style={styles.screen}>
+          <View style={styles.page}>
+            <EducationSearchInput value={search} onChangeText={setSearch} />
+            <EducationTypeTabs value={type} onChange={setType} />
+            <EducationLevelFilters value={level} onChange={setLevel} />
+            <EducationMaterialList data={data} loading={loading} error={error} favoriteIds={favoriteIds} />
+          </View>
+      </View>
+    </Container>
   );
 }
 
 const createStyles = (colors: AppColors) => StyleSheet.create({
   screen: { backgroundColor: colors.background.app, flex: 1 },
-  page: { flex: 1, gap: 14, paddingTop: 2 },
+  page: { flex: 1, gap: 14 },
 });

@@ -19,7 +19,9 @@ export default function EcoTips() {
   const styles = createStyles(colors)
 
   return (
-    <Container>
+    <Container
+      useScrollView={false}
+    >
       <View style={styles.content}>
         <View style={styles.backButtonContainer}>
           <BackButton
@@ -52,7 +54,6 @@ const createStyles = (colors: AppColors) =>
   StyleSheet.create({
     content: {
       flex: 1,
-      paddingTop: 40,
       paddingBottom: 64,
     },
     headingRow: {
