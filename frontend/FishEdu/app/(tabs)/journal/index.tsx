@@ -184,7 +184,10 @@ export default function JournalIndex() {
 
   return (
       <Container>
-        <View style={styles.page}>
+        <ScrollView
+          contentContainerStyle={{ paddingBottom: 96 }}
+        >
+         <View style={styles.page}>
           <View style={styles.header}>
             <View>
               <Text style={styles.heading}>
@@ -198,221 +201,217 @@ export default function JournalIndex() {
             </View>
           </View>
 
-          <ScrollView
-            showsVerticalScrollIndicator={false}
-            contentContainerStyle={styles.scrollContent}
-          >
-            {/* Wyszukiwarka */}
-            <JournalSearchBar
-              query={query}
-              mode={mode}
-              onQueryChange={setQuery}
-              onModeChange={setMode}
-            />
+          {/* Wyszukiwarka */}
+          <JournalSearchBar
+            query={query}
+            mode={mode}
+            onQueryChange={setQuery}
+            onModeChange={setMode}
+          />
 
-            {/* Nawigacja między miesiącami */}
-            <View style={styles.monthNavigation}>
-              <Pressable
-                accessibilityRole="button"
-                accessibilityLabel={
-                  languageCode === "en" ? "Previous month" : "Poprzedni miesiąc"
-                }
-                onPress={() => changeMonth(-1)}
-                style={styles.monthArrow}
-              >
-                <Ionicons
-                  name="chevron-back"
-                  size={21}
-                  color={colors.primary}
-                />
-              </Pressable>
+          {/* Nawigacja między miesiącami */}
+          <View style={styles.monthNavigation}>
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel={
+                languageCode === "en" ? "Previous month" : "Poprzedni miesiąc"
+              }
+              onPress={() => changeMonth(-1)}
+              style={styles.monthArrow}
+            >
+              <Ionicons
+                name="chevron-back"
+                size={21}
+                color={colors.primary}
+              />
+            </Pressable>
 
-              <Text style={styles.monthTitle}>{monthLabel}</Text>
+            <Text style={styles.monthTitle}>{monthLabel}</Text>
 
-              <Pressable
-                accessibilityRole="button"
-                accessibilityLabel={
-                  languageCode === "en" ? "Next month" : "Następny miesiąc"
-                }
-                onPress={() => changeMonth(1)}
-                style={styles.monthArrow}
-              >
-                <Ionicons
-                  name="chevron-forward"
-                  size={21}
-                  color={colors.primary}
-                />
-              </Pressable>
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel={
+                languageCode === "en" ? "Next month" : "Następny miesiąc"
+              }
+              onPress={() => changeMonth(1)}
+              style={styles.monthArrow}
+            >
+              <Ionicons
+                name="chevron-forward"
+                size={21}
+                color={colors.primary}
+              />
+            </Pressable>
 
-              <Pressable
-                accessibilityRole="button"
-                accessibilityLabel={
-                  languageCode === "en" ? "Toggle calendar" : "Otwórz kalendarz"
-                }
-                onPress={() => setCalendarVisible(value => !value)}
-                style={[
-                  styles.calendarToggle,
-                  calendarVisible && styles.calendarToggleActive,
-                ]}
-              >
-                <Ionicons
-                  name={calendarVisible ? "list-outline" : "calendar-outline"}
-                  size={20}
-                  color={colors.primary}
-                />
-              </Pressable>
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel={
+                languageCode === "en" ? "Toggle calendar" : "Otwórz kalendarz"
+              }
+              onPress={() => setCalendarVisible(value => !value)}
+              style={[
+                styles.calendarToggle,
+                calendarVisible && styles.calendarToggleActive,
+              ]}
+            >
+              <Ionicons
+                name={calendarVisible ? "list-outline" : "calendar-outline"}
+                size={20}
+                color={colors.primary}
+              />
+            </Pressable>
+          </View>
+
+          {/* Statystyki miesiąca */}
+          <View style={styles.statsRow}>
+            <View style={styles.statChip}>
+              <Text style={styles.statText}>
+                {monthJournals.length}{" "}
+                {languageCode === "en" ? "trips" : "wypraw"}
+              </Text>
             </View>
 
-            {/* Statystyki miesiąca */}
-            <View style={styles.statsRow}>
-              <View style={styles.statChip}>
-                <Text style={styles.statText}>
-                  {monthJournals.length}{" "}
-                  {languageCode === "en" ? "trips" : "wypraw"}
-                </Text>
-              </View>
-
-              <View style={styles.statChip}>
-                <Text style={styles.statText}>
-                  {totalCatches} {languageCode === "en" ? "fish" : "ryb"}
-                </Text>
-              </View>
-
-              <View style={styles.statChip}>
-                <Text style={styles.statText}>
-                  {languageCode === "en" ? "Most caught: " : "Najczęściej: "}
-                  {mostCaughtFish}
-                </Text>
-              </View>
+            <View style={styles.statChip}>
+              <Text style={styles.statText}>
+                {totalCatches} {languageCode === "en" ? "fish" : "ryb"}
+              </Text>
             </View>
 
-            {/* Kalendarz miesięczny */}
-            {calendarVisible && (
-              <View style={styles.calendar}>
-                <View style={styles.weekdays}>
-                  {weekdays.map(day => (
-                    <Text key={day} style={styles.weekday}>
-                      {day}
-                    </Text>
-                  ))}
-                </View>
+            <View style={styles.statChip}>
+              <Text style={styles.statText}>
+                {languageCode === "en" ? "Most caught: " : "Najczęściej: "}
+                {mostCaughtFish}
+              </Text>
+            </View>
+          </View>
 
-                <View style={styles.calendarGrid}>
-                  {calendarDays.map((day, index) => {
-                    if (day === null) {
-                      return (
-                        <View
-                          key={`empty-${index}`}
-                          style={styles.calendarCell}
-                        />
-                      )
-                    }
-
-                    const dateKey = `${monthKey}-${String(day).padStart(2, "0")}`
-                    const hasJournal = daysWithJournals.has(dateKey)
-                    const isSelected = selectedDate === dateKey
-
-                    const isToday =
-                      day === today.getDate() &&
-                      currentMonth.getMonth() === today.getMonth() &&
-                      currentMonth.getFullYear() === today.getFullYear()
-
-                    return (
-                      <View key={dateKey} style={styles.calendarCell}>
-                        <Pressable
-                          accessibilityRole="button"
-                          accessibilityLabel={dateKey}
-                          onPress={() => toggleDate(dateKey)}
-                          style={[
-                            styles.calendarDayButton,
-                            isToday && styles.calendarToday,
-                            isSelected && styles.calendarDaySelected,
-                          ]}
-                        >
-                          <Text
-                            style={[
-                              styles.calendarDayText,
-                              isSelected && styles.calendarDaySelectedText,
-                            ]}
-                          >
-                            {day}
-                          </Text>
-                        </Pressable>
-
-                        <View
-                          style={[
-                            styles.calendarDot,
-                            !hasJournal && styles.calendarDotHidden,
-                          ]}
-                        />
-                      </View>
-                    )
-                  })}
-                </View>
-
-                <Text style={styles.calendarHint}>
-                  {languageCode === "en"
-                    ? "Dots mark days with saved fishing trips. Tap a day to filter the list."
-                    : "Kropki oznaczają dni z zapisanymi połowami. Kliknij dzień, aby zobaczyć jego wpisy."}
-                </Text>
-              </View>
-            )}
-
-            {/* Lista wypraw */}
-            <Text style={styles.sectionTitle}>
-              {selectedDate
-                ? languageCode === "en"
-                  ? `Trips: ${selectedDateLabel}`
-                  : `Wyprawy: ${selectedDateLabel}`
-                : languageCode === "en"
-                  ? "Fishing trips"
-                  : "Wyprawy"}
-            </Text>
-
-            {loading ? (
-              <ActivityIndicator color={colors.primary} style={styles.loader} />
-            ) : visibleJournals.length ? (
-              <View style={styles.journalList}>
-                {visibleJournals.map(journal => (
-                  <JournalCard
-                    key={journal.id}
-                    journal={journal}
-                    onPress={() =>
-                      router.push({
-                        pathname: "/(tabs)/journal/[id]",
-                        params: { id: String(journal.id) },
-                      } as unknown as Parameters<typeof router.push>[0])
-                    }
-                  />
+          {/* Kalendarz miesięczny */}
+          {calendarVisible && (
+            <View style={styles.calendar}>
+              <View style={styles.weekdays}>
+                {weekdays.map(day => (
+                  <Text key={day} style={styles.weekday}>
+                    {day}
+                  </Text>
                 ))}
               </View>
-            ) : (
-              <View style={styles.empty}>
-                <Ionicons
-                  name="calendar-outline"
-                  size={42}
-                  color={colors.text.muted}
-                />
-                <Text style={styles.emptyTitle}>{emptyTitle}</Text>
-                <Text style={styles.emptyText}>{emptyMessage}</Text>
-              </View>
-            )}
-          </ScrollView>
 
-          {/* Dodawanie nowej wyprawy */}
-          <Pressable
-            accessibilityRole="button"
-            accessibilityLabel={getTranslation("journal.add", languageCode)}
-            onPress={() =>
-              router.push(
-                "/(tabs)/journal/add" as Parameters<typeof router.push>[0]
-              )
-            }
-            style={styles.addButton}
-          >
-            <Ionicons name="add" size={29} color={colors.text.onPrimary} />
-          </Pressable>
-        </View>
+              <View style={styles.calendarGrid}>
+                {calendarDays.map((day, index) => {
+                  if (day === null) {
+                    return (
+                      <View
+                        key={`empty-${index}`}
+                        style={styles.calendarCell}
+                      />
+                    )
+                  }
+
+                  const dateKey = `${monthKey}-${String(day).padStart(2, "0")}`
+                  const hasJournal = daysWithJournals.has(dateKey)
+                  const isSelected = selectedDate === dateKey
+
+                  const isToday =
+                    day === today.getDate() &&
+                    currentMonth.getMonth() === today.getMonth() &&
+                    currentMonth.getFullYear() === today.getFullYear()
+
+                  return (
+                    <View key={dateKey} style={styles.calendarCell}>
+                      <Pressable
+                        accessibilityRole="button"
+                        accessibilityLabel={dateKey}
+                        onPress={() => toggleDate(dateKey)}
+                        style={[
+                          styles.calendarDayButton,
+                          isToday && styles.calendarToday,
+                          isSelected && styles.calendarDaySelected,
+                        ]}
+                      >
+                        <Text
+                          style={[
+                            styles.calendarDayText,
+                            isSelected && styles.calendarDaySelectedText,
+                          ]}
+                        >
+                          {day}
+                        </Text>
+                      </Pressable>
+
+                      <View
+                        style={[
+                          styles.calendarDot,
+                          !hasJournal && styles.calendarDotHidden,
+                        ]}
+                      />
+                    </View>
+                  )
+                })}
+              </View>
+
+              <Text style={styles.calendarHint}>
+                {languageCode === "en"
+                  ? "Dots mark days with saved fishing trips. Tap a day to filter the list."
+                  : "Kropki oznaczają dni z zapisanymi połowami. Kliknij dzień, aby zobaczyć jego wpisy."}
+              </Text>
+            </View>
+          )}
+
+          {/* Lista wypraw */}
+          <Text style={styles.sectionTitle}>
+            {selectedDate
+              ? languageCode === "en"
+                ? `Trips: ${selectedDateLabel}`
+                : `Wyprawy: ${selectedDateLabel}`
+              : languageCode === "en"
+                ? "Fishing trips"
+                : "Wyprawy"}
+          </Text>
+
+          {loading ? (
+            <ActivityIndicator color={colors.primary} style={styles.loader} />
+          ) : visibleJournals.length ? (
+            <View style={styles.journalList}>
+              {visibleJournals.map(journal => (
+                <JournalCard
+                  key={journal.id}
+                  journal={journal}
+                  onPress={() =>
+                    router.push({
+                      pathname: "/(tabs)/journal/[id]",
+                      params: { id: String(journal.id) },
+                    } as unknown as Parameters<typeof router.push>[0])
+                  }
+                />
+              ))}
+            </View>
+          ) : (
+            <View style={styles.empty}>
+              <Ionicons
+                name="calendar-outline"
+                size={42}
+                color={colors.text.muted}
+              />
+              <Text style={styles.emptyTitle}>{emptyTitle}</Text>
+              <Text style={styles.emptyText}>{emptyMessage}</Text>
+            </View>
+          )}
+          </View>
+        </ScrollView>
+        {/* Dodawanie nowej wyprawy */}
+        
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel={getTranslation("journal.add", languageCode)}
+          onPress={() =>
+            router.push(
+              "/(tabs)/journal/add" as Parameters<typeof router.push>[0]
+            )
+          }
+          style={styles.addButton}
+        >
+          <Ionicons name="add" size={29} color={colors.text.onPrimary} />
+        </Pressable>
       </Container>
   )
 }
@@ -425,7 +424,7 @@ const createStyles = (colors: AppColors) =>
     },
     page: {
       flex: 1,
-      position: "relative",
+      gap: 14
     },
     header: {
       marginBottom: 12,
@@ -595,15 +594,14 @@ const createStyles = (colors: AppColors) =>
     },
     addButton: {
       alignItems: "center",
+      alignSelf: "center",
       backgroundColor: colors.primary,
       borderRadius: 29,
-      bottom: 16,
+      bottom: 24,
       elevation: 7,
       height: 58,
+      width: 58,
       justifyContent: "center",
       position: "absolute",
-      width: 58,
-      left: "50%",
-      transform: [{ translateX: -29 }],
     },
   })

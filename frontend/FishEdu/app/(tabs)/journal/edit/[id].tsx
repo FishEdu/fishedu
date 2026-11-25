@@ -119,6 +119,7 @@ const createStyles = (colors: AppColors) =>
     page: {
       flex: 1,
       gap: 14,
+      paddingBottom: 64,
     },
     back: {
       alignItems: "center",

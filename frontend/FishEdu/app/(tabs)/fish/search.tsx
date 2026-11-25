@@ -68,9 +68,7 @@ export default function FishSearch() {
   )
   
   return (
-    <Container
-      useScrollView={false}
-    >
+    <Container>
       <View style={styles.page}>
         <FishSearchInput
           lastFishQuery={lastFishQuery}
@@ -138,7 +136,7 @@ export default function FishSearch() {
 }
 
 const createStyles = (colors: AppColors) => StyleSheet.create({
-  page: { flex: 1, gap: 14 },
+  page: { flex: 1, gap: 14, paddingBottom: 32 },
   filterList: { flexDirection: "row", flexWrap: "wrap", gap: 8 },
   filter: { backgroundColor: colors.background.card, borderColor: colors.border.subtle, borderRadius: 16, borderWidth: 1, paddingHorizontal: 11, paddingVertical: 7 },
   filterAllActive: { backgroundColor: colors.background.primarySoft, borderColor: colors.primary },

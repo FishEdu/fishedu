@@ -13,7 +13,6 @@ import { useMemo, useState } from "react";
 import {
   Image,
   Pressable,
-  ScrollView,
   StyleSheet,
   Text,
   View,
@@ -170,9 +169,9 @@ export default function FishDetails() {
 
   return (
     <Container>
-      <ScrollView
+      <View
         style={styles.screen}
-        contentContainerStyle={styles.content}
+        // contentContainerStyle={styles.content}
       >
         <Stack.Screen options={{ headerShown: false }} />
 
@@ -358,7 +357,7 @@ export default function FishDetails() {
             </DetailSection>
           </>
         )}
-      </ScrollView>
+      </View>
     </Container>
   );
 }
@@ -369,6 +368,7 @@ const createStyles = (colors: AppColors) =>
     screen: {
       flex: 1,
       backgroundColor: colors.background.app,
+      paddingBottom: 32,
     },
 
     content: {
@@ -385,6 +385,7 @@ const createStyles = (colors: AppColors) =>
       gap: 2,
       paddingTop: 34,
       paddingEnd: 8,
+      paddingBottom: 16
     },
 
     backButtonText: {
