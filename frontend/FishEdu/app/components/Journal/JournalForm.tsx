@@ -1,7 +1,5 @@
-import { FishingJournal, FishingJournalInput } from "@/app/api/journal"
 import { AppColors } from "@/app/constants/theme"
 import { useTheme } from "@/app/hooks/useTheme/useTheme"
-import { createJournal, updateJournal } from "@/app/utils/fetch/journal/fetchJournals"
 import {
   getSelectedRecordPhotoUri,
   resolveRecordPhotoUrl,
@@ -13,6 +11,12 @@ import Ionicons from "@expo/vector-icons/Ionicons"
 import * as ImagePicker from "expo-image-picker"
 import { router } from "expo-router"
 import { useState } from "react"
+import {
+  createLocalJournal,
+  updateLocalJournal,
+  type FishingJournal,
+  type FishingJournalInput,
+} from "@/app/services/journal/localJournalService"
 
 import {
   ActivityIndicator,
@@ -81,6 +85,10 @@ export default function JournalForm({ journal }: Props) {
   const [endedAt, setEndedAt] = useState(
     journal?.ended_at ?? ""
   )
+
+  const [method, setMethod] = useState(
+  journal?.method ?? ""
+)
 
   const [description, setDescription] = useState(
     journal?.description ?? ""
@@ -193,6 +201,7 @@ export default function JournalForm({ journal }: Props) {
       fishing_spot: fishingSpot.trim(),
       started_at: startedAt.trim() || undefined,
       ended_at: endedAt.trim() || undefined,
+      method: method.trim() || undefined,
       description: description.trim() || undefined,
       image_url: imageUrl,
 
@@ -212,8 +221,8 @@ export default function JournalForm({ journal }: Props) {
 
     try {
       const savedJournal = journal
-        ? await updateJournal(journal.id, input)
-        : await createJournal(input)
+        ? await updateLocalJournal(journal.id, input)
+        : await createLocalJournal(input)
 
       if (!savedJournal) {
         throw new Error("Could not save journal")
@@ -342,6 +351,23 @@ export default function JournalForm({ journal }: Props) {
           <JournalSpotSearch
             value={fishingSpot}
             onChange={setFishingSpot}
+          />
+          {/* Metoda połowu */}
+          <Text style={styles.label}>
+            {isEnglish ? "Fishing method" : "Metoda połowu"}
+          </Text>
+
+          <TextInput
+            value={method}
+            onChangeText={setMethod}
+            placeholder={
+              isEnglish
+                ? "e.g. spinning, feeder, float fishing..."
+                : "np. spinning, metoda gruntowa, spławik..."
+            }
+            placeholderTextColor={colors.text.muted}
+            style={styles.methodInput}
+            returnKeyType="done"
           />
 
           {/* Godziny */}
@@ -745,5 +771,17 @@ const createStyles = (colors: AppColors) =>
       color: colors.text.onPrimary,
       fontSize: 14,
       fontWeight: "700",
+    },
+
+    methodInput: {
+      backgroundColor: colors.background.card,
+      borderColor: colors.border.card,
+      borderRadius: 10,
+      borderWidth: 1,
+      color: colors.text.main,
+      fontSize: 14,
+      minHeight: 50,
+      paddingHorizontal: 12,
+      paddingVertical: 10,
     },
   })

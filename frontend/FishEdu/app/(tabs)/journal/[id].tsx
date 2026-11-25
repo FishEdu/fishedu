@@ -1,11 +1,14 @@
 
-import { FishingJournal } from "@/app/api/journal"
+import {
+  getLocalJournalById,
+  deleteLocalJournal,
+  type FishingJournal,
+} from "@/app/services/journal/localJournalService"
 import JournalDetails from "@/app/components/Journal/JournalDetails"
 import Container from "@/app/components/ui/Container"
 import { AppColors } from "@/app/constants/theme"
 import { useLanguage } from "@/app/hooks/useLanguage/useLanguage"
 import { useTheme } from "@/app/hooks/useTheme/useTheme"
-import { deleteJournal, fetchJournal } from "@/app/utils/fetch/journal/fetchJournals"
 import { getTranslation } from "@/app/utils/translation/getTranslation"
 
 import Ionicons from "@expo/vector-icons/Ionicons"
@@ -27,10 +30,8 @@ import {
   View,
 } from "react-native"
 
-
 const JOURNAL_LIST_ROUTE =
   "/(tabs)/journal" as Parameters<typeof router.replace>[0]
-
 
 export default function JournalEntry() {
   const { colors } = useTheme()
@@ -44,22 +45,28 @@ export default function JournalEntry() {
   const [loading, setLoading] = useState(true)
   const [deleteModalVisible, setDeleteModalVisible] = useState(false)
 
-
-  // Pobieranie szczegółów wpisu
+  // Pobieranie wpisu z lokalnej bazy SQLite
   const loadJournal = useCallback(async () => {
+    const journalId = Number(id)
+
+    if (!Number.isInteger(journalId) || journalId <= 0) {
+      setJournal(null)
+      setLoading(false)
+      return
+    }
+
     setLoading(true)
 
     try {
-      const data = await fetchJournal(Number(id))
+      const data = await getLocalJournalById(journalId)
       setJournal(data)
     } catch (error) {
-      console.error("Error loading journal:", error)
+      console.error("Błąd pobierania lokalnej wyprawy:", error)
       setJournal(null)
     } finally {
       setLoading(false)
     }
   }, [id])
-
 
   // Odświeżenie wpisu po powrocie na ekran
   useFocusEffect(
@@ -68,29 +75,27 @@ export default function JournalEntry() {
     }, [loadJournal])
   )
 
-
   // Powrót do listy dziennika
   const goToJournalList = () => {
     router.replace(JOURNAL_LIST_ROUTE)
   }
-
 
   // Otwarcie okienka potwierdzenia usunięcia
   const handleDelete = () => {
     setDeleteModalVisible(true)
   }
 
-
-  // Potwierdzenie usunięcia wpisu
+  // Potwierdzenie usunięcia wpisu z SQLite
   const confirmDelete = async () => {
-    const deleted = await deleteJournal(Number(id))
+    try {
+      await deleteLocalJournal(Number(id))
 
-    if (deleted) {
       setDeleteModalVisible(false)
       goToJournalList()
+    } catch (error) {
+      console.error("Błąd usuwania lokalnej wyprawy:", error)
     }
   }
-
 
   return (
     <Container>
@@ -98,7 +103,6 @@ export default function JournalEntry() {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.content}
       >
-
         {/* Przycisk powrotu */}
         <Pressable
           accessibilityRole="button"
@@ -116,11 +120,9 @@ export default function JournalEntry() {
           </Text>
         </Pressable>
 
-
         {/* Zawartość ekranu */}
         {loading ? (
           <ActivityIndicator color={colors.primary} />
-
         ) : journal ? (
           <JournalDetails
             journal={journal}
@@ -134,7 +136,6 @@ export default function JournalEntry() {
             }
             onDelete={handleDelete}
           />
-
         ) : (
           <View style={styles.notFound}>
             <Text style={styles.notFoundText}>
@@ -142,9 +143,7 @@ export default function JournalEntry() {
             </Text>
           </View>
         )}
-
       </ScrollView>
-
 
       {/* Okienko potwierdzenia usunięcia */}
       <Modal
@@ -155,7 +154,6 @@ export default function JournalEntry() {
       >
         <View style={styles.modalOverlay}>
           <View style={styles.modalContainer}>
-
             <View style={styles.modalIcon}>
               <Ionicons
                 name="trash-outline"
@@ -173,7 +171,6 @@ export default function JournalEntry() {
             </Text>
 
             <View style={styles.modalButtons}>
-
               <Pressable
                 style={styles.cancelButton}
                 onPress={() => setDeleteModalVisible(false)}
@@ -197,49 +194,39 @@ export default function JournalEntry() {
                   {getTranslation("journal.delete", languageCode)}
                 </Text>
               </Pressable>
-
             </View>
           </View>
         </View>
       </Modal>
-
     </Container>
   )
 }
 
-
 const createStyles = (colors: AppColors) =>
   StyleSheet.create({
-
     content: {
       gap: 12,
       paddingBottom: 30,
     },
-
     back: {
       alignItems: "center",
       alignSelf: "flex-start",
       flexDirection: "row",
       paddingVertical: 5,
     },
-
     backText: {
       color: colors.primary,
       fontSize: 15,
       fontWeight: "600",
     },
-
     notFound: {
       alignItems: "center",
       paddingTop: 45,
     },
-
     notFoundText: {
       color: colors.text.muted,
       fontSize: 15,
     },
-
-    // Okienko usuwania
     modalOverlay: {
       flex: 1,
       backgroundColor: colors.background.overlay,
@@ -247,7 +234,6 @@ const createStyles = (colors: AppColors) =>
       justifyContent: "center",
       padding: 24,
     },
-
     modalContainer: {
       width: "100%",
       maxWidth: 360,
@@ -256,7 +242,6 @@ const createStyles = (colors: AppColors) =>
       padding: 24,
       alignItems: "center",
     },
-
     modalIcon: {
       width: 56,
       height: 56,
@@ -266,14 +251,12 @@ const createStyles = (colors: AppColors) =>
       justifyContent: "center",
       marginBottom: 14,
     },
-
     modalTitle: {
       fontSize: 19,
       fontWeight: "700",
       color: colors.text.main,
       marginBottom: 8,
     },
-
     modalDescription: {
       textAlign: "center",
       color: colors.text.muted,
@@ -281,13 +264,11 @@ const createStyles = (colors: AppColors) =>
       lineHeight: 19,
       marginBottom: 22,
     },
-
     modalButtons: {
       width: "100%",
       flexDirection: "row",
       gap: 10,
     },
-
     cancelButton: {
       flex: 1,
       borderWidth: 1,
@@ -297,13 +278,11 @@ const createStyles = (colors: AppColors) =>
       alignItems: "center",
       justifyContent: "center",
     },
-
     cancelButtonText: {
       color: colors.text.main,
       fontSize: 13,
       fontWeight: "600",
     },
-
     confirmDeleteButton: {
       flex: 1,
       backgroundColor: colors.danger,
@@ -314,11 +293,9 @@ const createStyles = (colors: AppColors) =>
       justifyContent: "center",
       gap: 6,
     },
-
     confirmDeleteText: {
       color: colors.text.onPrimary,
       fontSize: 13,
       fontWeight: "600",
     },
-
   })
