@@ -57,7 +57,6 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
   page: {
     flex: 1,
     gap: 14,
-    paddingTop: 36,
   },
   back: {
     alignItems: "center",

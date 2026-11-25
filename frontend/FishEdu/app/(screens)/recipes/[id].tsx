@@ -16,7 +16,7 @@ export default function RecipeScreen() {
   const styles = createStyles(colors)
   const { name, content } = useLocalSearchParams<LocalSearchParams>();
   return (
-    <ScrollView style={styles.screen}contentContainerStyle={styles.content}>
+    <ScrollView style={styles.screen}>
       <Container>
         <>
           <BackButton variant="text" label={getTranslation("common.back", language)} onPress={() => router.back()} />
@@ -31,8 +31,5 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
   screen: {
     flex: 1,
     backgroundColor: colors.background.app,
-  },
-  content: {
-    paddingTop: 40,
   },
 });

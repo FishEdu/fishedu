@@ -18,6 +18,7 @@ import {
   Text,
   View,
 } from "react-native";
+import Container from "../components/ui/Container";
 
 type FishParams = {
   id: string;
@@ -168,195 +169,197 @@ export default function FishDetails() {
     }`;
 
   return (
-    <ScrollView
-      style={styles.screen}
-      contentContainerStyle={styles.content}
-    >
-      <Stack.Screen options={{ headerShown: false }} />
-
-      {/* POWRÓT */}
-      <Pressable
-        onPress={() => router.back()}
-        style={styles.backButton}
+    <Container>
+      <ScrollView
+        style={styles.screen}
+        contentContainerStyle={styles.content}
       >
-        <Ionicons
-          name="chevron-back"
-          size={20}
-          color={colors.primary}
-        />
+        <Stack.Screen options={{ headerShown: false }} />
 
-        <Text style={styles.backButtonText}>
-          {getTranslation("common.back", languageCode)}
-        </Text>
-      </Pressable>
+        {/* POWRÓT */}
+        <Pressable
+          onPress={() => router.back()}
+          style={styles.backButton}
+        >
+          <Ionicons
+            name="chevron-back"
+            size={20}
+            color={colors.primary}
+          />
 
-      {!fish ? (
-        <>
-          <View style={styles.heroImageContainer}>
-            <Image
-              source={require("../../assets/images/fish.jpg")}
-              alt="Fish image"
-              style={styles.heroImage}
-            />
-          </View>
+          <Text style={styles.backButtonText}>
+            {getTranslation("common.back", languageCode)}
+          </Text>
+        </Pressable>
 
-          <View style={styles.mainCard}>
-            <Text style={styles.emptyText}>
-              {getTranslation(
-                "fishDetails.noFishData",
-                languageCode
-              )}
-            </Text>
-          </View>
-        </>
-      ) : (
-        <>
-          {/* ZDJĘCIE + NAZWA + ULUBIONE */}
-          <View style={styles.heroImageContainer}>
-            <Image
-              source={require("../../assets/images/fish.jpg")}
-              alt="Fish image"
-              style={styles.heroImage}
-            />
-
-            {/* PRZYCIEMNIENIE ZDJĘCIA */}
-            <View style={styles.imageOverlay} />
-
-            {/* NAZWA RYBY */}
-            <Text style={styles.fishName}>
-              {fish.name}
-            </Text>
-
-            {/* GWIAZDKA - NOWY SYSTEM */}
-            <Pressable
-              onPress={() => {
-                void handleToggleFavorite();
-              }}
-              disabled={!canToggleFavorite}
-              style={[
-                styles.favoriteButton,
-                !canToggleFavorite && { opacity: 0.5 },
-              ]}
-              accessibilityRole="button"
-              accessibilityState={{
-                selected: isFavorite,
-                disabled: !canToggleFavorite,
-              }}
-              accessibilityLabel={getTranslation(
-                "fishDetails.favorite",
-                languageCode
-              )}
-            >
-              <Ionicons
-                name={
-                  isFavorite
-                    ? "star"
-                    : "star-outline"
-                }
-                size={34}
-                color={colors.favorite}
+        {!fish ? (
+          <>
+            <View style={styles.heroImageContainer}>
+              <Image
+                source={require("../../assets/images/fish.jpg")}
+                alt="Fish image"
+                style={styles.heroImage}
               />
-            </Pressable>
-          </View>
+            </View>
 
-          {/* GŁÓWNA KARTA Z INFORMACJAMI */}
-          <View style={styles.mainCard}>
-
-            {/* OPIS */}
-            <View style={styles.infoBlock}>
-              <Text style={styles.infoTitle}>
+            <View style={styles.mainCard}>
+              <Text style={styles.emptyText}>
                 {getTranslation(
-                  "common.description",
+                  "fishDetails.noFishData",
                   languageCode
                 )}
               </Text>
-
-              <Text style={styles.description}>
-                {fish.description}
-              </Text>
             </View>
+          </>
+        ) : (
+          <>
+            {/* ZDJĘCIE + NAZWA + ULUBIONE */}
+            <View style={styles.heroImageContainer}>
+              <Image
+                source={require("../../assets/images/fish.jpg")}
+                alt="Fish image"
+                style={styles.heroImage}
+              />
 
-            {/* WYSTĘPOWANIE */}
-            <View style={styles.infoBlock}>
-              <Text style={styles.infoTitle}>
-                {getTranslation(
-                  "fishDetails.occurrence",
+              {/* PRZYCIEMNIENIE ZDJĘCIA */}
+              <View style={styles.imageOverlay} />
+
+              {/* NAZWA RYBY */}
+              <Text style={styles.fishName}>
+                {fish.name}
+              </Text>
+
+              {/* GWIAZDKA - NOWY SYSTEM */}
+              <Pressable
+                onPress={() => {
+                  void handleToggleFavorite();
+                }}
+                disabled={!canToggleFavorite}
+                style={[
+                  styles.favoriteButton,
+                  !canToggleFavorite && { opacity: 0.5 },
+                ]}
+                accessibilityRole="button"
+                accessibilityState={{
+                  selected: isFavorite,
+                  disabled: !canToggleFavorite,
+                }}
+                accessibilityLabel={getTranslation(
+                  "fishDetails.favorite",
                   languageCode
                 )}
-              </Text>
-
-              <Text style={styles.description}>
-                {fish.feedingPlaces}
-              </Text>
+              >
+                <Ionicons
+                  name={
+                    isFavorite
+                      ? "star"
+                      : "star-outline"
+                  }
+                  size={34}
+                  color={colors.favorite}
+                />
+              </Pressable>
             </View>
 
-            {/* WYGLĄD */}
-            <View style={styles.infoBlock}>
-              <Text style={styles.infoTitle}>
-                {getTranslation(
-                  "fishDetails.appearance",
-                  languageCode
-                )}
-              </Text>
+            {/* GŁÓWNA KARTA Z INFORMACJAMI */}
+            <View style={styles.mainCard}>
 
-              <Text style={styles.description}>
-                {fish.appearance}
-              </Text>
+              {/* OPIS */}
+              <View style={styles.infoBlock}>
+                <Text style={styles.infoTitle}>
+                  {getTranslation(
+                    "common.description",
+                    languageCode
+                  )}
+                </Text>
+
+                <Text style={styles.description}>
+                  {fish.description}
+                </Text>
+              </View>
+
+              {/* WYSTĘPOWANIE */}
+              <View style={styles.infoBlock}>
+                <Text style={styles.infoTitle}>
+                  {getTranslation(
+                    "fishDetails.occurrence",
+                    languageCode
+                  )}
+                </Text>
+
+                <Text style={styles.description}>
+                  {fish.feedingPlaces}
+                </Text>
+              </View>
+
+              {/* WYGLĄD */}
+              <View style={styles.infoBlock}>
+                <Text style={styles.infoTitle}>
+                  {getTranslation(
+                    "fishDetails.appearance",
+                    languageCode
+                  )}
+                </Text>
+
+                <Text style={styles.description}>
+                  {fish.appearance}
+                </Text>
+              </View>
             </View>
-          </View>
 
-          {/* PREFERENCJE */}
-          <DetailSection
-            title={getTranslation(
-              "fishDetails.preferences",
-              languageCode
-            )}
-            icon="fish-outline"
-          >
-            {fish.preferences}
-          </DetailSection>
-
-          {/* SPOSÓB OBCHODZENIA SIĘ */}
-          <DetailSection
-            title={getTranslation(
-              "fishDetails.handling",
-              languageCode
-            )}
-            icon="hand-left-outline"
-          >
-            {fish.handling}
-          </DetailSection>
-
-          {/* OCHRONA W POLSCE */}
-          <DetailSection
-            title={getTranslation(
-              "fishDetails.protectionInPoland",
-              languageCode
-            )}
-            icon="shield-checkmark-outline"
-          >
-            {[
-              minProtectionLength,
-              maxProtectionLength,
-              `${getTranslation(
-                "fishSearch.endangered",
+            {/* PREFERENCJE */}
+            <DetailSection
+              title={getTranslation(
+                "fishDetails.preferences",
                 languageCode
-              )}: ${
-                fish.isEndangered
-                  ? getTranslation(
-                      "common.yes",
-                      languageCode
-                    )
-                  : getTranslation(
-                      "common.no",
-                      languageCode
-                    )
-              }`,
-            ]}
-          </DetailSection>
-        </>
-      )}
-    </ScrollView>
+              )}
+              icon="fish-outline"
+            >
+              {fish.preferences}
+            </DetailSection>
+
+            {/* SPOSÓB OBCHODZENIA SIĘ */}
+            <DetailSection
+              title={getTranslation(
+                "fishDetails.handling",
+                languageCode
+              )}
+              icon="hand-left-outline"
+            >
+              {fish.handling}
+            </DetailSection>
+
+            {/* OCHRONA W POLSCE */}
+            <DetailSection
+              title={getTranslation(
+                "fishDetails.protectionInPoland",
+                languageCode
+              )}
+              icon="shield-checkmark-outline"
+            >
+              {[
+                minProtectionLength,
+                maxProtectionLength,
+                `${getTranslation(
+                  "fishSearch.endangered",
+                  languageCode
+                )}: ${
+                  fish.isEndangered
+                    ? getTranslation(
+                        "common.yes",
+                        languageCode
+                      )
+                    : getTranslation(
+                        "common.no",
+                        languageCode
+                      )
+                }`,
+              ]}
+            </DetailSection>
+          </>
+        )}
+      </ScrollView>
+    </Container>
   );
 }
 

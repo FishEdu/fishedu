@@ -23,7 +23,7 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
     flex: 1,
     backgroundColor: colors.background.app,
     minHeight: '100%',
-    paddingTop: 70,
+    // paddingTop: 70,
     paddingBottom: 16,
     paddingInline: 8,
     gap: 20,

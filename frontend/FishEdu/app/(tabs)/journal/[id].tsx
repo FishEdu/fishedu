@@ -214,7 +214,6 @@ const createStyles = (colors: AppColors) =>
     content: {
       gap: 12,
       paddingBottom: 30,
-      paddingTop: 36,
     },
 
     back: {
