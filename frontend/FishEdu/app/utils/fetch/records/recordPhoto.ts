@@ -1,6 +1,6 @@
 import { getBaseApiUrl } from "@/app/utils/getBaseApiUrl"
 import AsyncStorage from "@react-native-async-storage/async-storage"
-import { File } from "expo-file-system"
+import { Directory, File, Paths } from "expo-file-system"
 import { ImagePickerAsset } from "expo-image-picker"
 import { Platform } from "react-native"
 
@@ -18,23 +18,79 @@ export const resolveRecordPhotoUrl = (uri?: string | null) => {
   return uri.startsWith("/") ? new URL(uri, getBaseApiUrl()).toString() : uri
 }
 
-export const getSelectedRecordPhotoUri = async (asset: ImagePickerAsset): Promise<string> => {
-  if (asset.mimeType && !Object.values(photoTypes).includes(asset.mimeType)) {
+export const getSelectedRecordPhotoUri = async (
+  asset: ImagePickerAsset
+): Promise<string> => {
+  if (
+    asset.mimeType &&
+    !Object.values(photoTypes).includes(asset.mimeType)
+  ) {
     throw new Error("photo-unsupported")
   }
+
   if (asset.fileSize && asset.fileSize > MAX_RECORD_PHOTO_SIZE) {
     throw new Error("photo-too-large")
   }
 
   if (Platform.OS === "web") {
     const file = asset.file ?? await (await fetch(asset.uri)).blob()
-    if (file.size > MAX_RECORD_PHOTO_SIZE) throw new Error("photo-too-large")
+
+    if (file.size > MAX_RECORD_PHOTO_SIZE) {
+      throw new Error("photo-too-large")
+    }
+
     return asset.uri
   }
 
   const source = new File(asset.uri)
-  if (source.size > MAX_RECORD_PHOTO_SIZE) throw new Error("photo-too-large")
-  return asset.uri
+
+  if (source.size > MAX_RECORD_PHOTO_SIZE) {
+    throw new Error("photo-too-large")
+  }
+
+  if (!source.exists) {
+    throw new Error("photo-not-found")
+  }
+
+  const extensionFromMime = asset.mimeType
+    ? Object.entries(photoTypes).find(
+        ([, mimeType]) => mimeType === asset.mimeType
+      )?.[0]
+    : undefined
+
+  const extensionFromName = asset.fileName
+    ?.split(".")
+    .pop()
+    ?.toLowerCase()
+
+  const extension =
+    extensionFromMime ??
+    (extensionFromName && photoTypes[extensionFromName]
+      ? extensionFromName
+      : "jpg")
+
+  const photosDirectory = new Directory(
+    Paths.document,
+    "record-photos"
+  )
+
+  photosDirectory.create({
+    intermediates: true,
+    idempotent: true,
+  })
+
+  const uniqueName = `${Date.now()}-${Math.random()
+    .toString(36)
+    .slice(2, 8)}`
+
+  const destination = new File(
+    photosDirectory,
+    `record-${uniqueName}.${extension}`
+  )
+
+  await source.copy(destination)
+
+  return destination.uri
 }
 
 type PhotoAttachable = { image_url?: string | null }
